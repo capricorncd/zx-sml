@@ -1,0 +1,46 @@
+{
+  "name": "zx-sml",
+  "version": "0.0.1",
+  "description": "some static method library",
+  "main": "dist/zx-sml.es.js",
+  "browser": "dist/zx-sml.umd.js",
+  "types": "types",
+  "keywords": [
+    "zx-sml",
+    "static method library",
+    "method",
+    "typescript",
+    "vite"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build --emptyOutDir",
+    "preview": "vite preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "docs": "node scripts/create-docs.js",
+    "lint": "eslint . --fix --ext .js,.cjs,.ts,.tsx,.json"
+  },
+  "dependencies": {
+    "date-utils-2020": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.42",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "inquirer": "^8.2.4",
+    "jsdom": "^19.0.0",
+    "prettier": "^2.6.2",
+    "typescript": "^4.7.3",
+    "vite": "^2.9.12",
+    "vitest": "^0.14.2"
+  },
+  "repository": "https://github.com/capricorncd/zx-sml",
+  "author": "capricorncd <capricorncd@qq.com>",
+  "license": "MIT"
+}
