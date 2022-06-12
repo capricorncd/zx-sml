@@ -8,6 +8,7 @@
   "keywords": [
     "zx-sml",
     "static method library",
+    "format",
     "method",
     "typescript",
     "vite",
@@ -15,7 +16,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --emptyOutDir",
+    "build": "tsc && vite build --emptyOutDir && node scripts/build-header.js",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
@@ -42,6 +43,6 @@
     "vitest": "^0.14.2"
   },
   "repository": "https://github.com/capricorncd/zx-sml",
-  "author": "capricorncd <capricorncd@qq.com>",
+  "author": "Capricorncd <capricorncd@qq.com>",
   "license": "MIT"
 }
