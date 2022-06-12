@@ -88,7 +88,6 @@ export function toNumber<T>(input: T): number {
  * splitValue('2.5rem') // [2.5, 'rem']
  * splitValue('-2.5rem') // [-2.5, 'rem']
  * splitValue('50%') // [50, '%']
- * splitValue('50%') // [50, '%']
  * ```
  * @param input `string | number`
  * @returns `[number, string]`
