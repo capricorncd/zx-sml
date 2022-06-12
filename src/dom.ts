@@ -8,9 +8,9 @@ import { slice } from './format'
 /**
  * $(selector, doc?)
  * @description Get the DOM element that matches selector
- * @param selector string | HTMLElement
- * @param doc Document | HTMLElement
- * @returns HTMLElement | null
+ * @param selector `string | HTMLElement`
+ * @param doc `Document | HTMLElement`
+ * @returns `HTMLElement | null`
  */
 export function $<T extends HTMLElement>(
   selector: string | T,
@@ -23,9 +23,9 @@ export function $<T extends HTMLElement>(
 /**
  * $$(selector, doc?)
  * @description Get the DOM elements that matches selector
- * @param selector string
- * @param doc Document | HTMLElement
- * @returns HTMLElement[]
+ * @param selector `string`
+ * @param doc `Document | HTMLElement`
+ * @returns `HTMLElement[]`
  */
 export function $$<T extends HTMLElement>(
   selector: string,
@@ -36,11 +36,11 @@ export function $$<T extends HTMLElement>(
 
 /**
  * createElement(tag, attrs?, innerHTML?)
- * @description create element
- * @param tag string
- * @param attrs Record<string, string>
- * @param innerHTML string
- * @returns HTMLElement
+ * create an element
+ * @param tag `string`
+ * @param attrs `Record<string, string>`
+ * @param innerHTML `string`
+ * @returns `HTMLElement`
  */
 export function createElement<T extends HTMLElement>(
   tag: string,

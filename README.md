@@ -8,6 +8,30 @@
 
 zx-sml are some static method libraries that I commonly use.
 
+## Setup
+
+### NPM Install
+
+```shell
+# npm -i zx-sml
+npm install zx-sml
+```
+
+### Yarn add
+
+```shell
+yarn add zx-sml
+```
+
+## Usage Example
+
+```typescript
+import { formatDate } from 'zx-sml'
+
+formatDate('2020-12-04', 'yyyy/MM/dd W')
+// 2020/12/04 Fri
+```
+
 ## Methods
 
 <!--METHOD_START-->
@@ -16,145 +40,164 @@ zx-sml are some static method libraries that I commonly use.
 
 determines whether the passed value is an Array
 
-- @param input T
+- @param input `T`
 
-- @returns boolean
+- @returns `boolean`
 
 ### isObject(input)
 
 determines whether the passed value is an object
 
-- @param input T
+- @param input `T`
 
-- @returns boolean
+- @returns `boolean`
 
 ### formatDate(date, format, langPackage?)
 
 Date format,
 please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
 
-- @param date T
-- @param format string
-- @param langPackage ILangPackage
+- @param date `any`
+- @param format `string`
+- @param langPackage `ILangPackage`
 
-- @returns string
+- @returns `string`
 
 ### toDate(input)
 
 Convert input to Date,
 please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
 
-- @param input any
+- @param input `any`
 
-- @returns Date | null
+- @returns `Date | null`
 
 ### $(selector, doc?)
 
 Get the DOM element that matches selector
 
-- @param selector string | HTMLElement
-- @param doc Document | HTMLElement
+- @param selector `string | HTMLElement`
+- @param doc `Document | HTMLElement`
 
-- @returns HTMLElement | null
+- @returns `HTMLElement | null`
 
 ### $$(selector, doc?)
 
 Get the DOM elements that matches selector
 
-- @param selector string
-- @param doc Document | HTMLElement
+- @param selector `string`
+- @param doc `Document | HTMLElement`
 
-- @returns HTMLElement[]
+- @returns `HTMLElement[]`
 
 ### createElement(tag, attrs?, innerHTML?)
 
-create element
+create an element
 
-- @param tag string
-- @param attrs Record<string, string>
-- @param innerHTML string
+- @param tag `string`
+- @param attrs `Record<string, string>`
+- @param innerHTML `string`
 
-- @returns HTMLElement
+- @returns `HTMLElement`
 
 ### createUrlForGetRequest(url, params)
 
 Create full URL for GET request
 
-- @param url string
-- @param params Record<string, unknown>
+- @param url `string`
+- @param params `Record<string, unknown>`
 
-- @returns string
+- @returns `string`
 
 ### toSnakeCase(input, connectSymbol?)
 
-`toSnakeCase(helloWorld)` => `hello-world`
-HelloWorld => hello-world
-helloWorld => hello_world
-helloWorld => hello world
+Format string as snake case
 
-- @param input string
-- @param connectSymbol string word connect symbol, default `-`
+```js
+toSnakeCase('helloWorld') // hello-world
+toSnakeCase('HelloWorld') // hello-world
+toSnakeCase('helloWorld', '_') // hello_world
+toSnakeCase('helloWorld', ' ') // hello world
+```
 
-- @returns string
+- @param input `string`
+- @param connectSymbol `string` word connect symbol, default `-`
+
+- @returns `string`
 
 ### toCamelCase(input, isFirstCapitalLetter?)
 
-hello_world => helloWorld
-hello-world => helloWorld
-hello world => helloWorld
-when isFirstCapitalLetter is true
-hello world => HelloWorld
+Format string as camel case
 
-- @param input string
-- @param isFirstCapitalLetter boolean whether to capitalize the first letter, default `false`
+```js
+toCamelCase('hello_world') // helloWorld
+toCamelCase('hello-world') // helloWorld
+toCamelCase('hello world') // helloWorld
+toCamelCase('hello-world', true) // HelloWorld
+```
 
-- @returns string
+- @param input `string`
+- @param isFirstCapitalLetter `boolean` whether to capitalize the first letter, default `false`
+
+- @returns `string`
 
 ### toNumber(input)
 
 Convert any type to number.
 
-- @param input any
+- @param input `any`
 
-- @returns number
+- @returns `number`
 
 ### splitValue(input)
 
-'100px' => [100, 'px']
-100 => [100, '']
-'2.5rem' => [2.5, 'rem']
+Split an attribute value into number and suffix unit.
 
-- @param input string | number
+```js
+splitValue('100px') // [100, 'px']
+splitValue(100) // [100, '']
+splitValue('2.5rem') // [2.5, 'rem']
+splitValue('-2.5rem') // [-2.5, 'rem']
+splitValue('50%') // [50, '%']
+splitValue('50%') // [50, '%']
+```
 
-- @returns [number, string]
+- @param input `string | number`
+
+- @returns `[number, string]`
 
 ### classNames(...args)
 
 handle className
 
-- @param args string | [string] | { className1: true, className2: false }
+- @param args `string | [string] | { className1: true, className2: false }`
 
-- @returns string
+- @returns `string`
 
 ### joinUrl(...args)
 
-format url
+format url,
 
-- @param args string[] 'https://a.com/', '/news', 'detail/100001/?x=9'
+```js
+joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
+// https://a.com/news/detail/100001?x=9
+```
 
-- @returns 'https://a.com/news/detail/100001?x=9'
+- @param args `string[]`
+
+- @returns `string`
 
 ### slice(arrayLike, offset?)
 
 Convert pseudo-array to array
 
-- @param arrayLike pseudo-array
-- @param offset number default `0`
+- @param arrayLike `pseudo-array`
+- @param offset `number` default `0`
 
-- @returns array T[]
+- @returns `array T[]`
 
 <!--METHOD_END-->
 
 ## License
 
-zx-sml is [MIT licensed](./LICENSE).
+[MIT](./LICENSE) License © 2022-Present [Capricorncd](https://github.com/capricorncd).

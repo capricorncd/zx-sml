@@ -11,9 +11,9 @@ export { toTwoDigits }
 /**
  * createUrlForGetRequest(url, params)
  * @description Create full URL for GET request
- * @param url string
- * @param params Record<string, unknown>
- * @returns string
+ * @param url `string`
+ * @param params `Record<string, unknown>`
+ * @returns `string`
  */
 export function createUrlForGetRequest(
   url: string,
@@ -30,13 +30,16 @@ export function createUrlForGetRequest(
 
 /**
  * toSnakeCase(input, connectSymbol?)
- * @description `toSnakeCase(helloWorld)` => `hello-world`
- * @description HelloWorld => hello-world
- * @description helloWorld => hello_world
- * @description helloWorld => hello world
- * @param input string
- * @param connectSymbol string word connect symbol, default `-`
- * @returns string
+ * Format string as snake case
+ * ```js
+ * toSnakeCase('helloWorld') // hello-world
+ * toSnakeCase('HelloWorld') // hello-world
+ * toSnakeCase('helloWorld', '_') // hello_world
+ * toSnakeCase('helloWorld', ' ') // hello world
+ * ```
+ * @param input `string`
+ * @param connectSymbol `string` word connect symbol, default `-`
+ * @returns `string`
  */
 export function toSnakeCase(input = '', connectSymbol = '-'): string {
   return input
@@ -46,14 +49,16 @@ export function toSnakeCase(input = '', connectSymbol = '-'): string {
 
 /**
  * toCamelCase(input, isFirstCapitalLetter?)
- * @description hello_world => helloWorld
- * @description hello-world => helloWorld
- * @description hello world => helloWorld
- * @description when isFirstCapitalLetter is true
- * @description hello world => HelloWorld
- * @param input string
- * @param isFirstCapitalLetter boolean whether to capitalize the first letter, default `false`
- * @returns string
+ * Format string as camel case
+ * ```js
+ * toCamelCase('hello_world') // helloWorld
+ * toCamelCase('hello-world') // helloWorld
+ * toCamelCase('hello world') // helloWorld
+ * toCamelCase('hello-world', true) // HelloWorld
+ * ```
+ * @param input `string`
+ * @param isFirstCapitalLetter `boolean` whether to capitalize the first letter, default `false`
+ * @returns `string`
  */
 export function toCamelCase(input = '', isFirstCapitalLetter = false): string {
   const result = input.replace(/[-_\s](\w)/g, (_, s) => s.toUpperCase())
@@ -65,8 +70,8 @@ export function toCamelCase(input = '', isFirstCapitalLetter = false): string {
 /**
  * toNumber(input)
  * @description Convert any type to number.
- * @param input any
- * @returns number
+ * @param input `any`
+ * @returns `number`
  */
 export function toNumber<T>(input: T): number {
   if (typeof input === 'number') return input
@@ -76,11 +81,17 @@ export function toNumber<T>(input: T): number {
 
 /**
  * splitValue(input)
- * '100px'  => [100, 'px']
- * 100      => [100, '']
- * '2.5rem' => [2.5, 'rem']
- * @param input string | number
- * @returns [number, string]
+ * Split an attribute value into number and suffix unit.
+ * ```js
+ * splitValue('100px') // [100, 'px']
+ * splitValue(100) // [100, '']
+ * splitValue('2.5rem') // [2.5, 'rem']
+ * splitValue('-2.5rem') // [-2.5, 'rem']
+ * splitValue('50%') // [50, '%']
+ * splitValue('50%') // [50, '%']
+ * ```
+ * @param input `string | number`
+ * @returns `[number, string]`
  */
 export function splitValue(input: string | number): [number, string] {
   if (typeof input === 'number') {
@@ -92,7 +103,8 @@ export function splitValue(input: string | number): [number, string] {
 
 /**!
  * to string that className
- * @param input
+ * @param input `any`
+ * @returns `string`
  */
 function toString(input: unknown): string {
   if (typeof input === 'string') return input
@@ -110,8 +122,8 @@ function toString(input: unknown): string {
 /**
  * classNames(...args)
  * handle className
- * @param args string | [string] | { className1: true, className2: false }
- * @returns string
+ * @param args `string | [string] | { className1: true, className2: false }`
+ * @returns `string`
  */
 export function classNames(...args: unknown[]): string {
   return args
@@ -122,9 +134,13 @@ export function classNames(...args: unknown[]): string {
 
 /**
  * joinUrl(...args)
- * format url
- * @param args string[] 'https://a.com/', '/news', 'detail/100001/?x=9'
- * @returns 'https://a.com/news/detail/100001?x=9'
+ * format url,
+ * ```js
+ * joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
+ * // https://a.com/news/detail/100001?x=9
+ * ```
+ * @param args `string[]`
+ * @returns `string`
  */
 export function joinUrl(...args: string[]): string {
   const url = args
@@ -140,10 +156,10 @@ export function joinUrl(...args: string[]): string {
 /**
  * slice(arrayLike, offset?)
  * Convert pseudo-array to array
- * @param arrayLike pseudo-array
- * @param offset number default `0`
- * @returns array T[]
+ * @param arrayLike `pseudo-array`
+ * @param offset `number` default `0`
+ * @returns `array T[]`
  */
-export function slice<T, P>(arrLike: P, offset = 0): T[] {
-  return Array.prototype.slice.call(arrLike, offset)
+export function slice<T, P>(arrayLike: P, offset = 0): T[] {
+  return Array.prototype.slice.call(arrayLike, offset)
 }
