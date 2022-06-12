@@ -60,6 +60,7 @@ describe('format', () => {
     expect(splitValue('12.321rem')).toStrictEqual([12.321, 'rem'])
     expect(splitValue('16px')).toStrictEqual([16, 'px'])
     expect(splitValue('-16px')).toStrictEqual([-16, 'px'])
+    expect(splitValue('16%')).toStrictEqual([16, '%'])
     expect(splitValue('16')).toStrictEqual([16, ''])
     expect(splitValue(16)).toStrictEqual([16, ''])
   })
