@@ -10,7 +10,8 @@
     "static method library",
     "method",
     "typescript",
-    "vite"
+    "vite",
+    "vitest"
   ],
   "scripts": {
     "dev": "vite",
