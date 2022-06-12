@@ -5,7 +5,7 @@
  */
 
 /**
- * isArray(input)
+ * @method isArray(input)
  * @description determines whether the passed value is an Array
  * @param input `T`
  * @returns `boolean`
@@ -15,7 +15,7 @@ export function isArray<T>(input: T): boolean {
 }
 
 /**
- * isObject(input)
+ * @method isObject(input)
  * @description determines whether the passed value is an object
  * @param input `T`
  * @returns `boolean`

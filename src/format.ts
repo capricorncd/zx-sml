@@ -9,7 +9,7 @@ import { isObject } from './check'
 export { toTwoDigits }
 
 /**
- * createUrlForGetRequest(url, params)
+ * @method createUrlForGetRequest(url, params)
  * @description Create full URL for GET request
  * @param url `string`
  * @param params `Record<string, unknown>`
@@ -29,7 +29,7 @@ export function createUrlForGetRequest(
 }
 
 /**
- * toSnakeCase(input, connectSymbol?)
+ * @method toSnakeCase(input, connectSymbol?)
  * Format string as snake case
  * ```js
  * toSnakeCase('helloWorld') // hello-world
@@ -48,7 +48,7 @@ export function toSnakeCase(input = '', connectSymbol = '-'): string {
 }
 
 /**
- * toCamelCase(input, isFirstCapitalLetter?)
+ * @method toCamelCase(input, isFirstCapitalLetter?)
  * Format string as camel case
  * ```js
  * toCamelCase('hello_world') // helloWorld
@@ -68,7 +68,7 @@ export function toCamelCase(input = '', isFirstCapitalLetter = false): string {
 }
 
 /**
- * toNumber(input)
+ * @method toNumber(input)
  * @description Convert any type to number.
  * @param input `any`
  * @returns `number`
@@ -80,7 +80,7 @@ export function toNumber<T>(input: T): number {
 }
 
 /**
- * splitValue(input)
+ * @method splitValue(input)
  * Split an attribute value into number and suffix unit.
  * ```js
  * splitValue('100px') // [100, 'px']
@@ -120,7 +120,7 @@ function toString(input: unknown): string {
 }
 
 /**
- * classNames(...args)
+ * @method classNames(...args)
  * handle className
  * @param args `string | [string] | { className1: true, className2: false }`
  * @returns `string`
@@ -133,7 +133,7 @@ export function classNames(...args: unknown[]): string {
 }
 
 /**
- * joinUrl(...args)
+ * @method joinUrl(...args)
  * format url,
  * ```js
  * joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
@@ -154,7 +154,7 @@ export function joinUrl(...args: string[]): string {
 }
 
 /**
- * slice(arrayLike, offset?)
+ * @method slice(arrayLike, offset?)
  * Convert pseudo-array to array
  * @param arrayLike `pseudo-array`
  * @param offset `number` default `0`

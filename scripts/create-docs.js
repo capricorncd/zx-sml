@@ -4,44 +4,41 @@
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
 const fs = require('fs')
-const os = require('os')
+const { EOL } = require('os')
 const path = require('path')
 
-const END_OF_LINE = os.EOL
 const BLANK_LINE = ''
 const METHOD_START = '<!--METHOD_START-->'
 const METHOD_END = '<!--METHOD_END-->'
 
 function handleFile(filePath, data) {
   let isMethod = false
-  let methodCount = 0
   let methodName = null
   let tempStr
   fs.readFileSync(filePath)
     .toString()
-    .split(new RegExp(END_OF_LINE))
+    .split(new RegExp(EOL))
     .forEach((line) => {
       line = line.trim()
       // Start with method annotations
-      if (line === '/**') {
+      // Extract the method name
+      if (line.startsWith('* @method') && /^\*\s*@method\s*(.+)/.test(line)) {
         isMethod = true
-        return
-      } else if (line === '*/' && isMethod) {
-        isMethod = false
-        methodCount = 0
-        methodName = null
-        return
-      }
-      if (!isMethod) return
-      // method name
-      if (methodCount === 0 && /^\*\s?(.+)/.test(line)) {
         methodName = RegExp.$1
         data[methodName] = {
           desc: [],
           params: [],
           returns: [],
         }
-      } else if (methodName && /^\*\s?(.+)/.test(line)) {
+        return
+      } else if (line === '*/' && isMethod) {
+        isMethod = false
+        methodName = null
+        return
+      }
+      if (!isMethod || !methodName) return
+
+      if (/^\*\s*(.+)/.test(line)) {
         tempStr = RegExp.$1
         if (tempStr.startsWith('@param')) {
           data[methodName].params.push(tempStr.replace('@param', '').trim())
@@ -51,7 +48,6 @@ function handleFile(filePath, data) {
           data[methodName].desc.push(tempStr.replace('@description', '').trim())
         }
       }
-      methodCount++
     })
 }
 
@@ -65,11 +61,13 @@ function createMethodsDoc(data) {
       lines.push(
         `### ${method}`,
         BLANK_LINE,
-        item.desc.join(END_OF_LINE),
+        item.desc.join(EOL),
         BLANK_LINE,
-        item.params.map((param) => `* @param ${param}`).join(END_OF_LINE),
+        // '*' will be replaced by 'npx pretty-quick --staged' with '-'
+        // item.params.map((param) => `* @param ${param}`).join(EOL),
+        item.params.map((param) => `- @param ${param}`).join(EOL),
         BLANK_LINE,
-        item.returns.map((ret) => `* @returns ${ret}`).join(END_OF_LINE),
+        item.returns.map((ret) => `- @returns ${ret}`).join(EOL),
         BLANK_LINE
       )
     })
@@ -87,7 +85,7 @@ function writeInReadmeFile(data) {
   let isMethodStart = false
   fs.readFileSync(readmeFile, 'utf8')
     .toString()
-    .split(new RegExp(END_OF_LINE))
+    .split(new RegExp(EOL))
     .forEach((line) => {
       if (line.trim() === METHOD_START) {
         isMethodStart = true
@@ -100,7 +98,7 @@ function writeInReadmeFile(data) {
       }
       if (!isMethodStart) lines.push(line)
     })
-  fs.writeFileSync(readmeFile, lines.join(END_OF_LINE))
+  fs.writeFileSync(readmeFile, lines.join(EOL))
 }
 
 function main() {

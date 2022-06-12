@@ -13,7 +13,6 @@ zx-sml are some static method libraries that I commonly use.
 ### NPM Install
 
 ```shell
-# npm -i zx-sml
 npm install zx-sml
 ```
 

@@ -6,7 +6,7 @@
 import { slice } from './format'
 
 /**
- * $(selector, doc?)
+ * @method $(selector, doc?)
  * @description Get the DOM element that matches selector
  * @param selector `string | HTMLElement`
  * @param doc `Document | HTMLElement`
@@ -21,7 +21,7 @@ export function $<T extends HTMLElement>(
 }
 
 /**
- * $$(selector, doc?)
+ * @method $$(selector, doc?)
  * @description Get the DOM elements that matches selector
  * @param selector `string`
  * @param doc `Document | HTMLElement`
@@ -35,7 +35,7 @@ export function $$<T extends HTMLElement>(
 }
 
 /**
- * createElement(tag, attrs?, innerHTML?)
+ * @method createElement(tag, attrs?, innerHTML?)
  * create an element
  * @param tag `string`
  * @param attrs `Record<string, string>`
