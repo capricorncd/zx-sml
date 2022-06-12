@@ -58,19 +58,21 @@ function handleFile(filePath, data) {
 function createMethodsDoc(data) {
   const lines = []
   let item
-  Object.keys(data).forEach((method) => {
-    item = data[method]
-    lines.push(
-      `### ${method}`,
-      BLANK_LINE,
-      item.desc.join(END_OF_LINE),
-      BLANK_LINE,
-      item.params.map((param) => `* @param ${param}`).join(END_OF_LINE),
-      BLANK_LINE,
-      item.returns.map((ret) => `* @returns ${ret}`).join(END_OF_LINE),
-      BLANK_LINE
-    )
-  })
+  Object.keys(data)
+    .sort()
+    .forEach((method) => {
+      item = data[method]
+      lines.push(
+        `### ${method}`,
+        BLANK_LINE,
+        item.desc.join(END_OF_LINE),
+        BLANK_LINE,
+        item.params.map((param) => `* @param ${param}`).join(END_OF_LINE),
+        BLANK_LINE,
+        item.returns.map((ret) => `* @returns ${ret}`).join(END_OF_LINE),
+        BLANK_LINE
+      )
+    })
   return lines
 }
 

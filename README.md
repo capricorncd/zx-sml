@@ -36,41 +36,14 @@ formatDate('2020-12-04', 'yyyy/MM/dd W')
 
 <!--METHOD_START-->
 
-### isArray(input)
+### $$(selector, doc?)
 
-determines whether the passed value is an Array
+Get the DOM elements that matches selector
 
-- @param input `T`
+- @param selector `string`
+- @param doc `Document | HTMLElement`
 
-- @returns `boolean`
-
-### isObject(input)
-
-determines whether the passed value is an object
-
-- @param input `T`
-
-- @returns `boolean`
-
-### formatDate(date, format, langPackage?)
-
-Date format,
-please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
-
-- @param date `any`
-- @param format `string`
-- @param langPackage `ILangPackage`
-
-- @returns `string`
-
-### toDate(input)
-
-Convert input to Date,
-please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
-
-- @param input `any`
-
-- @returns `Date | null`
+- @returns `HTMLElement[]`
 
 ### $(selector, doc?)
 
@@ -81,14 +54,13 @@ Get the DOM element that matches selector
 
 - @returns `HTMLElement | null`
 
-### $$(selector, doc?)
+### classNames(...args)
 
-Get the DOM elements that matches selector
+handle className
 
-- @param selector `string`
-- @param doc `Document | HTMLElement`
+- @param args `string | [string] | { className1: true, className2: false }`
 
-- @returns `HTMLElement[]`
+- @returns `string`
 
 ### createElement(tag, attrs?, innerHTML?)
 
@@ -109,70 +81,32 @@ Create full URL for GET request
 
 - @returns `string`
 
-### toSnakeCase(input, connectSymbol?)
+### formatDate(date, format, langPackage?)
 
-Format string as snake case
+Date format,
+please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
 
-```js
-toSnakeCase('helloWorld') // hello-world
-toSnakeCase('HelloWorld') // hello-world
-toSnakeCase('helloWorld', '_') // hello_world
-toSnakeCase('helloWorld', ' ') // hello world
-```
-
-- @param input `string`
-- @param connectSymbol `string` word connect symbol, default `-`
+- @param date `any`
+- @param format `string`
+- @param langPackage `ILangPackage`
 
 - @returns `string`
 
-### toCamelCase(input, isFirstCapitalLetter?)
+### isArray(input)
 
-Format string as camel case
+determines whether the passed value is an Array
 
-```js
-toCamelCase('hello_world') // helloWorld
-toCamelCase('hello-world') // helloWorld
-toCamelCase('hello world') // helloWorld
-toCamelCase('hello-world', true) // HelloWorld
-```
+- @param input `T`
 
-- @param input `string`
-- @param isFirstCapitalLetter `boolean` whether to capitalize the first letter, default `false`
+- @returns `boolean`
 
-- @returns `string`
+### isObject(input)
 
-### toNumber(input)
+determines whether the passed value is an object
 
-Convert any type to number.
+- @param input `T`
 
-- @param input `any`
-
-- @returns `number`
-
-### splitValue(input)
-
-Split an attribute value into number and suffix unit.
-
-```js
-splitValue('100px') // [100, 'px']
-splitValue(100) // [100, '']
-splitValue('2.5rem') // [2.5, 'rem']
-splitValue('-2.5rem') // [-2.5, 'rem']
-splitValue('50%') // [50, '%']
-splitValue('50%') // [50, '%']
-```
-
-- @param input `string | number`
-
-- @returns `[number, string]`
-
-### classNames(...args)
-
-handle className
-
-- @param args `string | [string] | { className1: true, className2: false }`
-
-- @returns `string`
+- @returns `boolean`
 
 ### joinUrl(...args)
 
@@ -195,6 +129,72 @@ Convert pseudo-array to array
 - @param offset `number` default `0`
 
 - @returns `array T[]`
+
+### splitValue(input)
+
+Split an attribute value into number and suffix unit.
+
+```js
+splitValue('100px') // [100, 'px']
+splitValue(100) // [100, '']
+splitValue('2.5rem') // [2.5, 'rem']
+splitValue('-2.5rem') // [-2.5, 'rem']
+splitValue('50%') // [50, '%']
+splitValue('50%') // [50, '%']
+```
+
+- @param input `string | number`
+
+- @returns `[number, string]`
+
+### toCamelCase(input, isFirstCapitalLetter?)
+
+Format string as camel case
+
+```js
+toCamelCase('hello_world') // helloWorld
+toCamelCase('hello-world') // helloWorld
+toCamelCase('hello world') // helloWorld
+toCamelCase('hello-world', true) // HelloWorld
+```
+
+- @param input `string`
+- @param isFirstCapitalLetter `boolean` whether to capitalize the first letter, default `false`
+
+- @returns `string`
+
+### toDate(input)
+
+Convert input to Date,
+please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
+
+- @param input `any`
+
+- @returns `Date | null`
+
+### toNumber(input)
+
+Convert any type to number.
+
+- @param input `any`
+
+- @returns `number`
+
+### toSnakeCase(input, connectSymbol?)
+
+Format string as snake case
+
+```js
+toSnakeCase('helloWorld') // hello-world
+toSnakeCase('HelloWorld') // hello-world
+toSnakeCase('helloWorld', '_') // hello_world
+toSnakeCase('helloWorld', ' ') // hello world
+```
+
+- @param input `string`
+- @param connectSymbol `string` word connect symbol, default `-`
+
+- @returns `string`
 
 <!--METHOD_END-->
 
