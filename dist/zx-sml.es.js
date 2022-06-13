@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.0.1
- * Author: capricorncd <capricorncd@qq.com>
+ * zx-sml version 0.0.2
+ * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-12 13:28:52 (GMT+0900)
+ * Released on: 2022-06-13 22:25:09 (GMT+0900)
  */
 function isArray(input) {
   return Array.isArray(input);
@@ -98,18 +98,24 @@ function toCamelCase(input = "", isFirstCapitalLetter = false) {
   const result = input.replace(/[-_\s](\w)/g, (_, s) => s.toUpperCase());
   return isFirstCapitalLetter ? result.replace(/^\w/, (s) => s.toUpperCase()) : result;
 }
-function toNumber(input) {
+function toNumber(input, isStrictMode = false) {
   if (typeof input === "number")
     return input;
-  const n = Number(input);
-  return isNaN(n) ? 0 : n;
+  if (typeof input === "string") {
+    if (!isStrictMode && /^(-?\d+(?:\.\d+)?)\D*/.test(input.replace(/(\d),/g, "$1"))) {
+      return toNumber(RegExp.$1, true);
+    }
+    const n = Number(input);
+    return isNaN(n) ? 0 : n;
+  }
+  return 0;
 }
 function splitValue(input) {
   if (typeof input === "number") {
     return [input, ""];
   }
   const result = input.match(/^(-?\d+(?:\.\d+)?)([a-zA-Z%]*)$/);
-  return result ? [toNumber(result[1]), result[2]] : [0, ""];
+  return result ? [toNumber(result[1], true), result[2]] : [0, ""];
 }
 function toString(input) {
   if (typeof input === "string")

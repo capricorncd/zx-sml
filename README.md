@@ -170,11 +170,21 @@ please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) f
 
 - @returns `Date | null`
 
-### toNumber(input)
+### toNumber(input, isStrictMode?)
 
 Convert any type to number.
 
+```js
+toNumber('1.3rem') // 1.3
+toNumber('1.3rem', true) // 0
+toNumber('-12px') // -12
+toNumber('-12px', true) // 0
+toNumber('1,000,999Yan') // 1000999
+toNumber('1,000,999', true) // 0
+```
+
 - @param input `any`
+- @param isStrictMode `boolean` Whether it is strict mode, default `false`
 
 - @returns `number`
 

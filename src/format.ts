@@ -68,15 +68,33 @@ export function toCamelCase(input = '', isFirstCapitalLetter = false): string {
 }
 
 /**
- * @method toNumber(input)
+ * @method toNumber(input, isStrictMode?)
  * @description Convert any type to number.
+ * ```js
+ * toNumber('1.3rem') // 1.3
+ * toNumber('1.3rem', true) // 0
+ * toNumber('-12px') // -12
+ * toNumber('-12px', true) // 0
+ * toNumber('1,000,999Yan') // 1000999
+ * toNumber('1,000,999', true) // 0
+ * ```
  * @param input `any`
+ * @param isStrictMode `boolean` Whether it is strict mode, default `false`
  * @returns `number`
  */
-export function toNumber<T>(input: T): number {
+export function toNumber<T>(input: T, isStrictMode = false): number {
   if (typeof input === 'number') return input
-  const n = Number(input)
-  return isNaN(n) ? 0 : n
+  if (typeof input === 'string') {
+    if (
+      !isStrictMode &&
+      /^(-?\d+(?:\.\d+)?)\D*/.test(input.replace(/(\d),/g, '$1'))
+    ) {
+      return toNumber(RegExp.$1, true)
+    }
+    const n = Number(input)
+    return isNaN(n) ? 0 : n
+  }
+  return 0
 }
 
 /**
@@ -97,7 +115,7 @@ export function splitValue(input: string | number): [number, string] {
     return [input, '']
   }
   const result = input.match(/^(-?\d+(?:\.\d+)?)([a-zA-Z%]*)$/)
-  return result ? [toNumber(result[1]), result[2]] : [0, '']
+  return result ? [toNumber(result[1], true), result[2]] : [0, '']
 }
 
 /**!
