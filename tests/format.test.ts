@@ -56,13 +56,15 @@ describe('format', () => {
   })
 
   it('splitValue', () => {
-    expect(splitValue('12.321.23rem')).toStrictEqual([0, ''])
+    expect(splitValue('12.321.23rem')).toStrictEqual([12.321, '.23rem'])
     expect(splitValue('12.321rem')).toStrictEqual([12.321, 'rem'])
     expect(splitValue('16px')).toStrictEqual([16, 'px'])
     expect(splitValue('-16px')).toStrictEqual([-16, 'px'])
     expect(splitValue('16%')).toStrictEqual([16, '%'])
     expect(splitValue('16')).toStrictEqual([16, ''])
     expect(splitValue(16)).toStrictEqual([16, ''])
+    expect(splitValue('1,600円')).toStrictEqual([1600, '円'])
+    expect(splitValue(',1,600円')).toStrictEqual([0, ''])
   })
 
   it('classNames', () => {

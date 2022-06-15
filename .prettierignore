@@ -7,3 +7,6 @@ dist/
 
 .git/
 node_modules/
+
+# markdown
+*.md

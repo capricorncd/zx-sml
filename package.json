@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "some static method library",
   "main": "dist/zx-sml.es.js",
   "browser": "dist/zx-sml.umd.js",

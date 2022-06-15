@@ -13,6 +13,12 @@ import { formatDate, toDate } from 'date-utils-2020'
  * @param format `string`
  * @param langPackage `ILangPackage`
  * @returns `string`
+ * ```js
+ * // timestamp
+ * formatDate( 20210101 , 'yyyy-MM-dd hh:mm:ss') // 1970-01-01 14:36:50
+ * // yyyyMMdd
+ * formatDate('20210101', 'yyyy-MM-dd hh:mm:ss') // 2021-01-01 00:00:00
+ * ```
  */
 
 /**

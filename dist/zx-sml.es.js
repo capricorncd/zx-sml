@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.0.2
+ * zx-sml version 0.0.3
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-13 22:25:09 (GMT+0900)
+ * Released on: 2022-06-15 20:10:46 (GMT+0900)
  */
 function isArray(input) {
   return Array.isArray(input);
@@ -114,7 +114,7 @@ function splitValue(input) {
   if (typeof input === "number") {
     return [input, ""];
   }
-  const result = input.match(/^(-?\d+(?:\.\d+)?)([a-zA-Z%]*)$/);
+  const result = input.replace(/(\d),/g, "$1").match(/^(-?\d+(?:\.\d+)?)(.*)$/);
   return result ? [toNumber(result[1], true), result[2]] : [0, ""];
 }
 function toString(input) {

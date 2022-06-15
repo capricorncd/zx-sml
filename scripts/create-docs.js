@@ -13,6 +13,7 @@ const METHOD_END = '<!--METHOD_END-->'
 
 function handleFile(filePath, data) {
   let isMethod = false
+  let isCode = false
   let methodName = null
   let tempStr
   fs.readFileSync(filePath)
@@ -29,6 +30,7 @@ function handleFile(filePath, data) {
           desc: [],
           params: [],
           returns: [],
+          codes: [],
         }
         return
       } else if (line === '*/' && isMethod) {
@@ -38,15 +40,25 @@ function handleFile(filePath, data) {
       }
       if (!isMethod || !methodName) return
 
+      if (/^\*\s*```\w+/.test(line)) {
+        isCode = true
+      }
+
       if (/^\*\s*(.+)/.test(line)) {
         tempStr = RegExp.$1
         if (tempStr.startsWith('@param')) {
           data[methodName].params.push(tempStr.replace('@param', '').trim())
         } else if (tempStr.startsWith('@returns')) {
           data[methodName].returns.push(tempStr.replace('@returns', '').trim())
+        } else if (isCode) {
+          data[methodName].codes.push(tempStr)
         } else {
           data[methodName].desc.push(tempStr.replace('@description', '').trim())
         }
+      }
+
+      if (/^\*\s*```$/.test(line)) {
+        isCode = false
       }
     })
 }
@@ -58,6 +70,10 @@ function createMethodsDoc(data) {
     .sort()
     .forEach((method) => {
       item = data[method]
+      if (item.codes.length) {
+        item.codes.unshift(BLANK_LINE)
+        item.codes.push(BLANK_LINE)
+      }
       lines.push(
         `### ${method}`,
         BLANK_LINE,
@@ -68,7 +84,7 @@ function createMethodsDoc(data) {
         item.params.map((param) => `- @param ${param}`).join(EOL),
         BLANK_LINE,
         item.returns.map((ret) => `- @returns ${ret}`).join(EOL),
-        BLANK_LINE
+        item.codes.join(EOL)
       )
     })
   return lines

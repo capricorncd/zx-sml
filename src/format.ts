@@ -14,6 +14,12 @@ export { toTwoDigits }
  * @param url `string`
  * @param params `Record<string, unknown>`
  * @returns `string`
+ * ```js
+ * createUrlForGetRequest('api/user', { age: 18 })
+ * // 'api/user?age=18'
+ * createUrlForGetRequest('api/user?class=a', { age: 18 })
+ * // 'api/user?class=a&age=18'
+ * ```
  */
 export function createUrlForGetRequest(
   url: string,
@@ -106,6 +112,8 @@ export function toNumber<T>(input: T, isStrictMode = false): number {
  * splitValue('2.5rem') // [2.5, 'rem']
  * splitValue('-2.5rem') // [-2.5, 'rem']
  * splitValue('50%') // [50, '%']
+ * splitValue('1,600円') // [1600, '円']
+ * splitValue(',1,600円') // [0, '']
  * ```
  * @param input `string | number`
  * @returns `[number, string]`
@@ -114,7 +122,7 @@ export function splitValue(input: string | number): [number, string] {
   if (typeof input === 'number') {
     return [input, '']
   }
-  const result = input.match(/^(-?\d+(?:\.\d+)?)([a-zA-Z%]*)$/)
+  const result = input.replace(/(\d),/g, '$1').match(/^(-?\d+(?:\.\d+)?)(.*)$/)
   return result ? [toNumber(result[1], true), result[2]] : [0, '']
 }
 
@@ -141,6 +149,10 @@ function toString(input: unknown): string {
  * handle className
  * @param args `string | [string] | { className1: true, className2: false }`
  * @returns `string`
+ * ```js
+ * classNames({ active: true }, ['text-center'], 'flex')
+ * // 'active text-center flex'
+ * ```
  */
 export function classNames(...args: unknown[]): string {
   return args
@@ -176,6 +188,9 @@ export function joinUrl(...args: string[]): string {
  * @param arrayLike `pseudo-array`
  * @param offset `number` default `0`
  * @returns `array T[]`
+ * ```js
+ * slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
+ * ```
  */
 export function slice<T, P>(arrayLike: P, offset = 0): T[] {
   return Array.prototype.slice.call(arrayLike, offset)
