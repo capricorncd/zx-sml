@@ -64,7 +64,10 @@ describe('format', () => {
     expect(splitValue('16')).toStrictEqual([16, ''])
     expect(splitValue(16)).toStrictEqual([16, ''])
     expect(splitValue('1,600円')).toStrictEqual([1600, '円'])
+    expect(splitValue('-1,600円')).toStrictEqual([-1600, '円'])
     expect(splitValue(',1,600円')).toStrictEqual([0, ''])
+    expect(splitValue('0000,600円')).toStrictEqual([0, ',600円'])
+    expect(splitValue('rem')).toStrictEqual([0, ''])
   })
 
   it('classNames', () => {

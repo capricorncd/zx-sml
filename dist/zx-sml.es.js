@@ -2,7 +2,7 @@
  * zx-sml version 0.0.3
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-15 20:10:46 (GMT+0900)
+ * Released on: 2022-06-15 21:24:50 (GMT+0900)
  */
 function isArray(input) {
   return Array.isArray(input);
@@ -98,11 +98,14 @@ function toCamelCase(input = "", isFirstCapitalLetter = false) {
   const result = input.replace(/[-_\s](\w)/g, (_, s) => s.toUpperCase());
   return isFirstCapitalLetter ? result.replace(/^\w/, (s) => s.toUpperCase()) : result;
 }
+function restoreUSLocalString(input) {
+  return input.replace(/^-?[1-9]\d{0,2}(,\d{3})+/, (match) => match.replace(/,/g, ""));
+}
 function toNumber(input, isStrictMode = false) {
   if (typeof input === "number")
     return input;
   if (typeof input === "string") {
-    if (!isStrictMode && /^(-?\d+(?:\.\d+)?)\D*/.test(input.replace(/(\d),/g, "$1"))) {
+    if (!isStrictMode && /^(-?\d+(?:\.\d+)?)\D*/.test(restoreUSLocalString(input))) {
       return toNumber(RegExp.$1, true);
     }
     const n = Number(input);
@@ -114,7 +117,7 @@ function splitValue(input) {
   if (typeof input === "number") {
     return [input, ""];
   }
-  const result = input.replace(/(\d),/g, "$1").match(/^(-?\d+(?:\.\d+)?)(.*)$/);
+  const result = restoreUSLocalString(input).match(/^(-?\d+(?:\.\d+)?)(.*)$/);
   return result ? [toNumber(result[1], true), result[2]] : [0, ""];
 }
 function toString(input) {

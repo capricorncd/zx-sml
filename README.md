@@ -154,6 +154,7 @@ slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
 ### splitValue(input)
 
 Split an attribute value into number and suffix unit.
+Returns `[0, '']` if the string does not start with a `number` or `-number`.
 
 - @param input `string | number`
 
@@ -167,6 +168,7 @@ splitValue('-2.5rem') // [-2.5, 'rem']
 splitValue('50%') // [50, '%']
 splitValue('1,600円') // [1600, '円']
 splitValue(',1,600円') // [0, '']
+splitValue('0000,600円') // [0, ',600円']
 ```
 
 ### toCamelCase(input, isFirstCapitalLetter?)

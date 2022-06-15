@@ -73,6 +73,12 @@ export function toCamelCase(input = '', isFirstCapitalLetter = false): string {
     : result
 }
 
+function restoreUSLocalString(input: string): string {
+  return input.replace(/^-?[1-9]\d{0,2}(,\d{3})+/, (match) =>
+    match.replace(/,/g, '')
+  )
+}
+
 /**
  * @method toNumber(input, isStrictMode?)
  * @description Convert any type to number.
@@ -93,7 +99,7 @@ export function toNumber<T>(input: T, isStrictMode = false): number {
   if (typeof input === 'string') {
     if (
       !isStrictMode &&
-      /^(-?\d+(?:\.\d+)?)\D*/.test(input.replace(/(\d),/g, '$1'))
+      /^(-?\d+(?:\.\d+)?)\D*/.test(restoreUSLocalString(input))
     ) {
       return toNumber(RegExp.$1, true)
     }
@@ -106,6 +112,7 @@ export function toNumber<T>(input: T, isStrictMode = false): number {
 /**
  * @method splitValue(input)
  * Split an attribute value into number and suffix unit.
+ * Returns `[0, '']` if the string does not start with a `number` or `-number`.
  * ```js
  * splitValue('100px') // [100, 'px']
  * splitValue(100) // [100, '']
@@ -114,6 +121,7 @@ export function toNumber<T>(input: T, isStrictMode = false): number {
  * splitValue('50%') // [50, '%']
  * splitValue('1,600円') // [1600, '円']
  * splitValue(',1,600円') // [0, '']
+ * splitValue('0000,600円') // [0, ',600円']
  * ```
  * @param input `string | number`
  * @returns `[number, string]`
@@ -122,7 +130,7 @@ export function splitValue(input: string | number): [number, string] {
   if (typeof input === 'number') {
     return [input, '']
   }
-  const result = input.replace(/(\d),/g, '$1').match(/^(-?\d+(?:\.\d+)?)(.*)$/)
+  const result = restoreUSLocalString(input).match(/^(-?\d+(?:\.\d+)?)(.*)$/)
   return result ? [toNumber(result[1], true), result[2]] : [0, '']
 }
 
