@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.0.3
+ * zx-sml version 0.0.4
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-15 21:24:50 (GMT+0900)
+ * Released on: 2022-06-18 14:39:35 (GMT+0900)
  */
 function isArray(input) {
   return Array.isArray(input);
@@ -150,13 +150,18 @@ function $(selector, doc = document) {
 function $$(selector, doc = document) {
   return slice(doc.querySelectorAll(selector), 0);
 }
-function createElement(tag, attrs = {}, innerHTML) {
+function createElement(tag, attrs = {}, children) {
   const el = document.createElement(tag);
   for (const [key, val] of Object.entries(attrs)) {
     el.setAttribute(key, val);
   }
-  if (innerHTML)
-    el.innerHTML = innerHTML;
+  if (children) {
+    if (typeof children === "string") {
+      el.innerHTML = children;
+    } else {
+      el.append(children);
+    }
+  }
   return el;
 }
 var formatDate = dateUtils2020.exports.formatDate;

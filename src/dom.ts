@@ -35,22 +35,28 @@ export function $$<T extends HTMLElement>(
 }
 
 /**
- * @method createElement(tag, attrs?, innerHTML?)
+ * @method createElement(tag, attrs?, children?)
  * create an element
  * @param tag `string`
  * @param attrs `Record<string, string>`
- * @param innerHTML `string`
+ * @param children `string | HTMLElement | Node`
  * @returns `HTMLElement`
  */
 export function createElement<T extends HTMLElement>(
   tag: string,
   attrs: Record<string, string> = {},
-  innerHTML?: string
+  children?: string | HTMLElement | Node
 ): T {
   const el = document.createElement(tag) as T
   for (const [key, val] of Object.entries(attrs)) {
     el.setAttribute(key, val)
   }
-  if (innerHTML) el.innerHTML = innerHTML
+  if (children) {
+    if (typeof children === 'string') {
+      el.innerHTML = children
+    } else {
+      el.append(children)
+    }
+  }
   return el
 }

@@ -65,13 +65,13 @@ classNames({ active: true }, ['text-center'], 'flex')
 // 'active text-center flex'
 ```
 
-### createElement(tag, attrs?, innerHTML?)
+### createElement(tag, attrs?, children?)
 
 create an element
 
 - @param tag `string`
 - @param attrs `Record<string, string>`
-- @param innerHTML `string`
+- @param children `string | HTMLElement | Node`
 
 - @returns `HTMLElement`
 
