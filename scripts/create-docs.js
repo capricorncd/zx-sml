@@ -57,7 +57,7 @@ function handleFile(filePath, data) {
         }
       }
 
-      if (/^\*\s*```$/.test(line)) {
+      if (isCode && /^\*\s*```$/.test(line)) {
         isCode = false
       }
     })
