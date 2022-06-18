@@ -48,9 +48,10 @@ export function createUrlForGetRequest(
  * @returns `string`
  */
 export function toSnakeCase(input = '', connectSymbol = '-'): string {
-  return input
-    .replace(/[A-Z]/g, (s) => `${connectSymbol}${s.toLowerCase()}`)
-    .replace(new RegExp(`^${connectSymbol}`), '')
+  return input.replace(
+    /[A-Z]/g,
+    (s, offset) => `${offset > 0 ? connectSymbol : ''}${s.toLowerCase()}`
+  )
 }
 
 /**
