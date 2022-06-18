@@ -3,7 +3,9 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 10:44:51 (GMT+0900)
  */
-import { slice } from './format'
+import { AnyObject } from '@types'
+import { isObject } from './check'
+import { slice, formatKeys } from './format'
 
 /**
  * @method $(selector, doc?)
@@ -44,12 +46,15 @@ export function $$<T extends HTMLElement>(
  */
 export function createElement<T extends HTMLElement>(
   tag: string,
-  attrs: Record<string, string> = {},
+  attrs: AnyObject = {},
   children?: string | HTMLElement | Node
 ): T {
   const el = document.createElement(tag) as T
   for (const [key, val] of Object.entries(attrs)) {
-    el.setAttribute(key, val)
+    el.setAttribute(
+      key,
+      key === 'style' && isObject(val) ? toStrStyles(val) : val
+    )
   }
   if (children) {
     if (typeof children === 'string') {
@@ -59,4 +64,25 @@ export function createElement<T extends HTMLElement>(
     }
   }
   return el
+}
+
+/**
+ * @method toStrStyles(styles)
+ * Convert styles object to string
+ * @param styles `object {}`
+ * @returns string
+ * ```js
+ * toStrStyles({'line-height': 1.5, width: '50%'})
+ * // `line-height:1.5;width:'50%'`
+ * toStrStyles({lineHeight: 1.5, width: '50%'})
+ * // `line-height:1.5;width:50%`
+ * ```
+ */
+export function toStrStyles(styles: AnyObject): string {
+  const arr: string[] = []
+  for (const [key, value] of Object.entries(formatKeys(styles))) {
+    if (value === '' || typeof value === 'undefined' || value === null) continue
+    arr.push(`${key}:${value}`)
+  }
+  return arr.join(';')
 }

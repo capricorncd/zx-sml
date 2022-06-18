@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.0.4
+ * zx-sml version 0.1.0
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-18 14:42:10 (GMT+0900)
+ * Released on: 2022-06-18 22:44:29 (GMT+0900)
  */
 function isArray(input) {
   return Array.isArray(input);
@@ -92,7 +92,7 @@ function createUrlForGetRequest(url, params = {}) {
   return prefixUrl + (queryParams.length ? `?${queryParams.join("&")}` : "");
 }
 function toSnakeCase(input = "", connectSymbol = "-") {
-  return input.replace(/[A-Z]/g, (s) => `${connectSymbol}${s.toLowerCase()}`).replace(new RegExp(`^${connectSymbol}`), "");
+  return input.replace(/[A-Z]/g, (s, offset) => `${offset > 0 ? connectSymbol : ""}${s.toLowerCase()}`);
 }
 function toCamelCase(input = "", isFirstCapitalLetter = false) {
   const result = input.replace(/[-_\s](\w)/g, (_, s) => s.toUpperCase());
@@ -142,6 +142,14 @@ function joinUrl(...args) {
 function slice(arrayLike, offset = 0) {
   return Array.prototype.slice.call(arrayLike, offset);
 }
+function formatKeys(obj = {}, isCamelCase = false) {
+  const formatter = isCamelCase ? toCamelCase : toSnakeCase;
+  const result = {};
+  for (const [key, value] of Object.entries(obj)) {
+    result[formatter(key)] = isObject(value) ? formatKeys(value, isCamelCase) : value;
+  }
+  return result;
+}
 function $(selector, doc = document) {
   if (selector instanceof HTMLElement)
     return selector;
@@ -153,7 +161,7 @@ function $$(selector, doc = document) {
 function createElement(tag, attrs = {}, children) {
   const el = document.createElement(tag);
   for (const [key, val] of Object.entries(attrs)) {
-    el.setAttribute(key, val);
+    el.setAttribute(key, key === "style" && isObject(val) ? toStrStyles(val) : val);
   }
   if (children) {
     if (typeof children === "string") {
@@ -164,7 +172,16 @@ function createElement(tag, attrs = {}, children) {
   }
   return el;
 }
+function toStrStyles(styles) {
+  const arr = [];
+  for (const [key, value] of Object.entries(formatKeys(styles))) {
+    if (value === "" || typeof value === "undefined" || value === null)
+      continue;
+    arr.push(`${key}:${value}`);
+  }
+  return arr.join(";");
+}
 var formatDate = dateUtils2020.exports.formatDate;
 var toDate = dateUtils2020.exports.toDate;
 var toTwoDigits = dateUtils2020.exports.toTwoDigits;
-export { $, $$, classNames, createElement, createUrlForGetRequest, formatDate, isArray, isObject, joinUrl, slice, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toTwoDigits };
+export { $, $$, classNames, createElement, createUrlForGetRequest, formatDate, formatKeys, isArray, isObject, joinUrl, slice, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };

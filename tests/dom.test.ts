@@ -4,7 +4,7 @@
  * Date: 2022/06/11 11:40:27 (GMT+0900)
  */
 import { describe, it, expect } from 'vitest'
-import { createElement, $, $$ } from '@core/dom'
+import { createElement, $, $$, toStrStyles } from '@core/dom'
 
 describe('dom', () => {
   it('$', () => {
@@ -18,5 +18,14 @@ describe('dom', () => {
     expect($$('p', el).length).toBe(2)
     expect($$('div', el).length).toBe(0)
     expect($$('span', el).length).toBe(1)
+  })
+
+  it('toStrStyles', () => {
+    expect(toStrStyles({ 'line-height': 1.5, width: '50%' })).toBe(
+      `line-height:1.5;width:50%`
+    )
+    expect(toStrStyles({ lineHeight: 1.5, width: '50%' })).toBe(
+      `line-height:1.5;width:50%`
+    )
   })
 })

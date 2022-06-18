@@ -4,6 +4,7 @@
  * Date: 2022/06/11 09:58:54 (GMT+0900)
  */
 import { toTwoDigits } from 'date-utils-2020'
+import { AnyObject } from '@types'
 import { isObject } from './check'
 
 export { toTwoDigits }
@@ -203,4 +204,33 @@ export function joinUrl(...args: string[]): string {
  */
 export function slice<T, P>(arrayLike: P, offset = 0): T[] {
   return Array.prototype.slice.call(arrayLike, offset)
+}
+
+/**
+ * @method formatKeys(obj, isCamelCase?)
+ * Format the key of the object, using the `toSnakeCase` or `toCamelCase` method.
+ * @param obj `object {}`
+ * @param isCamelCase `boolean` Whether the key of the object uses camel-case or snake-case, default `false`
+ * @returns `object {}`
+ * ```js
+ * formatObjKeys({lineHeight: 1.5}) // {'line-height': 1.5}
+ * formatObjKeys({lineHeight: 1.5, childObj: {maxWidth: 100}})
+ * // {'line-height': 1.5, 'child-obj': {'max-width': 100}}
+ * formatObjKeys({'line-height': 1.5}, true) // {lineHeight: 1.5}
+ * formatObjKeys({'line-height': 1.5, 'child-obj': {'max-width': 100}}, true)
+ * // {lineHeight: 1.5, childObj: {maxWidth: 100}}
+ * ```
+ */
+export function formatKeys(
+  obj: AnyObject = {},
+  isCamelCase = false
+): AnyObject {
+  const formatter = isCamelCase ? toCamelCase : toSnakeCase
+  const result: AnyObject = {}
+  for (const [key, value] of Object.entries(obj)) {
+    result[formatter(key)] = isObject(value)
+      ? formatKeys(value, isCamelCase)
+      : value
+  }
+  return result
 }

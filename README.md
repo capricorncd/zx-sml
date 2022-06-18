@@ -109,6 +109,24 @@ formatDate( 20210101 , 'yyyy-MM-dd hh:mm:ss') // 1970-01-01 14:36:50
 formatDate('20210101', 'yyyy-MM-dd hh:mm:ss') // 2021-01-01 00:00:00
 ```
 
+### formatKeys(obj, isCamelCase?)
+
+Format the key of the object, using the `toSnakeCase` or `toCamelCase` method.
+
+- @param obj `object {}`
+- @param isCamelCase `boolean` Whether the key of the object uses camel-case or snake-case, default `false`
+
+- @returns `object {}`
+
+```js
+formatObjKeys({lineHeight: 1.5}) // {'line-height': 1.5}
+formatObjKeys({lineHeight: 1.5, childObj: {maxWidth: 100}})
+// {'line-height': 1.5, 'child-obj': {'max-width': 100}}
+formatObjKeys({'line-height': 1.5}, true) // {lineHeight: 1.5}
+formatObjKeys({'line-height': 1.5, 'child-obj': {'max-width': 100}}, true)
+// {lineHeight: 1.5, childObj: {maxWidth: 100}}
+```
+
 ### isArray(input)
 
 determines whether the passed value is an Array
@@ -228,6 +246,21 @@ toSnakeCase('helloWorld') // hello-world
 toSnakeCase('HelloWorld') // hello-world
 toSnakeCase('helloWorld', '_') // hello_world
 toSnakeCase('helloWorld', ' ') // hello world
+```
+
+### toStrStyles(styles)
+
+Convert styles object to string
+
+- @param styles `object {}`
+
+- @returns string
+
+```js
+toStrStyles({'line-height': 1.5, width: '50%'})
+// `line-height:1.5;width:'50%'`
+toStrStyles({lineHeight: 1.5, width: '50%'})
+// `line-height:1.5;width:50%`
 ```
 
 <!--METHOD_END-->

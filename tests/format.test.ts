@@ -14,6 +14,7 @@ import {
   splitValue,
   classNames,
   toNumber,
+  formatKeys,
 } from '@core/format'
 
 describe('format', () => {
@@ -99,5 +100,28 @@ describe('format', () => {
     expect(toNumber(null)).toBe(0)
     expect(toNumber(undefined)).toBe(0)
     expect(toNumber({})).toBe(0)
+  })
+
+  it('formatKeys', () => {
+    expect(formatKeys({ lineHeight: 1.5 })).toStrictEqual({
+      'line-height': 1.5,
+    })
+    expect(formatKeys({ 'line-height': 1.5 }, true)).toStrictEqual({
+      lineHeight: 1.5,
+    })
+
+    expect(
+      formatKeys({ lineHeight: 1.5, childObj: { maxWidth: 600 } })
+    ).toStrictEqual({ 'line-height': 1.5, 'child-obj': { 'max-width': 600 } })
+
+    expect(
+      formatKeys(
+        { 'line-height': 1.5, 'child-obj': { 'max-width': 600 } },
+        true
+      )
+    ).toStrictEqual({
+      lineHeight: 1.5,
+      childObj: { maxWidth: 600 },
+    })
   })
 })
