@@ -31,7 +31,7 @@ export function $$<T extends HTMLElement>(
   selector: string,
   doc: Document | HTMLElement = document
 ): T[] {
-  return slice(doc.querySelectorAll(selector), 0)
+  return slice(doc.querySelectorAll(selector))
 }
 
 /**

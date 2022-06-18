@@ -2,7 +2,7 @@
  * zx-sml version 0.0.4
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-18 14:39:35 (GMT+0900)
+ * Released on: 2022-06-18 14:42:10 (GMT+0900)
  */
 function isArray(input) {
   return Array.isArray(input);
@@ -148,7 +148,7 @@ function $(selector, doc = document) {
   return doc.querySelector(selector);
 }
 function $$(selector, doc = document) {
-  return slice(doc.querySelectorAll(selector), 0);
+  return slice(doc.querySelectorAll(selector));
 }
 function createElement(tag, attrs = {}, children) {
   const el = document.createElement(tag);
