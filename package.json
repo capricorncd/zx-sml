@@ -1,9 +1,9 @@
 {
   "name": "zx-sml",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "some static method library",
-  "main": "dist/zx-sml.es.js",
-  "browser": "dist/zx-sml.umd.js",
+  "main": "dist/zx-sml.umd.js",
+  "module": "dist/zx-sml.es.js",
   "types": "types",
   "keywords": [
     "zx-sml",
