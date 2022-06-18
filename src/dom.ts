@@ -68,17 +68,23 @@ export function createElement<T extends HTMLElement>(
 
 /**
  * @method toStrStyles(styles)
- * Convert styles object to string
- * @param styles `object {}`
+ * Convert styles object to string.
+ * When the properties are the same, the previous object properties will be overwritten
+ * @param args `Array<object {}>`
  * @returns string
  * ```js
  * toStrStyles({'line-height': 1.5, width: '50%'})
  * // `line-height:1.5;width:'50%'`
  * toStrStyles({lineHeight: 1.5, width: '50%'})
  * // `line-height:1.5;width:50%`
+ * toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
+ * // line-height:24px;width:50%
  * ```
  */
-export function toStrStyles(styles: AnyObject): string {
+export function toStrStyles(...args: AnyObject[]): string {
+  const styles: AnyObject = args.reduce((prev, obj) => {
+    return { ...prev, ...obj }
+  })
   const arr: string[] = []
   for (const [key, value] of Object.entries(formatKeys(styles))) {
     if (value === '' || typeof value === 'undefined' || value === null) continue

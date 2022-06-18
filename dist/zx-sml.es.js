@@ -2,8 +2,24 @@
  * zx-sml version 0.1.0
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-18 22:44:29 (GMT+0900)
+ * Released on: 2022-06-18 23:04:29 (GMT+0900)
  */
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
 function isArray(input) {
   return Array.isArray(input);
 }
@@ -172,7 +188,10 @@ function createElement(tag, attrs = {}, children) {
   }
   return el;
 }
-function toStrStyles(styles) {
+function toStrStyles(...args) {
+  const styles = args.reduce((prev, obj) => {
+    return __spreadValues(__spreadValues({}, prev), obj);
+  });
   const arr = [];
   for (const [key, value] of Object.entries(formatKeys(styles))) {
     if (value === "" || typeof value === "undefined" || value === null)

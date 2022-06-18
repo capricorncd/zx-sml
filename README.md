@@ -250,9 +250,10 @@ toSnakeCase('helloWorld', ' ') // hello world
 
 ### toStrStyles(styles)
 
-Convert styles object to string
+Convert styles object to string.
+When the properties are the same, the previous object properties will be overwritten
 
-- @param styles `object {}`
+- @param args `Array<object {}>`
 
 - @returns string
 
@@ -261,6 +262,8 @@ toStrStyles({'line-height': 1.5, width: '50%'})
 // `line-height:1.5;width:'50%'`
 toStrStyles({lineHeight: 1.5, width: '50%'})
 // `line-height:1.5;width:50%`
+toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
+// line-height:24px;width:50%
 ```
 
 <!--METHOD_END-->

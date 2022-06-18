@@ -27,5 +27,8 @@ describe('dom', () => {
     expect(toStrStyles({ lineHeight: 1.5, width: '50%' })).toBe(
       `line-height:1.5;width:50%`
     )
+    expect(
+      toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
+    ).toBe(`line-height:24px;width:50%`)
   })
 })
