@@ -2,7 +2,7 @@
  * zx-sml version 0.1.0
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-18 23:04:29 (GMT+0900)
+ * Released on: 2022-06-19 22:54:33 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -25,6 +25,9 @@ function isArray(input) {
 }
 function isObject(input) {
   return input !== null && !isArray(input) && typeof input === "object";
+}
+function isElement(el) {
+  return el && el.nodeType === 1;
 }
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var dateUtils2020 = { exports: {} };
@@ -190,17 +193,62 @@ function createElement(tag, attrs = {}, children) {
 }
 function toStrStyles(...args) {
   const styles = args.reduce((prev, obj) => {
-    return __spreadValues(__spreadValues({}, prev), obj);
-  });
+    return __spreadValues(__spreadValues({}, prev), formatKeys(obj));
+  }, {});
   const arr = [];
-  for (const [key, value] of Object.entries(formatKeys(styles))) {
+  for (const [key, value] of Object.entries(styles)) {
     if (value === "" || typeof value === "undefined" || value === null)
       continue;
     arr.push(`${key}:${value}`);
   }
   return arr.join(";");
 }
+function getMaxZIndex(defaultZIndex = 100) {
+  const elements = document.getElementsByTagName("*");
+  let el, css, zIndex;
+  const arr = [];
+  for (let i = 0; i < elements.length; i++) {
+    el = elements[i];
+    if (el.nodeType !== 1)
+      continue;
+    css = window.getComputedStyle(el, null);
+    if (css.position !== "static") {
+      zIndex = +css.zIndex;
+      if (zIndex > 0)
+        arr.push(zIndex);
+    }
+  }
+  return arr.length ? Math.max.apply(null, arr) : defaultZIndex;
+}
+function getStyleValue(el, attr, isNumber = false) {
+  if (!isElement(el))
+    return null;
+  const css = window.getComputedStyle(el, null);
+  if (attr) {
+    try {
+      const value = css[toCamelCase(attr)];
+      return isNumber ? toNumber(value) : value;
+    } catch (e) {
+      return null;
+    }
+  }
+  return css;
+}
+function getScrollParents(el) {
+  const scrollableValues = ["auto", "scroll"];
+  const arr = [];
+  let parent = el.parentElement;
+  let val;
+  while (parent) {
+    val = getStyleValue(parent, "overflow");
+    if (typeof val === "string" && scrollableValues.includes(val)) {
+      arr.push(parent);
+    }
+    parent = parent.parentElement;
+  }
+  return arr;
+}
 var formatDate = dateUtils2020.exports.formatDate;
 var toDate = dateUtils2020.exports.toDate;
 var toTwoDigits = dateUtils2020.exports.toTwoDigits;
-export { $, $$, classNames, createElement, createUrlForGetRequest, formatDate, formatKeys, isArray, isObject, joinUrl, slice, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };
+export { $, $$, classNames, createElement, createUrlForGetRequest, formatDate, formatKeys, getMaxZIndex, getScrollParents, getStyleValue, isArray, isElement, isObject, joinUrl, slice, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };

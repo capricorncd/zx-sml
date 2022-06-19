@@ -70,7 +70,7 @@ classNames({ active: true }, ['text-center'], 'flex')
 create an element
 
 - @param tag `string`
-- @param attrs `Record<string, string>`
+- @param attrs `Record<string, any>`
 - @param children `string | HTMLElement | Node`
 
 - @returns `HTMLElement`
@@ -127,6 +127,32 @@ formatObjKeys({'line-height': 1.5, 'child-obj': {'max-width': 100}}, true)
 // {lineHeight: 1.5, childObj: {maxWidth: 100}}
 ```
 
+### getMaxZIndex(defaultZIndex?)
+
+Get the max zIndex value in the document
+
+- @param defaultZIndex `number` Return value when none of the DOM elements have `zIndex` set, default `100`
+
+- @returns `number`
+
+### getScrollableParents(el)
+
+Get scrollable parent element
+
+- @param el `HTMLElement`
+
+- @returns `HTMLElement[]`
+
+### getStyleValue(el, attr?, isNumber)
+
+Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
+
+- @param el `Node`
+- @param attr `string` Arbitrary property key for CSSStyleDeclaration
+- @param isNumber `boolean` whether to cast the returned property value to a numeric type
+
+- @returns string | number | CSSStyleDeclaration | CSSRule | ((index: number) => string) | ((property: string, value: (string | null), priority?: (string | undefined)) => void) | null
+
 ### isArray(input)
 
 determines whether the passed value is an Array
@@ -134,6 +160,14 @@ determines whether the passed value is an Array
 - @param input `T`
 
 - @returns `boolean`
+
+### isElement(el)
+
+determines whether the el is an Element
+
+- @param el `Element`
+
+- @returns boolean
 
 ### isObject(input)
 
@@ -253,9 +287,9 @@ toSnakeCase('helloWorld', ' ') // hello world
 Convert styles object to string.
 When the properties are the same, the previous object properties will be overwritten
 
-- @param args `Array<object {}>`
+- @param args `Array<object {} | CSSStyleDeclaration>`
 
-- @returns string
+- @returns `string`
 
 ```js
 toStrStyles({'line-height': 1.5, width: '50%'})

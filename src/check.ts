@@ -23,3 +23,13 @@ export function isArray<T>(input: T): boolean {
 export function isObject<T>(input: T): boolean {
   return input !== null && !isArray(input) && typeof input === 'object'
 }
+
+/**
+ * @method isElement(el)
+ * determines whether the el is an Element
+ * @param el `Element`
+ * @returns boolean
+ */
+export function isElement<T extends Node>(el: T): boolean {
+  return el && el.nodeType === 1
+}
