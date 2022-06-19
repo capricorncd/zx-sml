@@ -4,7 +4,7 @@
  * Date: 2022/06/11 09:58:54 (GMT+0900)
  */
 import { toTwoDigits } from 'date-utils-2020'
-import { AnyObject } from '@types'
+import { AnyObject } from '../types'
 import { isObject } from './check'
 
 export { toTwoDigits }

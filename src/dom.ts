@@ -3,7 +3,7 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 10:44:51 (GMT+0900)
  */
-import { AnyObject } from '@types'
+import { AnyObject } from '../types'
 import { isObject, isElement } from './check'
 import { slice, formatKeys, toNumber, toCamelCase } from './format'
 
