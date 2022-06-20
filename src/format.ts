@@ -182,14 +182,13 @@ export function classNames(...args: unknown[]): string {
  * @returns `string`
  */
 export function joinUrl(...args: string[]): string {
-  const url = args
-    .join('/')
-    // `http://`の`//`が対象外
-    .replace(/(\w(?!:))(\/+)/g, '$1/')
-    // 新URLの末尾の'/'を削除する
-    .replace(/\/$/, '')
-  // http://a.com/?x=1 => http://a.com?x=1
-  return url.replace(/\/([?#])/, '$1')
+  return (
+    args
+      .join('/')
+      .replace(/(\w(?!:))(\/+)/g, '$1/')
+      // http://a.com/?x=1 => http://a.com?x=1
+      .replace(/\/([?#])|\/$/g, '$1')
+  )
 }
 
 /**

@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.1.1
+ * zx-sml version 0.1.2
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-19 23:05:31 (GMT+0900)
+ * Released on: 2022-06-20 21:02:50 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -28,6 +28,12 @@ function isObject(input) {
 }
 function isElement(el) {
   return el && el.nodeType === 1;
+}
+function isNumberLike(input) {
+  if (typeof input === "string") {
+    return /^-?\d+(\.\d+)?$/.test(input);
+  }
+  return typeof input === "number";
 }
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 var dateUtils2020 = { exports: {} };
@@ -155,8 +161,7 @@ function classNames(...args) {
   return args.map(toString).filter((item) => !!item).join(" ");
 }
 function joinUrl(...args) {
-  const url = args.join("/").replace(/(\w(?!:))(\/+)/g, "$1/").replace(/\/$/, "");
-  return url.replace(/\/([?#])/, "$1");
+  return args.join("/").replace(/(\w(?!:))(\/+)/g, "$1/").replace(/\/([?#])|\/$/g, "$1");
 }
 function slice(arrayLike, offset = 0) {
   return Array.prototype.slice.call(arrayLike, offset);
@@ -251,4 +256,4 @@ function getScrollParents(el) {
 var formatDate = dateUtils2020.exports.formatDate;
 var toDate = dateUtils2020.exports.toDate;
 var toTwoDigits = dateUtils2020.exports.toTwoDigits;
-export { $, $$, classNames, createElement, createUrlForGetRequest, formatDate, formatKeys, getMaxZIndex, getScrollParents, getStyleValue, isArray, isElement, isObject, joinUrl, slice, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };
+export { $, $$, classNames, createElement, createUrlForGetRequest, formatDate, formatKeys, getMaxZIndex, getScrollParents, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, slice, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };

@@ -42,6 +42,13 @@ describe('format', () => {
   })
 
   it('joinUrl', () => {
+    expect(joinUrl('//a.com/', 'api/user/')).toBe('//a.com/api/user')
+    expect(joinUrl('https://a.com/', 'api/user/', '#top')).toBe(
+      'https://a.com/api/user#top'
+    )
+    expect(joinUrl('https://a.com/', 'api/user/', '?x=100', '/#top')).toBe(
+      'https://a.com/api/user?x=100#top'
+    )
     expect(joinUrl('https://a.com/', '/api/user/', '?age=18')).toBe(
       'https://a.com/api/user?age=18'
     )

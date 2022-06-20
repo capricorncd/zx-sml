@@ -157,7 +157,7 @@ Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
 
 determines whether the passed value is an Array
 
-- @param input `T`
+- @param input `any`
 
 - @returns `boolean`
 
@@ -165,15 +165,23 @@ determines whether the passed value is an Array
 
 determines whether the el is an Element
 
-- @param el `Element`
+- @param el `Node`
 
 - @returns boolean
+
+### isNumberLike(input)
+
+Determine if `input` is a string number
+
+- @param input `any`
+
+- @returns `boolean`
 
 ### isObject(input)
 
 determines whether the passed value is an object
 
-- @param input `T`
+- @param input `any`
 
 - @returns `boolean`
 
