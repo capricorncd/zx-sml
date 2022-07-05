@@ -5,7 +5,7 @@
  */
 import { AnyObject } from '../types'
 import { isObject, isElement } from './check'
-import { slice, formatKeys, toNumber, toCamelCase } from './format'
+import { slice, formatKeys, toNumber, toCamelCase, toSnakeCase } from './format'
 
 /**
  * @method $(selector, doc?)
@@ -52,7 +52,7 @@ export function createElement<T extends HTMLElement>(
   const el = document.createElement(tag) as T
   for (const [key, val] of Object.entries(attrs)) {
     el.setAttribute(
-      key,
+      toSnakeCase(key),
       key === 'style' && isObject(val) ? toStrStyles(val) : val
     )
   }

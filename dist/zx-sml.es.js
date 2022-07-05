@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.1.2
+ * zx-sml version 0.1.3
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-06-20 21:02:50 (GMT+0900)
+ * Released on: 2022-07-05 21:41:34 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -185,7 +185,7 @@ function $$(selector, doc = document) {
 function createElement(tag, attrs = {}, children) {
   const el = document.createElement(tag);
   for (const [key, val] of Object.entries(attrs)) {
-    el.setAttribute(key, key === "style" && isObject(val) ? toStrStyles(val) : val);
+    el.setAttribute(toSnakeCase(key), key === "style" && isObject(val) ? toStrStyles(val) : val);
   }
   if (children) {
     if (typeof children === "string") {

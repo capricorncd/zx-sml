@@ -17,9 +17,15 @@ import {
 
 describe('dom', () => {
   it('$', () => {
-    const el = createElement('div', {}, '<p>1</p><span>2</span>')
+    const el = createElement(
+      'div',
+      { id: 'test', dataName: 20 },
+      '<p>1</p><span>2</span>'
+    )
     expect($('p', el)?.textContent).toBe('1')
     expect($('span', el)?.textContent).toBe('2')
+    expect(el.getAttribute('data-name')).toBe('20')
+    expect(el.getAttribute('dataName')).toBeNull()
   })
 
   it('$$', () => {
