@@ -48,8 +48,8 @@ function handleFile(filePath, data) {
         tempStr = RegExp.$1
         if (tempStr.startsWith('@param')) {
           data[methodName].params.push(tempStr.replace('@param', '').trim())
-        } else if (tempStr.startsWith('@returns')) {
-          data[methodName].returns.push(tempStr.replace('@returns', '').trim())
+        } else if (tempStr.startsWith('@return')) {
+          data[methodName].returns.push(tempStr.replace(/@returns?/, '').trim())
         } else if (isCode) {
           data[methodName].codes.push(tempStr)
         } else {

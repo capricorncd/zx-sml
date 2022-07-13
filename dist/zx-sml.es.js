@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.1.3
+ * zx-sml version 0.2.0
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-07-05 21:41:34 (GMT+0900)
+ * Released on: 2022-07-13 22:24:52 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -174,7 +174,52 @@ function formatKeys(obj = {}, isCamelCase = false) {
   }
   return result;
 }
+function createBlobURL(blob) {
+  const windowURL = window.URL || window.webkitURL;
+  return windowURL.createObjectURL(blob);
+}
+function splitBase64(base64) {
+  const arr = base64.split(",");
+  let type = "";
+  if (/data:(\w+\/\w+);base64/.test(arr[0])) {
+    type = RegExp.$1;
+  }
+  return {
+    type,
+    data: arr[1]
+  };
+}
+function base64ToBlob(base64, type) {
+  const dataInfo = splitBase64(base64);
+  const data = window.atob(dataInfo.data);
+  type = type || dataInfo.type;
+  const ia = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i++) {
+    ia[i] = data.charCodeAt(i);
+  }
+  return new Blob([ia], { type });
+}
+function formatBytes(bytes, useDecimal = false, decimalPlaces = 2) {
+  const aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+  const denominator = useDecimal ? 1e3 : 1024;
+  let value = String(bytes);
+  let unit = "Byte";
+  for (let nMultiple = 0, nApprox = bytes / denominator; nApprox > 1; nApprox /= denominator, nMultiple++) {
+    value = nApprox.toFixed(decimalPlaces);
+    unit = aMultiples[nMultiple];
+  }
+  if (useDecimal)
+    unit = unit.replace("i", "");
+  return {
+    text: value.replace(/\.0+$/, "") + unit,
+    value: +value,
+    unit,
+    bytes
+  };
+}
 function $(selector, doc = document) {
+  if (!selector)
+    return null;
   if (selector instanceof HTMLElement)
     return selector;
   return doc.querySelector(selector);
@@ -256,4 +301,4 @@ function getScrollParents(el) {
 var formatDate = dateUtils2020.exports.formatDate;
 var toDate = dateUtils2020.exports.toDate;
 var toTwoDigits = dateUtils2020.exports.toTwoDigits;
-export { $, $$, classNames, createElement, createUrlForGetRequest, formatDate, formatKeys, getMaxZIndex, getScrollParents, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, slice, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };
+export { $, $$, base64ToBlob, classNames, createBlobURL, createElement, createUrlForGetRequest, formatBytes, formatDate, formatKeys, getMaxZIndex, getScrollParents, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, slice, splitBase64, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };

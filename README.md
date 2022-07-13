@@ -52,6 +52,15 @@ Get the DOM element that matches selector
 
 - @returns `HTMLElement | null`
 
+### base64ToBlob(base64, type?)
+
+base64 to blob data
+
+- @param base64 `string`
+- @param type `string` the target blob mimeType, Example `image/jpeg`
+
+- @returns `Blob`
+
 ### classNames(...args)
 
 handle className
@@ -64,6 +73,14 @@ handle className
 classNames({ active: true }, ['text-center'], 'flex')
 // 'active text-center flex'
 ```
+
+### createBlobURL(blob)
+
+creates a string containing a URL representing the object given in the parameter.
+
+- @param blob `Blob | File`
+
+- @returns `string`
 
 ### createElement(tag, attrs?, children?)
 
@@ -90,6 +107,16 @@ createUrlForGetRequest('api/user', { age: 18 })
 createUrlForGetRequest('api/user?class=a', { age: 18 })
 // 'api/user?class=a&age=18'
 ```
+
+### formatBytes(bytes, useDecimal?, decimalPlaces?)
+
+Digital Information Sizes Calculator
+
+- @param bytes `number` bytes
+- @param useDecimal `boolean` whether to use decimal for calculations. default `false`
+- @param decimalPlaces `number` How many decimal places to keep. default `2`
+
+- @returns `{unit: string, text: string, value: number, bytes: number}`
 
 ### formatDate(date, format, langPackage?)
 
@@ -210,6 +237,14 @@ Convert pseudo-array to array
 ```js
 slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
 ```
+
+### splitBase64(base64)
+
+split base64 data
+
+- @param base64 `string` base64(image) data.
+
+- @returns `{ type: string; data: string }`
 
 ### splitValue(input)
 

@@ -18,6 +18,7 @@ export function $<T extends HTMLElement>(
   selector: string | T,
   doc: Document | HTMLElement = document
 ): T | null {
+  if (!selector) return null
   if (selector instanceof HTMLElement) return selector
   return doc.querySelector(selector)
 }
