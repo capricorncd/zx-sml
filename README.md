@@ -108,6 +108,14 @@ createUrlForGetRequest('api/user?class=a', { age: 18 })
 // 'api/user?class=a&age=18'
 ```
 
+### fileToBase64(file)
+
+read file to base64 string
+
+- @param file `File | Blob`
+
+- @returns `Promise<string>`
+
 ### formatBytes(bytes, useDecimal?, decimalPlaces?)
 
 Digital Information Sizes Calculator
