@@ -88,7 +88,7 @@ create an element
 
 - @param tag `string`
 - @param attrs `Record<string, any>`
-- @param children `string | HTMLElement | Node`
+- @param children `string | HTMLElement | Node | (string | HTMLElement | Node)[]`
 
 - @returns `HTMLElement`
 

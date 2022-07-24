@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.2.0
+ * zx-sml version 0.2.1
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-07-13 22:46:38 (GMT+0900)
+ * Released on: 2022-07-24 15:34:05 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -208,11 +208,18 @@ function createElement(tag, attrs = {}, children) {
     el.setAttribute(toSnakeCase(key), key === "style" && isObject(val) ? toStrStyles(val) : val);
   }
   if (children) {
-    if (typeof children === "string") {
-      el.innerHTML = children;
-    } else {
-      el.append(children);
+    if (!Array.isArray(children)) {
+      children = [children];
     }
+    children.forEach((child) => {
+      if (typeof child === "string") {
+        const temp = createElement("div");
+        temp.innerHTML = child;
+        el.append(...temp.childNodes);
+      } else {
+        el.append(child);
+      }
+    });
   }
   return el;
 }

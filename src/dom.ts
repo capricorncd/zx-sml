@@ -42,13 +42,13 @@ export function $$<T extends HTMLElement>(
  * create an element
  * @param tag `string`
  * @param attrs `Record<string, any>`
- * @param children `string | HTMLElement | Node`
+ * @param children `string | HTMLElement | Node | (string | HTMLElement | Node)[]`
  * @returns `HTMLElement`
  */
 export function createElement<T extends HTMLElement>(
   tag: string,
   attrs: AnyObject = {},
-  children?: string | HTMLElement | Node
+  children?: string | HTMLElement | Node | (string | HTMLElement | Node)[]
 ): T {
   const el = document.createElement(tag) as T
   for (const [key, val] of Object.entries(attrs)) {
@@ -58,11 +58,18 @@ export function createElement<T extends HTMLElement>(
     )
   }
   if (children) {
-    if (typeof children === 'string') {
-      el.innerHTML = children
-    } else {
-      el.append(children)
+    if (!Array.isArray(children)) {
+      children = [children]
     }
+    children.forEach((child) => {
+      if (typeof child === 'string') {
+        const temp = createElement('div')
+        temp.innerHTML = child
+        el.append(...temp.childNodes)
+      } else {
+        el.append(child)
+      }
+    })
   }
   return el
 }

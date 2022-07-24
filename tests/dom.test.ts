@@ -35,6 +35,16 @@ describe('dom', () => {
     expect($$('span', el).length).toBe(1)
   })
 
+  it('createElement', () => {
+    const el1 = createElement('div', {}, '<p>1</p><span>2</span><p>3</p>')
+    const el2 = createElement('div', {}, [
+      '<p>1</p>',
+      createElement('span', {}, '2'),
+      createElement('p', undefined, ['3']),
+    ])
+    expect(el1.isEqualNode(el2)).toBeTruthy()
+  })
+
   it('toStrStyles', () => {
     expect(toStrStyles({ 'line-height': 1.5, width: '50%' })).toBe(
       `line-height:1.5;width:50%`
