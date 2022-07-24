@@ -6,7 +6,9 @@
   "module": "dist/zx-sml.es.js",
   "types": "types",
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "types"
   ],
   "keywords": [
     "zx-sml",
