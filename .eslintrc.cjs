@@ -42,6 +42,7 @@ module.exports = {
         ],
       },
     ],
+    '@typescript-eslint/no-explicit-any': ['off'],
     '@typescript-eslint/no-non-null-assertion': 'off',
     // node.js require('some-lib')
     '@typescript-eslint/no-var-requires': 'off',

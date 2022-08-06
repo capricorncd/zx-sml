@@ -22,6 +22,12 @@ npm install zx-sml
 yarn add zx-sml
 ```
 
+### pnpm install
+
+```shell
+pnpm i zx-sml
+```
+
 ## Usage Example
 
 ```typescript
@@ -31,9 +37,10 @@ formatDate('2020-12-04', 'yyyy/MM/dd W')
 // 2020/12/04 Fri
 ```
 
+<!--METHOD_START-->
+
 ## Methods
 
-<!--METHOD_START-->
 ### $$(selector, doc?)
 
 Get the DOM elements that matches selector
@@ -68,7 +75,6 @@ handle className
 - @param args `string | [string] | { className1: true, className2: false }`
 
 - @returns `string`
-
 ```js
 classNames({ active: true }, ['text-center'], 'flex')
 // 'active text-center flex'
@@ -100,7 +106,6 @@ Create full URL for GET request
 - @param params `Record<string, unknown>`
 
 - @returns `string`
-
 ```js
 createUrlForGetRequest('api/user', { age: 18 })
 // 'api/user?age=18'
@@ -136,7 +141,6 @@ please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) f
 - @param langPackage `ILangPackage`
 
 - @returns `string`
-
 ```js
 // timestamp
 formatDate( 20210101 , 'yyyy-MM-dd hh:mm:ss') // 1970-01-01 14:36:50
@@ -152,7 +156,6 @@ Format the key of the object, using the `toSnakeCase` or `toCamelCase` method.
 - @param isCamelCase `boolean` Whether the key of the object uses camel-case or snake-case, default `false`
 
 - @returns `object {}`
-
 ```js
 formatObjKeys({lineHeight: 1.5}) // {'line-height': 1.5}
 formatObjKeys({lineHeight: 1.5, childObj: {maxWidth: 100}})
@@ -227,7 +230,6 @@ format url,
 - @param args `string[]`
 
 - @returns `string`
-
 ```js
 joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
 // https://a.com/news/detail/100001?x=9
@@ -241,7 +243,6 @@ Convert pseudo-array to array
 - @param offset `number` default `0`
 
 - @returns `array T[]`
-
 ```js
 slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
 ```
@@ -262,7 +263,6 @@ Returns `[0, '']` if the string does not start with a `number` or `-number`.
 - @param input `string | number`
 
 - @returns `[number, string]`
-
 ```js
 splitValue('100px') // [100, 'px']
 splitValue(100) // [100, '']
@@ -282,7 +282,6 @@ Format string as camel case
 - @param isFirstCapitalLetter `boolean` whether to capitalize the first letter, default `false`
 
 - @returns `string`
-
 ```js
 toCamelCase('hello_world') // helloWorld
 toCamelCase('hello-world') // helloWorld
@@ -307,7 +306,6 @@ Convert any type to number.
 - @param isStrictMode `boolean` Whether it is strict mode, default `false`
 
 - @returns `number`
-
 ```js
 toNumber('1.3rem') // 1.3
 toNumber('1.3rem', true) // 0
@@ -325,7 +323,6 @@ Format string as snake case
 - @param connectSymbol `string` word connect symbol, default `-`
 
 - @returns `string`
-
 ```js
 toSnakeCase('helloWorld') // hello-world
 toSnakeCase('HelloWorld') // hello-world
@@ -341,7 +338,6 @@ When the properties are the same, the previous object properties will be overwri
 - @param args `Array<object {} | CSSStyleDeclaration>`
 
 - @returns `string`
-
 ```js
 toStrStyles({'line-height': 1.5, width: '50%'})
 // `line-height:1.5;width:'50%'`
@@ -350,8 +346,19 @@ toStrStyles({lineHeight: 1.5, width: '50%'})
 toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
 // line-height:24px;width:50%
 ```
-
 <!--METHOD_END-->
+
+## zx-sml/nodejs
+
+zx-sml/nodejs's [docs](./nodejs/README.md).
+
+```js
+const { log, outputFile } = require('zx-sml/nodejs');
+
+log('hello nodejs')
+
+outputFile(path.resolve(__dirname, './src'), path.resolve(__dirname, './docs/README.md'));
+```
 
 ## License
 

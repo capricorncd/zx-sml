@@ -1,13 +1,24 @@
 {
   "name": "zx-sml",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "some static method library",
   "main": "dist/zx-sml.umd.js",
   "module": "dist/zx-sml.es.js",
   "types": "types",
+  "exports": {
+    ".": {
+      "import": "./dist/zx-sml.es.js",
+      "require": "./dist/zx-sml.umd.js"
+    },
+    "./nodejs": {
+      "require": "./nodejs/index.js",
+      "types": "./nodejs/types.d.ts"
+    }
+  },
   "files": [
     "dist",
     "src",
+    "nodejs",
     "types"
   ],
   "keywords": [
