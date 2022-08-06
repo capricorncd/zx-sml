@@ -281,7 +281,6 @@ function outputFile(input, outputDirOrFile) {
 
 /**
  * @method getCommentsData(input, needArray?, data?)
- * or `getCommentsData(input, needArray?, data?)`
  * Get comments from the `input` file or directory.
  * @param input `string` The target file or directory.
  * @param needArray `boolean` It's true will be returned an array. default `false`.

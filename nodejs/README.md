@@ -20,7 +20,6 @@ Output 😡 red color log in console
 
 ### getCommentsData(input, needArray?, data?)
 
-or `getCommentsData(input, needArray?, data?)`
 Get comments from the `input` file or directory.
 
 - @param input `string` The target file or directory.
