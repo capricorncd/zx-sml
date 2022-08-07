@@ -20,13 +20,55 @@ Output 😡 red color log in console
 
 ### getCommentsData(input, needArray?, data?)
 
-Get comments from the `input` file or directory.
+Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
 
 - @param input `string` The target file or directory.
 - @param needArray `boolean` It's true will be returned an array. default `false`.
 - @param data `object` default `{}`
 
-- @returns `Record<string, CommentInfoItem> | CommentInfoItem[]` It's an array if `needArray` is true.
+- @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true.
+```js
+// for example
+// ./src/index.js
+
+/**
+ * @method someMethod(param)
+ * someMethod description 1 ...
+ * someMethod description 2 ...
+ * @param param `any` param description
+ * @returns `object` return description
+ */
+function someMethod(param) {
+  // do something ...
+  return {...};
+}
+
+// get comment form `./src` or `./src/index.js`
+// ./create-docs.js
+
+getCommentsData(path.resolve(__dirname, './src'));
+// {
+//   '/usr/.../src/index.js': {
+//     method_someMethod: {
+//       type: 'method',
+//       name: 'someMethod',
+//       fullName: 'someMethod(param)',
+//       desc: [
+//         'someMethod description 1 ...',
+//         'someMethod description 2 ...',
+//       ],
+//       params: ['param `any` param description'],
+//       returns: ['`object` return description'],
+//       codes: [],
+//       private: false,
+//       path: '/usr/.../src/index.js',
+//     },
+//     method_someMethod2: { ... },
+//     document_someDocument: { ... },
+//     type_someTypeName: { ... },
+//   }
+// }
+```
 
 ### log(...args)
 
@@ -48,7 +90,7 @@ make a directory synchronously
 
 Output the obtained annotation content as a document.
 
-- @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path.
+- @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getCommentsData) will be called.
 - @param outputDirOrFile `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
 
 - @returns `OutputFileReturns | OutputFileReturns[]`

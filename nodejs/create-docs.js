@@ -33,6 +33,9 @@ function handleFile(filePath, data) {
   let isCode = false
   let type = null
   let typeName = null
+  // dataKey = type_typeName
+  // Avoid the problem of type naming the same being overwritten
+  let dataKey
   let tempStr
   fs.readFileSync(filePath, 'utf8')
     .toString()
@@ -46,8 +49,8 @@ function handleFile(filePath, data) {
         isTargetComment = true
         type = RegExp.$1
         typeName = fullName.replace(/^([\w.]+).*/, '$1')
-
-        data[typeName] = {
+        dataKey = `${type}_${typeName}`
+        data[dataKey] = {
           type,
           name: typeName,
           fullName,
@@ -70,7 +73,7 @@ function handleFile(filePath, data) {
       if (!isTargetComment || !typeName) {
         // type codes
         if (typeName && type === TYPES.TYPE && line) {
-          data[typeName].codes.push(
+          data[dataKey].codes.push(
             originalLine.replace(/^export( default)?\s*/, '')
           )
         }
@@ -85,16 +88,22 @@ function handleFile(filePath, data) {
         tempStr = RegExp.$1
         const temp = tempStr.trim()
         if (temp.startsWith('@param')) {
-          data[typeName].params.push(temp.replace('@param', '').trim())
+          data[dataKey].params.push(temp.replace('@param', '').trim())
         } else if (temp.startsWith('@return')) {
-          data[typeName].returns.push(temp.replace(/@returns?/, '').trim())
+          data[dataKey].returns.push(temp.replace(/@returns?/, '').trim())
         } else if (temp.startsWith('@private')) {
-          data[typeName].private = true
+          data[dataKey].private = true
         } else if (isCode) {
-          // push `tempStr` to `codes`, and remove first null character of `tempStr`
-          data[typeName].codes.push(tempStr.replace(/^\s/, ''))
+          // push `tempStr` to `codes`
+          data[dataKey].codes.push(
+            tempStr
+              // Remove first null character of `tempStr`
+              .replace(/^\s/, '')
+              // Restore escaped strings in comments
+              .replace('*\\/', '*/')
+          )
         } else {
-          data[typeName].desc.push(temp.replace('@description', '').trim())
+          data[dataKey].desc.push(temp.replace('@description', '').trim())
         }
       }
 
@@ -255,7 +264,7 @@ function handleOutput(arr, outputDir) {
 /**
  * @method outputFile(input, outputDirOrFile?)
  * Output the obtained annotation content as a document.
- * @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path.
+ * @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getCommentsData) will be called.
  * @param outputDirOrFile `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
  * @returns `OutputFileReturns | OutputFileReturns[]`
  */
@@ -281,11 +290,55 @@ function outputFile(input, outputDirOrFile) {
 
 /**
  * @method getCommentsData(input, needArray?, data?)
- * Get comments from the `input` file or directory.
+ * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
+ *
+ * ```js
+ * // for example
+ * // ./src/index.js
+ *
+ * /**
+ *  * @method someMethod(param)
+ *  * someMethod description 1 ...
+ *  * someMethod description 2 ...
+ *  * @param param `any` param description
+ *  * @returns `object` return description
+ *  *\/
+ * function someMethod(param) {
+ *   // do something ...
+ *   return {...};
+ * }
+ *
+ * // get comment form `./src` or `./src/index.js`
+ * // ./create-docs.js
+ *
+ * getCommentsData(path.resolve(__dirname, './src'));
+ * // {
+ * //   '/usr/.../src/index.js': {
+ * //     method_someMethod: {
+ * //       type: 'method',
+ * //       name: 'someMethod',
+ * //       fullName: 'someMethod(param)',
+ * //       desc: [
+ * //         'someMethod description 1 ...',
+ * //         'someMethod description 2 ...',
+ * //       ],
+ * //       params: ['param `any` param description'],
+ * //       returns: ['`object` return description'],
+ * //       codes: [],
+ * //       private: false,
+ * //       path: '/usr/.../src/index.js',
+ * //     },
+ * //     method_someMethod2: { ... },
+ * //     document_someDocument: { ... },
+ * //     type_someTypeName: { ... },
+ * //   }
+ * // }
+ * ```
+ *
  * @param input `string` The target file or directory.
  * @param needArray `boolean` It's true will be returned an array. default `false`.
  * @param data `object` default `{}`
- * @returns `Record<string, CommentInfoItem> | CommentInfoItem[]` It's an array if `needArray` is true.
+ * @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true.
  */
 function getCommentsData(input, needArray = false, data = {}) {
   const stat = fs.statSync(input)
