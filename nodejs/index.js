@@ -5,7 +5,7 @@
  *
  * @document zx-sml/nodejs
  *
- * Some tool functions used in the Nodejs environment
+ * Some tool functions used in the Nodejs environment.
  *
  * ```js
  * const { mkdirSync } = require('zx-sml/nodejs')

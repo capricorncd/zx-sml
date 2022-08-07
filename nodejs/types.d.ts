@@ -31,7 +31,7 @@ export interface CommentInfoItem {
 
 /**
  * @type OutputFileReturns
- * `OutputFileReturns` returned by the `outputFile` function.
+ * `OutputFileReturns` returned by the [outputFile](#outputfileinput-outputdirorfile) function.
  */
 export interface OutputFileReturns {
   // outputted filename

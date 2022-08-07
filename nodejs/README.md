@@ -1,6 +1,6 @@
 # zx-sml/nodejs
 
-Some tool functions used in the Nodejs environment
+Some tool functions used in the Nodejs environment.
 
 ```js
 const { mkdirSync } = require('zx-sml/nodejs')
@@ -135,7 +135,7 @@ interface CommentInfoItem {
 
 ### OutputFileReturns
 
-`OutputFileReturns` returned by the `outputFile` function.
+`OutputFileReturns` returned by the [outputFile](#outputfileinput-outputdirorfile) function.
 
 ```ts
 interface OutputFileReturns {
