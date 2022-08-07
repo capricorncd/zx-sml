@@ -90,7 +90,7 @@ make a directory synchronously
 
 Output the obtained annotation content as a document.
 
-- @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getCommentsData) will be called.
+- @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called.
 - @param outputDirOrFile `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
 
 - @returns `OutputFileReturns | OutputFileReturns[]`
