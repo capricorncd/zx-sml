@@ -6,7 +6,7 @@
 
 /**
  * @type CommentInfoItem
- * CommentInfoItem is the comment information read with the getCommentsData function.
+ * CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-data) function.
  */
 export interface CommentInfoItem {
   // method | type | class | document
@@ -43,7 +43,7 @@ export interface OutputFileReturns {
 }
 
 /**
- * @type OutputFileInput
+ * OutputFileInput
  * outputFile's `input` parameter
  */
 type OutputFileInput =
@@ -52,7 +52,7 @@ type OutputFileInput =
   | string
 
 /**
- * @type OutputFileReturnData<T>
+ * OutputFileReturnData<T>
  * outputFile's `input` return data
  */
 type OutputFileReturnData<T> = T extends string | CommentInfoItem[]

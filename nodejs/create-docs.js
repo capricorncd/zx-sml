@@ -264,9 +264,9 @@ function handleOutput(arr, outputDir) {
 /**
  * @method outputFile(input, outputDirOrFile?)
  * Output the obtained annotation content as a document.
- * @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called.
+ * @param input `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
  * @param outputDirOrFile `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
- * @returns `OutputFileReturns | OutputFileReturns[]`
+ * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
  */
 function outputFile(input, outputDirOrFile) {
   if (typeof input === 'string') {
@@ -307,7 +307,8 @@ function outputFile(input, outputDirOrFile) {
  *   // do something ...
  *   return {...};
  * }
- *
+ *```
+ *```js
  * // get comment form `./src` or `./src/index.js`
  * // ./create-docs.js
  *
@@ -338,7 +339,7 @@ function outputFile(input, outputDirOrFile) {
  * @param input `string` The target file or directory.
  * @param needArray `boolean` It's true will be returned an array. default `false`.
  * @param data `object` default `{}`
- * @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true.
+ * @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
  */
 function getCommentsData(input, needArray = false, data = {}) {
   const stat = fs.statSync(input)

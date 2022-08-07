@@ -26,7 +26,7 @@ Get comments from the `input` file or directory. Supported keywords are `type`, 
 - @param needArray `boolean` It's true will be returned an array. default `false`.
 - @param data `object` default `{}`
 
-- @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true.
+- @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
 ```js
 // for example
 // ./src/index.js
@@ -42,7 +42,8 @@ function someMethod(param) {
   // do something ...
   return {...};
 }
-
+```
+```js
 // get comment form `./src` or `./src/index.js`
 // ./create-docs.js
 
@@ -90,10 +91,10 @@ make a directory synchronously
 
 Output the obtained annotation content as a document.
 
-- @param data `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called.
+- @param input `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
 - @param outputDirOrFile `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
 
-- @returns `OutputFileReturns | OutputFileReturns[]`
+- @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
 
 ### warn(...args)
 
@@ -107,7 +108,7 @@ Output 😕 yellow color log in console
 
 ### CommentInfoItem
 
-CommentInfoItem is the comment information read with the getCommentsData function.
+CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-data) function.
 
 ```ts
 interface CommentInfoItem {
@@ -130,27 +131,6 @@ interface CommentInfoItem {
   // file path
   path: string
 }
-```
-
-### OutputFileInput
-
-outputFile's `input` parameter
-
-```ts
-type OutputFileInput =
-  | Record<string, CommentInfoItem>
-  | CommentInfoItem[]
-  | string
-```
-
-### OutputFileReturnData<T>
-
-outputFile's `input` return data
-
-```ts
-type OutputFileReturnData<T> = T extends string | CommentInfoItem[]
-  ? OutputFileReturns[]
-  : OutputFileReturns
 ```
 
 ### OutputFileReturns
