@@ -80,7 +80,7 @@ function handleFile(filePath, data) {
         return
       }
 
-      if (/^\*\s*```\w+/.test(line)) {
+      if (/^\*\s*(```\w+|@code)/.test(line)) {
         isCode = true
       }
 
@@ -94,6 +94,11 @@ function handleFile(filePath, data) {
         } else if (temp.startsWith('@private')) {
           data[dataKey].private = true
         } else if (isCode) {
+          if (temp.startsWith('@code')) {
+            // push a blank line.
+            data[dataKey].codes.push('')
+            tempStr = tempStr.replace(/@code\w*/, '').trim()
+          }
           // push `tempStr` to `codes`
           data[dataKey].codes.push(
             tempStr
@@ -291,11 +296,11 @@ function outputFile(input, outputDirOrFile) {
 /**
  * @method getCommentsData(input, needArray?, data?)
  * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
+ * @code #### for example
+ *
+ * A source file `./src/index.js`, or a directory `./src`.
  *
  * ```js
- * // for example
- * // ./src/index.js
- *
  * /**
  *  * @method someMethod(param)
  *  * someMethod description 1 ...
@@ -308,9 +313,13 @@ function outputFile(input, outputDirOrFile) {
  *   return {...};
  * }
  *```
+ * @code Get comments info form `./src` or `./src/index.js`
+ *
+ * nodejs file `./scripts/create-docs.js`.
+ *
  *```js
- * // get comment form `./src` or `./src/index.js`
- * // ./create-docs.js
+ * const path = require('path')
+ * const { getCommentsData } = require('zx-sml/nodejs')
  *
  * getCommentsData(path.resolve(__dirname, './src'));
  * // {

@@ -27,10 +27,12 @@ Get comments from the `input` file or directory. Supported keywords are `type`, 
 - @param data `object` default `{}`
 
 - @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
-```js
-// for example
-// ./src/index.js
 
+#### for example
+
+A source file `./src/index.js`, or a directory `./src`.
+
+```js
 /**
  * @method someMethod(param)
  * someMethod description 1 ...
@@ -43,9 +45,14 @@ function someMethod(param) {
   return {...};
 }
 ```
+
+Get comments info form `./src` or `./src/index.js`
+
+nodejs file `./scripts/create-docs.js`.
+
 ```js
-// get comment form `./src` or `./src/index.js`
-// ./create-docs.js
+const path = require('path')
+const { getCommentsData } = require('zx-sml/nodejs')
 
 getCommentsData(path.resolve(__dirname, './src'));
 // {
