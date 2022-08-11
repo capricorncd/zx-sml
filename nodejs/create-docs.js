@@ -259,12 +259,17 @@ function createTypesDoc(item, lines, options = {}) {
     '</details>',
   ]
 
+  const { typeWithSourceCode, typeWithTable, typeWithAuto } = options
+
+  if (typeWithSourceCode && typeWithTable) {
+    lines.push(...typeTable, ...codes)
+  }
   // only source code
-  if (options.typeWithSourceCode) {
+  else if (typeWithSourceCode) {
     lines.push(...codes)
   }
   // only table
-  else if (options.typeWithTable) {
+  else if (typeWithTable) {
     lines.push(...typeTable)
   }
   // table and source code
@@ -272,7 +277,7 @@ function createTypesDoc(item, lines, options = {}) {
     if (typeTable.length) {
       lines.push(...typeTable, ...details)
     } else {
-      if (options.typeWithAuto) {
+      if (typeWithAuto) {
         lines.push(...codes)
       } else {
         lines.push(...details)
