@@ -7,7 +7,7 @@
 /**
  * @method isArray(input)
  * @description determines whether the passed value is an Array
- * @param input `any`
+ * @param input `any` any type of object
  * @returns `boolean`
  */
 export function isArray<T>(input: T): boolean {
@@ -17,7 +17,7 @@ export function isArray<T>(input: T): boolean {
 /**
  * @method isObject(input)
  * @description determines whether the passed value is an object
- * @param input `any`
+ * @param input `any` any type of object
  * @returns `boolean`
  */
 export function isObject<T>(input: T): boolean {
@@ -27,8 +27,8 @@ export function isObject<T>(input: T): boolean {
 /**
  * @method isElement(el)
  * determines whether the el is an Element
- * @param el `Node`
- * @returns boolean
+ * @param el `Node` DOM Node
+ * @returns `boolean`
  */
 export function isElement<T extends Node>(el: T): boolean {
   return el && el.nodeType === 1
@@ -37,7 +37,7 @@ export function isElement<T extends Node>(el: T): boolean {
 /**
  * @method isNumberLike(input)
  * Determine if `input` is a string number
- * @param input `any`
+ * @param input `any` any type of object
  * @returns `boolean`
  */
 export function isNumberLike<T>(input: T): boolean {

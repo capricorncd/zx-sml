@@ -36,7 +36,7 @@ export function createUrlForGetRequest(
 }
 
 /**
- * @method toSnakeCase(input, connectSymbol?)
+ * @method toSnakeCase(input, connectSymbol)
  * Format string as snake case
  * ```js
  * toSnakeCase('helloWorld') // hello-world
@@ -44,8 +44,8 @@ export function createUrlForGetRequest(
  * toSnakeCase('helloWorld', '_') // hello_world
  * toSnakeCase('helloWorld', ' ') // hello world
  * ```
- * @param input `string`
- * @param connectSymbol `string` word connect symbol, default `-`
+ * @param input `string` any string
+ * @param connectSymbol? `string` word connect symbol, default `-`
  * @returns `string`
  */
 export function toSnakeCase(input = '', connectSymbol = '-'): string {
@@ -56,7 +56,7 @@ export function toSnakeCase(input = '', connectSymbol = '-'): string {
 }
 
 /**
- * @method toCamelCase(input, isFirstCapitalLetter?)
+ * @method toCamelCase(input, isFirstCapitalLetter)
  * Format string as camel case
  * ```js
  * toCamelCase('hello_world') // helloWorld
@@ -65,7 +65,7 @@ export function toSnakeCase(input = '', connectSymbol = '-'): string {
  * toCamelCase('hello-world', true) // HelloWorld
  * ```
  * @param input `string`
- * @param isFirstCapitalLetter `boolean` whether to capitalize the first letter, default `false`
+ * @param isFirstCapitalLetter? `boolean` whether to capitalize the first letter, default `false`
  * @returns `string`
  */
 export function toCamelCase(input = '', isFirstCapitalLetter = false): string {
@@ -82,7 +82,7 @@ function restoreUSLocalString(input: string): string {
 }
 
 /**
- * @method toNumber(input, isStrictMode?)
+ * @method toNumber(input, isStrictMode)
  * @description Convert any type to number.
  * ```js
  * toNumber('1.3rem') // 1.3
@@ -93,7 +93,7 @@ function restoreUSLocalString(input: string): string {
  * toNumber('1,000,999', true) // 0
  * ```
  * @param input `any`
- * @param isStrictMode `boolean` Whether it is strict mode, default `false`
+ * @param isStrictMode? `boolean` Whether it is strict mode, default `false`
  * @returns `number`
  */
 export function toNumber<T>(input: T, isStrictMode = false): number {
@@ -136,7 +136,7 @@ export function splitValue(input: string | number): [number, string] {
   return result ? [toNumber(result[1], true), result[2]] : [0, '']
 }
 
-/**!
+/**
  * to string that className
  * @param input `any`
  * @returns `string`
@@ -157,7 +157,7 @@ function toString(input: unknown): string {
 /**
  * @method classNames(...args)
  * handle className
- * @param args `string | [string] | { className1: true, className2: false }`
+ * @param args `string | string[] | { className1: true, className2: false }`
  * @returns `string`
  * ```js
  * classNames({ active: true }, ['text-center'], 'flex')
@@ -192,10 +192,10 @@ export function joinUrl(...args: string[]): string {
 }
 
 /**
- * @method slice(arrayLike, offset?)
+ * @method slice(arrayLike, offset)
  * Convert pseudo-array to array
  * @param arrayLike `pseudo-array`
- * @param offset `number` default `0`
+ * @param offset? `number` default `0`
  * @returns `array T[]`
  * ```js
  * slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
@@ -206,11 +206,11 @@ export function slice<T, P>(arrayLike: P, offset = 0): T[] {
 }
 
 /**
- * @method formatKeys(obj, isCamelCase?)
+ * @method formatKeys(obj, isCamelCase)
  * Format the key of the object, using the `toSnakeCase` or `toCamelCase` method.
- * @param obj `object {}`
- * @param isCamelCase `boolean` Whether the key of the object uses camel-case or snake-case, default `false`
- * @returns `object {}`
+ * @param obj `object`
+ * @param isCamelCase? `boolean` Whether the key of the object uses camel-case or snake-case, default `false`
+ * @returns `object`
  * ```js
  * formatObjKeys({lineHeight: 1.5}) // {'line-height': 1.5}
  * formatObjKeys({lineHeight: 1.5, childObj: {maxWidth: 100}})
@@ -235,12 +235,12 @@ export function formatKeys(
 }
 
 /**
- * @method formatBytes(bytes, useDecimal?, decimalPlaces?)
+ * @method formatBytes(bytes, useDecimal, decimalPlaces)
  * Digital Information Sizes Calculator
  * @param bytes `number` bytes
- * @param useDecimal `boolean` whether to use decimal for calculations. default `false`
- * @param decimalPlaces `number` How many decimal places to keep. default `2`
- * @returns `{unit: string, text: string, value: number, bytes: number}`
+ * @param useDecimal? `boolean` whether to use decimal for calculations. default `false`
+ * @param decimalPlaces? `number` How many decimal places to keep. default `2`
+ * @returns `object` `{unit: string, text: string, value: number, bytes: number}`
  */
 export function formatBytes(
   bytes: number,

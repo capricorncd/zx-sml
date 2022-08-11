@@ -41,30 +41,36 @@ formatDate('2020-12-04', 'yyyy/MM/dd W')
 
 ## Methods
 
-### $$(selector, doc?)
+### $$(selector, doc)
 
 Get the DOM elements that matches selector
 
-- @param selector `string`
-- @param doc `Document | HTMLElement`
+Param|Types|Required|Description
+:--|:--|:--|:--
+selector|`string`|yes|-
+doc|`Document`/`HTMLElement`|no|default `document`
 
 - @returns `HTMLElement[]`
 
-### $(selector, doc?)
+### $(selector, doc)
 
 Get the DOM element that matches selector
 
-- @param selector `string | HTMLElement`
-- @param doc `Document | HTMLElement`
+Param|Types|Required|Description
+:--|:--|:--|:--
+selector|`string`/`HTMLElement`|yes|-
+doc|`Document`/`HTMLElement`|no|default `document`
 
 - @returns `HTMLElement | null`
 
-### base64ToBlob(base64, type?)
+### base64ToBlob(base64, type)
 
 base64 to blob data
 
-- @param base64 `string`
-- @param type `string` the target blob mimeType, Example `image/jpeg`
+Param|Types|Required|Description
+:--|:--|:--|:--
+base64|`string`|yes|-
+type|`string`|no|the target blob mimeType, Example `image/jpeg`
 
 - @returns `Blob`
 
@@ -72,7 +78,9 @@ base64 to blob data
 
 handle className
 
-- @param args `string | [string] | { className1: true, className2: false }`
+Param|Types|Required|Description
+:--|:--|:--|:--
+args|`string`/`string[]`/`{ className1: true, className2: false }`|yes|-
 
 - @returns `string`
 ```js
@@ -84,17 +92,21 @@ classNames({ active: true }, ['text-center'], 'flex')
 
 creates a string containing a URL representing the object given in the parameter.
 
-- @param blob `Blob | File`
+Param|Types|Required|Description
+:--|:--|:--|:--
+blob|`Blob`/`File`|yes|-
 
 - @returns `string`
 
-### createElement(tag, attrs?, children?)
+### createElement(tag, attrs, children)
 
 create an element
 
-- @param tag `string`
-- @param attrs `Record<string, any>`
-- @param children `string | HTMLElement | Node | (string | HTMLElement | Node)[]`
+Param|Types|Required|Description
+:--|:--|:--|:--
+tag|`string`|yes|-
+attrs|`Record<string, any>`|no|HTMLElement's attributes.
+children|`string`/`HTMLElement`/`Node`/`string[]`/`HTMLElement[]`/`Node[]`|no|-
 
 - @returns `HTMLElement`
 
@@ -102,8 +114,10 @@ create an element
 
 Create full URL for GET request
 
-- @param url `string`
-- @param params `Record<string, unknown>`
+Param|Types|Required|Description
+:--|:--|:--|:--
+url|`string`|yes|-
+params|`Record<string, unknown>`|yes|-
 
 - @returns `string`
 ```js
@@ -117,28 +131,34 @@ createUrlForGetRequest('api/user?class=a', { age: 18 })
 
 read file to base64 string
 
-- @param file `File | Blob`
+Param|Types|Required|Description
+:--|:--|:--|:--
+file|`File`/`Blob`|yes|-
 
 - @returns `Promise<string>`
 
-### formatBytes(bytes, useDecimal?, decimalPlaces?)
+### formatBytes(bytes, useDecimal, decimalPlaces)
 
 Digital Information Sizes Calculator
 
-- @param bytes `number` bytes
-- @param useDecimal `boolean` whether to use decimal for calculations. default `false`
-- @param decimalPlaces `number` How many decimal places to keep. default `2`
+Param|Types|Required|Description
+:--|:--|:--|:--
+bytes|`number`|yes|bytes
+useDecimal|`boolean`|no|whether to use decimal for calculations. default `false`
+decimalPlaces|`number`|no|How many decimal places to keep. default `2`
 
-- @returns `{unit: string, text: string, value: number, bytes: number}`
+- @returns `object` `{unit: string, text: string, value: number, bytes: number}`
 
-### formatDate(date, format, langPackage?)
+### formatDate(date, format, langPackage)
 
 Date format,
-please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
+see [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
 
-- @param date `any`
-- @param format `string`
-- @param langPackage `ILangPackage`
+Param|Types|Required|Description
+:--|:--|:--|:--
+date|`any`|yes|any type of object
+format|`string`|yes|like this `yyyy-MM-dd hh:mm:ss W`
+langPackage|`ILangPackage`|no|-
 
 - @returns `string`
 ```js
@@ -148,14 +168,16 @@ formatDate( 20210101 , 'yyyy-MM-dd hh:mm:ss') // 1970-01-01 14:36:50
 formatDate('20210101', 'yyyy-MM-dd hh:mm:ss') // 2021-01-01 00:00:00
 ```
 
-### formatKeys(obj, isCamelCase?)
+### formatKeys(obj, isCamelCase)
 
 Format the key of the object, using the `toSnakeCase` or `toCamelCase` method.
 
-- @param obj `object {}`
-- @param isCamelCase `boolean` Whether the key of the object uses camel-case or snake-case, default `false`
+Param|Types|Required|Description
+:--|:--|:--|:--
+obj|`object`|yes|-
+isCamelCase|`boolean`|no|Whether the key of the object uses camel-case or snake-case, default `false`
 
-- @returns `object {}`
+- @returns `object`
 ```js
 formatObjKeys({lineHeight: 1.5}) // {'line-height': 1.5}
 formatObjKeys({lineHeight: 1.5, childObj: {maxWidth: 100}})
@@ -165,11 +187,13 @@ formatObjKeys({'line-height': 1.5, 'child-obj': {'max-width': 100}}, true)
 // {lineHeight: 1.5, childObj: {maxWidth: 100}}
 ```
 
-### getMaxZIndex(defaultZIndex?)
+### getMaxZIndex(defaultZIndex)
 
 Get the max zIndex value in the document
 
-- @param defaultZIndex `number` Return value when none of the DOM elements have `zIndex` set, default `100`
+Param|Types|Required|Description
+:--|:--|:--|:--
+defaultZIndex|`number`|no|Return value when none of the DOM elements have `zIndex` set, default `100`
 
 - @returns `number`
 
@@ -177,25 +201,31 @@ Get the max zIndex value in the document
 
 Get scrollable parent element
 
-- @param el `HTMLElement`
+Param|Types|Required|Description
+:--|:--|:--|:--
+el|`HTMLElement`|yes|-
 
 - @returns `HTMLElement[]`
 
-### getStyleValue(el, attr?, isNumber)
+### getStyleValue(el, attr, isNumber)
 
 Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
 
-- @param el `Node`
-- @param attr `string` Arbitrary property key for CSSStyleDeclaration
-- @param isNumber `boolean` whether to cast the returned property value to a numeric type
+Param|Types|Required|Description
+:--|:--|:--|:--
+el|`Node`|yes|-
+attr|`string`|no|Arbitrary property key for CSSStyleDeclaration
+isNumber|`boolean`|no|whether to cast the returned property value to a numeric type
 
-- @returns string | number | CSSStyleDeclaration | CSSRule | ((index: number) => string) | ((property: string, value: (string | null), priority?: (string | undefined)) => void) | null
+- @returns `string | number | CSSStyleDeclaration | CSSRule | ((index: number) => string) | ((property: string, value: string/null, priority?: string) => void) | null`
 
 ### isArray(input)
 
 determines whether the passed value is an Array
 
-- @param input `any`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`any`|yes|any type of object
 
 - @returns `boolean`
 
@@ -203,15 +233,19 @@ determines whether the passed value is an Array
 
 determines whether the el is an Element
 
-- @param el `Node`
+Param|Types|Required|Description
+:--|:--|:--|:--
+el|`Node`|yes|DOM Node
 
-- @returns boolean
+- @returns `boolean`
 
 ### isNumberLike(input)
 
 Determine if `input` is a string number
 
-- @param input `any`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`any`|yes|any type of object
 
 - @returns `boolean`
 
@@ -219,7 +253,9 @@ Determine if `input` is a string number
 
 determines whether the passed value is an object
 
-- @param input `any`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`any`|yes|any type of object
 
 - @returns `boolean`
 
@@ -227,7 +263,9 @@ determines whether the passed value is an object
 
 format url,
 
-- @param args `string[]`
+Param|Types|Required|Description
+:--|:--|:--|:--
+args|`string[]`|yes|-
 
 - @returns `string`
 ```js
@@ -235,12 +273,14 @@ joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
 // https://a.com/news/detail/100001?x=9
 ```
 
-### slice(arrayLike, offset?)
+### slice(arrayLike, offset)
 
 Convert pseudo-array to array
 
-- @param arrayLike `pseudo-array`
-- @param offset `number` default `0`
+Param|Types|Required|Description
+:--|:--|:--|:--
+arrayLike|`pseudo-array`|yes|-
+offset|`number`|no|default `0`
 
 - @returns `array T[]`
 ```js
@@ -251,7 +291,9 @@ slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
 
 split base64 data
 
-- @param base64 `string` base64(image) data.
+Param|Types|Required|Description
+:--|:--|:--|:--
+base64|`string`|yes|base64(image) data.
 
 - @returns `{ type: string; data: string }`
 
@@ -260,7 +302,9 @@ split base64 data
 Split an attribute value into number and suffix unit.
 Returns `[0, '']` if the string does not start with a `number` or `-number`.
 
-- @param input `string | number`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`string`/`number`|yes|-
 
 - @returns `[number, string]`
 ```js
@@ -274,12 +318,14 @@ splitValue(',1,600円') // [0, '']
 splitValue('0000,600円') // [0, ',600円']
 ```
 
-### toCamelCase(input, isFirstCapitalLetter?)
+### toCamelCase(input, isFirstCapitalLetter)
 
 Format string as camel case
 
-- @param input `string`
-- @param isFirstCapitalLetter `boolean` whether to capitalize the first letter, default `false`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`string`|yes|-
+isFirstCapitalLetter|`boolean`|no|whether to capitalize the first letter, default `false`
 
 - @returns `string`
 ```js
@@ -294,16 +340,20 @@ toCamelCase('hello-world', true) // HelloWorld
 Convert input to Date,
 please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
 
-- @param input `any`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`any`|yes|any type of object
 
 - @returns `Date | null`
 
-### toNumber(input, isStrictMode?)
+### toNumber(input, isStrictMode)
 
 Convert any type to number.
 
-- @param input `any`
-- @param isStrictMode `boolean` Whether it is strict mode, default `false`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`any`|yes|-
+isStrictMode|`boolean`|no|Whether it is strict mode, default `false`
 
 - @returns `number`
 ```js
@@ -315,12 +365,14 @@ toNumber('1,000,999Yan') // 1000999
 toNumber('1,000,999', true) // 0
 ```
 
-### toSnakeCase(input, connectSymbol?)
+### toSnakeCase(input, connectSymbol)
 
 Format string as snake case
 
-- @param input `string`
-- @param connectSymbol `string` word connect symbol, default `-`
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`string`|yes|any string
+connectSymbol|`string`|no|word connect symbol, default `-`
 
 - @returns `string`
 ```js
@@ -330,12 +382,14 @@ toSnakeCase('helloWorld', '_') // hello_world
 toSnakeCase('helloWorld', ' ') // hello world
 ```
 
-### toStrStyles(styles)
+### toStrStyles(...styles)
 
 Convert styles object to string.
 When the properties are the same, the previous object properties will be overwritten
 
-- @param args `Array<object {} | CSSStyleDeclaration>`
+Param|Types|Required|Description
+:--|:--|:--|:--
+styles|`object[]`/`CSSStyleDeclaration[]`|yes|-
 
 - @returns `string`
 ```js

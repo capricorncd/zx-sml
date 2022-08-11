@@ -8,10 +8,10 @@ import { isObject, isElement } from './check'
 import { slice, formatKeys, toNumber, toCamelCase, toSnakeCase } from './format'
 
 /**
- * @method $(selector, doc?)
- * @description Get the DOM element that matches selector
+ * @method $(selector, doc)
+ * Get the DOM element that matches selector
  * @param selector `string | HTMLElement`
- * @param doc `Document | HTMLElement`
+ * @param doc? `Document | HTMLElement` default `document`
  * @returns `HTMLElement | null`
  */
 export function $<T extends HTMLElement>(
@@ -24,10 +24,10 @@ export function $<T extends HTMLElement>(
 }
 
 /**
- * @method $$(selector, doc?)
- * @description Get the DOM elements that matches selector
+ * @method $$(selector, doc)
+ * Get the DOM elements that matches selector
  * @param selector `string`
- * @param doc `Document | HTMLElement`
+ * @param doc? `Document | HTMLElement` default `document`
  * @returns `HTMLElement[]`
  */
 export function $$<T extends HTMLElement>(
@@ -38,11 +38,11 @@ export function $$<T extends HTMLElement>(
 }
 
 /**
- * @method createElement(tag, attrs?, children?)
+ * @method createElement(tag, attrs, children)
  * create an element
  * @param tag `string`
- * @param attrs `Record<string, any>`
- * @param children `string | HTMLElement | Node | (string | HTMLElement | Node)[]`
+ * @param attrs? `Record<string, any>` HTMLElement's attributes.
+ * @param children? `string | HTMLElement | Node | string[] | HTMLElement[] | Node[]`
  * @returns `HTMLElement`
  */
 export function createElement<T extends HTMLElement>(
@@ -75,10 +75,10 @@ export function createElement<T extends HTMLElement>(
 }
 
 /**
- * @method toStrStyles(styles)
+ * @method toStrStyles(...styles)
  * Convert styles object to string.
  * When the properties are the same, the previous object properties will be overwritten
- * @param args `Array<object {} | CSSStyleDeclaration>`
+ * @param styles `object[] | CSSStyleDeclaration[]`
  * @returns `string`
  * ```js
  * toStrStyles({'line-height': 1.5, width: '50%'})
@@ -102,9 +102,9 @@ export function toStrStyles(...args: AnyObject[]): string {
 }
 
 /**
- * @method getMaxZIndex(defaultZIndex?)
+ * @method getMaxZIndex(defaultZIndex)
  * Get the max zIndex value in the document
- * @param defaultZIndex `number` Return value when none of the DOM elements have `zIndex` set, default `100`
+ * @param defaultZIndex? `number` Return value when none of the DOM elements have `zIndex` set, default `100`
  * @returns `number`
  */
 export function getMaxZIndex(defaultZIndex = 100): number {
@@ -124,12 +124,12 @@ export function getMaxZIndex(defaultZIndex = 100): number {
 }
 
 /**
- * @method getStyleValue(el, attr?, isNumber)
+ * @method getStyleValue(el, attr, isNumber)
  * Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
  * @param el `Node`
- * @param attr `string` Arbitrary property key for CSSStyleDeclaration
- * @param isNumber `boolean` whether to cast the returned property value to a numeric type
- * @returns string | number | CSSStyleDeclaration | CSSRule | ((index: number) => string) | ((property: string, value: (string | null), priority?: (string | undefined)) => void) | null
+ * @param attr? `string` Arbitrary property key for CSSStyleDeclaration
+ * @param isNumber? `boolean` whether to cast the returned property value to a numeric type
+ * @returns `string | number | CSSStyleDeclaration | CSSRule | ((index: number) => string) | ((property: string, value: string/null, priority?: string) => void) | null`
  */
 export function getStyleValue(el: Node, attr?: string, isNumber = false) {
   if (!isElement(el)) return null

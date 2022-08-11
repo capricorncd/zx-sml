@@ -6,12 +6,12 @@
 // https://github.com/capricorncd/date-utils-2020
 import { formatDate, toDate } from 'date-utils-2020'
 /**
- * @method formatDate(date, format, langPackage?)
+ * @method formatDate(date, format, langPackage)
  * @description Date format,
- * @description please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
- * @param date `any`
- * @param format `string`
- * @param langPackage `ILangPackage`
+ * @description see [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
+ * @param date `any` any type of object
+ * @param format `string` like this `yyyy-MM-dd hh:mm:ss W`
+ * @param langPackage? `ILangPackage`
  * @returns `string`
  * ```js
  * // timestamp
@@ -25,7 +25,7 @@ import { formatDate, toDate } from 'date-utils-2020'
  * @method toDate(input)
  * @description Convert input to Date,
  * @description please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
- * @param input `any`
+ * @param input `any` any type of object
  * @returns `Date | null`
  */
 

@@ -57,10 +57,10 @@ export function splitBase64(base64: string): { type: string; data: string } {
 }
 
 /**
- * @method base64ToBlob(base64, type?)
+ * @method base64ToBlob(base64, type)
  * base64 to blob data
  * @param base64 `string`
- * @param type `string` the target blob mimeType, Example `image/jpeg`
+ * @param type? `string` the target blob mimeType, Example `image/jpeg`
  * @returns `Blob`
  */
 export function base64ToBlob(base64: string, type?: string): Blob {
