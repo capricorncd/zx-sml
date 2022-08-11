@@ -277,9 +277,11 @@ function createTypesDoc(item, lines, options = {}) {
     if (typeTable.length) {
       lines.push(...typeTable, ...details)
     } else {
+      // When typeWithAuto is true and typeTable is not, display only code.
       if (typeWithAuto) {
         lines.push(...codes)
       } else {
+        // default `<details>...</details>`
         lines.push(...details)
       }
     }
