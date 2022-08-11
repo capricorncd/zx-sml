@@ -112,6 +112,10 @@ export function getCommentsData(
 export interface OutputFileOptions {
   // Display `methods` using raw string, not table. default `false`
   methodWithRaw?: boolean
+  // Display `types` using only table, not Source Code. default `false`
+  typeWithTable?: boolean
+  // Display `types` using only Source Code, not table. default `false`
+  typeWithSourceCode?: boolean
   // Lines that need to be added at the start.
   startLines?: string[]
   // Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`

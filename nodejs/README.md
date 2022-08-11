@@ -260,6 +260,8 @@ interface CommentInfoItemReturn {
 Prop|Types|Required|Description
 :--|:--:|:--:|:--
 methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
+typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
+typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`
 startLines|`string[]`|no|Lines that need to be added at the start.
 endLines|`string[]`|no|Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
 afterDocumentLines|`string[]`|no|This `afterDocumentLines` will be appended to the `@document`, before the `## Methods`
@@ -271,6 +273,10 @@ afterDocumentLines|`string[]`|no|This `afterDocumentLines` will be appended to t
 interface OutputFileOptions {
   // Display `methods` using raw string, not table. default `false`
   methodWithRaw?: boolean
+  // Display `types` using only table, not Source Code. default `false`
+  typeWithTable?: boolean
+  // Display `types` using only Source Code, not table. default `false`
+  typeWithSourceCode?: boolean
   // Lines that need to be added at the start.
   startLines?: string[]
   // Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`

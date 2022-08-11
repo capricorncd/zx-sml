@@ -238,25 +238,40 @@ function createMethodsDoc(item, lines, options = {}) {
  * create types docs
  * @param item `CommentInfoItem`
  * @param lines `string[]`
+ * @param options `{typeWithTable: false, typeWithSourceCode: false}`
  */
-function createTypesDoc(item, lines) {
+function createTypesDoc(item, lines, options = {}) {
   lines.push(
     BLANK_LINE,
     `### ${item.fullName}`,
     BLANK_LINE,
     ...item.desc,
-    BLANK_LINE,
-    ...createPropsTable(item.props, 'Prop'),
-    '<details>',
-    '<summary>Source Code</summary>',
-    BLANK_LINE,
-    '```ts',
-    ...item.codes,
-    '```',
-    BLANK_LINE,
-    '</details>',
     BLANK_LINE
   )
+
+  // only source code
+  if (options.typeWithSourceCode) {
+    lines.push('```ts', ...item.codes, '```')
+  }
+  // only table
+  else if (options.typeWithTable) {
+    lines.push(...createPropsTable(item.props, 'Prop'))
+  }
+  // table and source code
+  else {
+    lines.push(
+      ...createPropsTable(item.props, 'Prop'),
+      '<details>',
+      '<summary>Source Code</summary>',
+      BLANK_LINE,
+      '```ts',
+      ...item.codes,
+      '```',
+      BLANK_LINE,
+      '</details>'
+    )
+  }
+  lines.push(BLANK_LINE)
 }
 
 /**
@@ -338,7 +353,7 @@ function handleOutput(arr, outputDir, options = {}) {
   if (types.length) {
     lines.push(BLANK_LINE, '## Types', BLANK_LINE)
     types.forEach((item) => {
-      createTypesDoc(item, lines)
+      createTypesDoc(item, lines, options)
     })
   }
 
