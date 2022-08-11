@@ -191,7 +191,7 @@ function handleFile(filePath, data) {
  * @returns `string[]`
  */
 function createPropsTable(props, typeName = 'Name') {
-  if (!props.length) return []
+  if (!isValidArray(props)) return []
   const arr = [`${typeName}|Types|Required|Description`, ':--|:--|:--|:--']
   props.forEach((item) => {
     arr.push(
