@@ -116,6 +116,7 @@ export function getCommentsData(
 
 /**
  * @type OutputFileOptions
+ * [outputFile](#outputfileinput-outputdirorfile-options)'s options
  */
 export interface OutputFileOptions {
   // Display `methods` using raw string, not table. default `false`
@@ -124,12 +125,17 @@ export interface OutputFileOptions {
   typeWithTable?: boolean
   // Display `types` using only Source Code, not table. default `false`
   typeWithSourceCode?: boolean
+  // By default, `table` and `<details><summary>Source Code</summary></details>` are displayed,
+  // but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
+  typeWithAuto?: boolean
   // Lines that need to be added at the start.
   startLines?: string[]
   // Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
   endLines?: string[]
   // This `afterDocumentLines` will be appended to the `@document`, before the `## Methods`
   afterDocumentLines?: string[]
+  // `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`
+  sourceCodeSummary?: string
 }
 
 /**

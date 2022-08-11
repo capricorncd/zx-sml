@@ -248,28 +248,36 @@ function createTypesDoc(item, lines, options = {}) {
     ...item.desc,
     BLANK_LINE
   )
+  const typeTable = createPropsTable(item.props, 'Prop')
+  const codes = ['```ts', ...item.codes, '```']
+  const details = [
+    '<details>',
+    `<summary>${options.sourceCodeSummary || 'Source Code'}</summary>`,
+    BLANK_LINE,
+    ...codes,
+    BLANK_LINE,
+    '</details>',
+  ]
 
   // only source code
   if (options.typeWithSourceCode) {
-    lines.push('```ts', ...item.codes, '```')
+    lines.push(...codes)
   }
   // only table
   else if (options.typeWithTable) {
-    lines.push(...createPropsTable(item.props, 'Prop'))
+    lines.push(...typeTable)
   }
   // table and source code
   else {
-    lines.push(
-      ...createPropsTable(item.props, 'Prop'),
-      '<details>',
-      '<summary>Source Code</summary>',
-      BLANK_LINE,
-      '```ts',
-      ...item.codes,
-      '```',
-      BLANK_LINE,
-      '</details>'
-    )
+    if (typeTable.length) {
+      lines.push(...typeTable, ...details)
+    } else {
+      if (options.typeWithAuto) {
+        lines.push(...codes)
+      } else {
+        lines.push(...details)
+      }
+    }
   }
   lines.push(BLANK_LINE)
 }
