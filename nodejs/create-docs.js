@@ -13,6 +13,7 @@ const {
   isObject,
   isValidArray,
   toStrForStrArray,
+  findCharIndex,
 } = require('./helpers')
 const { log } = require('./log')
 
@@ -28,6 +29,16 @@ const TYPES = {
 }
 
 /**
+ * When the parameter description cannot be obtained using regular expressions
+ * @param {*} input
+ * @returns
+ */
+function getSpDescription(input) {
+  const index = findCharIndex(input, '`', 2)
+  return index === -1 ? '' : input.substr(index + 1)
+}
+
+/**
  * handleParam
  * @param input `string`
  * @returns `CommentInfoItemParam`
@@ -39,15 +50,16 @@ function handleParam(input) {
   }
   // paramName? `type` param description
   // paramName `type1 | type2` param description
-  if (/(\w+\??)\s+(?:`([^`]+)`)?\s*(.*)/.test(input)) {
+  if (/(\w+\??)\s+`([^`]+)`(.*)/.test(input)) {
     const name = RegExp.$1
     data.name = name.replace('?', '')
 
     data.required = !name.includes('?')
     // no support for `Array<string | number>` or `(string | number)[]`
     data.types = RegExp.$2.split(/\s*\|\s*/)
-
-    data.desc = [RegExp.$3]
+    // desc
+    const desc = RegExp.$3 || getSpDescription(input)
+    data.desc = [desc.trim()]
   }
   return data
 }
@@ -364,7 +376,7 @@ function handleOutput(arr, outputDir, options = {}) {
 /**
  * @method outputFile(input, outputDirOrFile, options)
  * Output the obtained annotation content as a document.
- * @param input `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
+ * @param input `Record<string, Record<string, CommentInfoItem>> | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
  * @param outputDirOrFile? `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
  * @param options? `OutputFileOptions` [OutputFileOptions](#OutputFileOptions)
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
@@ -575,8 +587,6 @@ function handleProps(item, types) {
         desc: description,
         types,
       }
-
-      console.log(data)
 
       // Has extends, a property with the same name may already exist
       const index = arr.findIndex((item) => item.name === data.name)

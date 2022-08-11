@@ -124,7 +124,7 @@ Output the obtained annotation content as a document.
 
 Param|Types|Required|Description
 :--|:--:|:--:|:--
-input|`CommentInfoItem`/`CommentInfoItem[]`/`string`|yes|-
+input|`Record<string, Record<string, CommentInfoItem>>`/`CommentInfoItem[]`/`string`|yes|Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
 outputDirOrFile|`string`|no|Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
 options|`OutputFileOptions`|no|[OutputFileOptions](#OutputFileOptions)
 

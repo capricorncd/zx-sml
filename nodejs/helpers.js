@@ -57,10 +57,27 @@ function toStrForStrArray(arr, spliceSymbol = ' ', defaultReturnValue = '-') {
   return newArr.length ? newArr.join(spliceSymbol) : defaultReturnValue
 }
 
+/**
+ * Find the N occurrence of a string
+ * @param {*} str `string`
+ * @param {*} char `string`
+ * @param {*} times `number`
+ * @returns
+ */
+function findCharIndex(str, char, times) {
+  let index = -1
+  for (let i = 0; i < times; i++) {
+    index = str.indexOf(char, index + 1)
+    if (index === -1) break
+  }
+  return index
+}
+
 module.exports = {
   mkdirSync,
   isFileLike,
   isObject,
   isValidArray,
   toStrForStrArray,
+  findCharIndex,
 }
