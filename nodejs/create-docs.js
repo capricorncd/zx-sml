@@ -87,6 +87,19 @@ function handleReturn(input) {
 }
 
 /**
+ * Get type name:
+ * setContents(box, newContents)  -> setContents
+ * InterfaceName<Type1, Type2>    -> InterfaceName
+ * classInstance.someMethod(param)-> classInstance.someMethod
+ * @param fullName `string`
+ * @returns
+ */
+function getTypeName(fullName) {
+  // only words and '.'
+  return fullName.replace(/^([\w.]+).*/, '$1')
+}
+
+/**
  * handle file
  * get `method|type|class|document` annotations in file.
  * @param filePath `string` absolute file path.
@@ -110,11 +123,24 @@ function handleFile(filePath, data) {
       line = line.trim()
       // Start with method|type|class|document annotations
       if (/^\*\s*@(method|type|class|document)\s*(.+)/.test(line)) {
-        const fullName = RegExp.$2
         isTargetComment = true
+
         type = RegExp.$1
-        typeName = fullName.replace(/^([\w.]+).*/, '$1')
+
+        // setContents(box, newContents)
+        // InterfaceName<Type1, Type2>
+        // classInstance.someMethod(param)
+        const fullName = RegExp.$2.trim()
+
+        // setContents
+        // InterfaceName
+        // classInstance.someMethod
+        typeName = getTypeName(fullName)
+
+        // Avoid duplicate names being overwritten
         dataKey = `${type}_${typeName}`
+
+        // data
         data[dataKey] = {
           type,
           name: typeName,
@@ -575,8 +601,12 @@ function handleProps(item, types) {
 
   const firstCodeLine = item.codes[0] || ''
   // handle extends, get extends interface or class's props
+  // interface ColorfulCircle<T> extends Colorful<T>, Circle {}
   if (/\sextends\s+(.+)\s*\{/.test(firstCodeLine)) {
-    const extendTypes = RegExp.$1.split(/\s*,\s*/).map((name) => name.trim())
+    const extendTypes = RegExp.$1
+      .split(/\s*,\s*/)
+      // Colorful<T> -> Colorful
+      .map((name) => getTypeName(name.trim()))
     extendTypes.forEach((extendName) => {
       // find extendName from types
       const typeItem = types.find((item) => item.name === extendName)
@@ -595,14 +625,24 @@ function handleProps(item, types) {
   let description = []
 
   item.codes.forEach((line) => {
-    if (!isCodeStart && line.includes('{')) {
+    // type A = {
+    //   prop: type
+    // }
+    if (!isCodeStart && /\{\s*$/.test(line)) {
       return (isCodeStart = true)
     }
 
     // desc?: string[] | OtherType // description ...
     // install: (e: Editor, parent?: HTMLElement) => void // description ...
     // [key]: any, or [key: string]: OtherType // description ...
-    if (/^\s*((?:\w|\[.+\])+\??)\s*:\s*([^/]*)(?:\/\/(.*))?/.test(line)) {
+    // interface ReadonlyStringArray {
+    //   readonly [index: number]: string;
+    // }
+    if (
+      /^\s*(?:(?:readonly|static|public)\s*)?((?:\w|\[.+\])+\??)\s*:\s*([^/]*)(?:\/\/(.*))?/.test(
+        line
+      )
+    ) {
       // $1~$3
       const name = RegExp.$1
       const types = RegExp.$2.trim().split(/\s*\|\s*/)
