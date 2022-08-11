@@ -37,6 +37,16 @@ formatDate('2020-12-04', 'yyyy/MM/dd W')
 // 2020/12/04 Fri
 ```
 
+zx-sml/nodejs's [docs](./nodejs/README.md).
+
+```js
+const { log, outputFile } = require('zx-sml/nodejs');
+
+log('hello nodejs')
+
+outputFile(path.resolve(__dirname, './src'), path.resolve(__dirname, './docs/README.md'));
+```
+
 <!--METHOD_START-->
 
 ## Methods
@@ -401,18 +411,6 @@ toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
 // line-height:24px;width:50%
 ```
 <!--METHOD_END-->
-
-## zx-sml/nodejs
-
-zx-sml/nodejs's [docs](./nodejs/README.md).
-
-```js
-const { log, outputFile } = require('zx-sml/nodejs');
-
-log('hello nodejs')
-
-outputFile(path.resolve(__dirname, './src'), path.resolve(__dirname, './docs/README.md'));
-```
 
 ## License
 

@@ -6,6 +6,7 @@
  * @document zx-sml/nodejs
  *
  * Some tool functions used in the Nodejs environment.
+ * see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.js)
  *
  * ```js
  * const { mkdirSync } = require('zx-sml/nodejs')
