@@ -15,7 +15,7 @@ mkdirSync('./a/b/c')
 Output 😡 red color log in console
 
 Param|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 args|`Array<string>`|yes|-
 
 - @returns `void`
@@ -27,7 +27,7 @@ Format is not supported for `Array<string | number>` or `(string | number)[]`,
 please use `Array<string> | Array<number>` or `string[] | number[]`
 
 Param|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 input|`string`|yes|The target file or directory.
 needArray|`boolean`|no|It's true will be returned an array. default `false`.
 data|`object`|no|default `{}`
@@ -103,7 +103,7 @@ getCommentsData(path.resolve(__dirname, './src'));
 Output 😎 green color log in console
 
 Param|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 args|`Array<string>`|yes|-
 
 - @returns `void`
@@ -113,7 +113,7 @@ args|`Array<string>`|yes|-
 make a directory synchronously
 
 Param|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 dir|`string`|yes|directory path
 
 - @returns `void`
@@ -123,7 +123,7 @@ dir|`string`|yes|directory path
 Output the obtained annotation content as a document.
 
 Param|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 input|`Record<string, Record<string, CommentInfoItem>>`/`CommentInfoItem[]`/`string`|yes|Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
 outputDirOrFile|`string`|no|Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
 options|`OutputFileOptions`|no|[OutputFileOptions](#OutputFileOptions)
@@ -135,7 +135,7 @@ options|`OutputFileOptions`|no|[OutputFileOptions](#OutputFileOptions)
 Output 😕 yellow color log in console
 
 Param|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 args|`Array<string>`|yes|-
 
 - @returns `void`
@@ -147,7 +147,7 @@ args|`Array<string>`|yes|-
 CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-data) function.
 
 Prop|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 type|`string`|yes|method/type/class/document
 name|`string`|yes|@method name(...args)'s `name`
 fullName|`string`|yes|@method name(...args)'s `name(...args)`
@@ -193,7 +193,7 @@ interface CommentInfoItem {
 [CommentInfoItem](#CommentInfoItem)'s `params`.
 
 Prop|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 name|`string`|yes|-
 required|`boolean`|yes|-
 desc|`string[]`|yes|-
@@ -218,7 +218,7 @@ interface CommentInfoItemParam {
 The properties of [CommentInfoItem](#CommentInfoItem), only exists when the type is `type` or `interface`.
 
 Prop|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 raw|`string`|yes|-
 
 <details>
@@ -237,7 +237,7 @@ interface CommentInfoItemProp extends CommentInfoItemParam {
 [CommentInfoItem](#CommentInfoItem)'s `return`.
 
 Prop|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 desc|`string[]`|yes|-
 types|`string[]`|yes|-
 raw|`string`|yes|-
@@ -258,7 +258,7 @@ interface CommentInfoItemReturn {
 ### OutputFileOptions
 
 Prop|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
 typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
 typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`
@@ -293,7 +293,7 @@ interface OutputFileOptions {
 `OutputFileReturns` returned by the [outputFile](#outputfileinput-outputdirorfile-options) function.
 
 Prop|Types|Required|Description
-:--|:--:|:--:|:--
+:--|:--|:--|:--
 outputFileName|`string`/`null`|yes|outputted filename
 lines|`string[]`|yes|line array in the output file
 data|`CommentInfoItem[]`|yes|comments data read from code
