@@ -157,9 +157,11 @@ returns|`CommentInfoItemReturn[]`|yes|method's returns
 codes|`string[]`|yes|for example codes
 private|`boolean`|yes|Whether the member method of the class is private
 path|`string`|yes|file path
-props|``|no|-
+props|`CommentInfoItemProp[]`|no|-
 
-<details><summary>Source Code</summary>
+<details>
+<summary>Source Code</summary>
+
 ```ts
 interface CommentInfoItem {
   // method/type/class/document
@@ -183,6 +185,7 @@ interface CommentInfoItem {
   props?: CommentInfoItemProp[]
 }
 ```
+
 </details>
 
 ### CommentInfoItemParam
@@ -196,7 +199,9 @@ required|`boolean`|yes|-
 desc|`string[]`|yes|-
 types|`string[]`|yes|-
 
-<details><summary>Source Code</summary>
+<details>
+<summary>Source Code</summary>
+
 ```ts
 interface CommentInfoItemParam {
   name: string
@@ -205,6 +210,7 @@ interface CommentInfoItemParam {
   types: string[]
 }
 ```
+
 </details>
 
 ### CommentInfoItemProp
@@ -215,12 +221,15 @@ Prop|Types|Required|Description
 :--|:--:|:--:|:--
 raw|`string`|yes|-
 
-<details><summary>Source Code</summary>
+<details>
+<summary>Source Code</summary>
+
 ```ts
 interface CommentInfoItemProp extends CommentInfoItemParam {
   raw: string
 }
 ```
+
 </details>
 
 ### CommentInfoItemReturn
@@ -233,7 +242,9 @@ desc|`string[]`|yes|-
 types|`string[]`|yes|-
 raw|`string`|yes|-
 
-<details><summary>Source Code</summary>
+<details>
+<summary>Source Code</summary>
+
 ```ts
 interface CommentInfoItemReturn {
   desc: string[]
@@ -241,18 +252,21 @@ interface CommentInfoItemReturn {
   raw: string
 }
 ```
+
 </details>
 
 ### OutputFileOptions
 
 Prop|Types|Required|Description
 :--|:--:|:--:|:--
-methodWithRaw|``|no|Display `methods` using raw string, not table. default `false`
-startLines|``|no|Lines that need to be added at the start.
-endLines|``|no|Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
-afterDocumentLines|``|no|This `afterDocumentLines` will be appended to the `@document`, before the `## Methods`
+methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
+startLines|`string[]`|no|Lines that need to be added at the start.
+endLines|`string[]`|no|Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
+afterDocumentLines|`string[]`|no|This `afterDocumentLines` will be appended to the `@document`, before the `## Methods`
 
-<details><summary>Source Code</summary>
+<details>
+<summary>Source Code</summary>
+
 ```ts
 interface OutputFileOptions {
   // Display `methods` using raw string, not table. default `false`
@@ -265,11 +279,12 @@ interface OutputFileOptions {
   afterDocumentLines?: string[]
 }
 ```
+
 </details>
 
 ### OutputFileReturns
 
-`OutputFileReturns` returned by the [outputFile](#outputfileinput-outputdirorfile) function.
+`OutputFileReturns` returned by the [outputFile](#outputfileinput-outputdirorfile-options) function.
 
 Prop|Types|Required|Description
 :--|:--:|:--:|:--
@@ -277,7 +292,9 @@ outputFileName|`string`/`null`|yes|outputted filename
 lines|`string[]`|yes|line array in the output file
 data|`CommentInfoItem[]`|yes|comments data read from code
 
-<details><summary>Source Code</summary>
+<details>
+<summary>Source Code</summary>
+
 ```ts
 interface OutputFileReturns {
   // outputted filename
@@ -288,6 +305,7 @@ interface OutputFileReturns {
   data: CommentInfoItem[]
 }
 ```
+
 </details>
 
 ## License

@@ -235,10 +235,13 @@ function createTypesDoc(item, lines) {
     ...item.desc,
     BLANK_LINE,
     ...createPropsTable(item.props, 'Prop'),
-    '<details><summary>Source Code</summary>',
+    '<details>',
+    '<summary>Source Code</summary>',
+    BLANK_LINE,
     '```ts',
     ...item.codes,
     '```',
+    BLANK_LINE,
     '</details>',
     BLANK_LINE
   )
@@ -561,16 +564,19 @@ function handleProps(item, types) {
     }
     // desc?: string[] // description ...
     if (/^\s*(\w+\??)\s*:\s*(\w+.*)(?:\/\/(.*))?/.test(line)) {
-      description.push(RegExp.$3.trim())
-
+      // $1~$3
       const name = RegExp.$1
+      const types = RegExp.$2.trim().split(/\s*\|\s*/)
+      description.push(RegExp.$3.trim())
 
       const data = {
         name: name.replace(/\?/g, ''),
         required: !name.includes('?'),
         desc: description,
-        types: RegExp.$2.trim().split(/\s*\|\s*/),
+        types,
       }
+
+      console.log(data)
 
       // Has extends, a property with the same name may already exist
       const index = arr.findIndex((item) => item.name === data.name)
