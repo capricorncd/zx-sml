@@ -38,6 +38,15 @@ function writeInReadmeFile(inputLines) {
   fs.writeFileSync(readmeFile, lines.join(EOL))
 }
 
+const outputFileOptions = {
+  endLines: [
+    '',
+    '## License',
+    '',
+    'MIT License © 2022-Present [Capricorncd](https://github.com/capricorncd).',
+  ],
+}
+
 function main() {
   // zx-sml default docs
   const srcDir = path.resolve(__dirname, '../src')
@@ -47,7 +56,11 @@ function main() {
 
   // zx-sml/nodejs docs
   const input = path.resolve(__dirname, '../nodejs')
-  outputFile(input, path.resolve(__dirname, '../nodejs/README.md'))
+  outputFile(
+    input,
+    path.resolve(__dirname, '../nodejs/README.md'),
+    outputFileOptions
+  )
 }
 
 main()
