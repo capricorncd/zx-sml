@@ -44,7 +44,23 @@ function isFileLike(filePath) {
   return false
 }
 
+function isObject(o) {
+  return !!o && typeof o === 'object'
+}
+
+function isValidArray(i) {
+  return Array.isArray(i) && i.length > 0
+}
+
+function toStrForStrArray(arr, spliceSymbol = ' ', defaultReturnValue = '-') {
+  const newArr = arr.filter((str) => !!str)
+  return newArr.length ? newArr.join(spliceSymbol) : defaultReturnValue
+}
+
 module.exports = {
   mkdirSync,
   isFileLike,
+  isObject,
+  isValidArray,
+  toStrForStrArray,
 }

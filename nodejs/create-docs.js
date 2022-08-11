@@ -7,7 +7,13 @@
 const fs = require('fs')
 const { EOL } = require('os')
 const path = require('path')
-const { mkdirSync, isFileLike } = require('./helpers')
+const {
+  mkdirSync,
+  isFileLike,
+  isObject,
+  isValidArray,
+  toStrForStrArray,
+} = require('./helpers')
 const { log } = require('./log')
 
 // blank line
@@ -19,6 +25,53 @@ const TYPES = {
   TYPE: 'type',
   CLASS: 'class',
   DOCUMENT: 'document',
+}
+
+/**
+ * handleParam
+ * @param input `string`
+ * @returns `CommentInfoItemParam`
+ */
+function handleParam(input) {
+  input = input.replace('@param', '').trim()
+  const data = {
+    raw: input,
+  }
+  // paramName? `type` param description
+  // paramName `type1 | type2` param description
+  if (/(\w+\??)\s+(?:`([^`]+)`)?\s*(.*)/.test(input)) {
+    const name = RegExp.$1
+    data.name = name.replace('?', '')
+
+    data.required = !name.includes('?')
+    // no support for `Array<string | number>` or `(string | number)[]`
+    data.types = RegExp.$2.split(/\s*\|\s*/)
+
+    data.desc = [RegExp.$3]
+  }
+  return data
+}
+
+/**
+ * handleReturn
+ * @param input `string`
+ * @returns `CommentInfoItemReturn`
+ */
+function handleReturn(input) {
+  input = input.replace(/@returns?/, '').trim()
+  const data = {
+    raw: input,
+  }
+  // `type` Return's description
+  // `type1 | type2` Return's description
+  if (/`([^`]+)`\s*(.*)/.test(input)) {
+    // no support for `Array<string | number>` or `(string | number)[]`
+    // please use `Array<string> | Array<number>` or `string[] | number[]`
+    data.types = RegExp.$1.split(/\s*\|\s*/)
+
+    data.desc = [RegExp.$2]
+  }
+  return data
 }
 
 /**
@@ -88,9 +141,9 @@ function handleFile(filePath, data) {
         tempStr = RegExp.$1
         const temp = tempStr.trim()
         if (temp.startsWith('@param')) {
-          data[dataKey].params.push(temp.replace('@param', '').trim())
+          data[dataKey].params.push(handleParam(temp))
         } else if (temp.startsWith('@return')) {
-          data[dataKey].returns.push(temp.replace(/@returns?/, '').trim())
+          data[dataKey].returns.push(handleReturn(temp))
         } else if (temp.startsWith('@private')) {
           data[dataKey].private = true
         } else if (isCode) {
@@ -120,12 +173,38 @@ function handleFile(filePath, data) {
 }
 
 /**
+ * createPropsTable
+ * @param props `CommentInfoItemParam[] | CommentInfoItemProp[]`
+ * @param typeName
+ * @returns `string[]`
+ */
+function createPropsTable(props, typeName = 'Name') {
+  if (!props.length) return []
+  const arr = [`${typeName}|Types|Required|Description`, ':--|:--:|:--:|:--']
+  props.forEach((item) => {
+    arr.push(
+      `${item.name}|\`${item.types.join('`/`')}\`|${
+        item.required ? 'yes' : 'no'
+      }|${toStrForStrArray(item.desc)}`
+    )
+  })
+  arr.push(BLANK_LINE)
+  return arr
+}
+
+/**
  * create method docs
  * @param item `CommentInfoItem`
  * @param lines `string[]`
  */
-function createMethodsDoc(item, lines) {
-  if (!item.returns.length) item.returns.push('`void`')
+function createMethodsDoc(item, lines, options = {}) {
+  if (!item.returns.length) {
+    item.returns.push({
+      raw: '`void`',
+      types: ['void'],
+      desc: [],
+    })
+  }
   lines.push(
     BLANK_LINE,
     `### ${item.fullName}`,
@@ -134,9 +213,11 @@ function createMethodsDoc(item, lines) {
     BLANK_LINE,
     // '*' will be replaced by 'npx pretty-quick --staged' with '-'
     // item.params.map((param) => `* @param ${param}`),
-    ...item.params.map((param) => `- @param ${param}`),
+    ...(options.methodWithRaw
+      ? item.params.map((param) => `- @param ${param.raw}`)
+      : createPropsTable(item.params, 'Param')),
     BLANK_LINE,
-    ...item.returns.map((ret) => `- @returns ${ret}`),
+    ...item.returns.map((ret) => `- @returns ${ret.raw}`),
     ...item.codes
   )
 }
@@ -153,9 +234,12 @@ function createTypesDoc(item, lines) {
     BLANK_LINE,
     ...item.desc,
     BLANK_LINE,
+    ...createPropsTable(item.props, 'Prop'),
+    '<details><summary>Source Code</summary>',
     '```ts',
     ...item.codes,
     '```',
+    '</details>',
     BLANK_LINE
   )
 }
@@ -184,9 +268,10 @@ function removeConsecutiveBlankLine(lines) {
  * handle output
  * @param arr `CommentInfoItem[]`
  * @param outputDir `string` optional parameter.
+ * @param options `OutputFileOptions`
  * @returns `{ outputFileName: string | null, lines: string[], data: CommentInfoItem[] }`
  */
-function handleOutput(arr, outputDir) {
+function handleOutput(arr, outputDir, options = {}) {
   console.log('Output file is start ...')
   // method|type|class|document
   const documents = []
@@ -207,6 +292,12 @@ function handleOutput(arr, outputDir) {
   })
 
   const lines = []
+
+  // start lines
+  if (isValidArray(options.startLines)) {
+    lines.push(...options.startLines)
+  }
+
   documents.forEach((item) => {
     lines.push(
       `# ${item.fullName}`,
@@ -217,10 +308,14 @@ function handleOutput(arr, outputDir) {
     )
   })
 
+  if (isValidArray(options.afterDocumentLines)) {
+    lines.push(...options.afterDocumentLines)
+  }
+
   if (methods.length) {
     lines.push(BLANK_LINE, '## Methods')
     methods.forEach((item) => {
-      createMethodsDoc(item, lines)
+      createMethodsDoc(item, lines, options)
     })
   }
 
@@ -232,15 +327,12 @@ function handleOutput(arr, outputDir) {
     })
   }
 
-  if (outputDir) {
-    // ## License
-    lines.push(
-      BLANK_LINE,
-      '## License',
-      BLANK_LINE,
-      'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).'
-    )
+  // end lines
+  if (isValidArray(options.endLines)) {
+    lines.push(...options.endLines)
+  }
 
+  if (outputDir) {
     // file check
     if (isFileLike(outputDir)) {
       outputFileName = outputDir
@@ -267,16 +359,23 @@ function handleOutput(arr, outputDir) {
 }
 
 /**
- * @method outputFile(input, outputDirOrFile?)
+ * @method outputFile(input, outputDirOrFile, options)
  * Output the obtained annotation content as a document.
  * @param input `CommentInfoItem | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
- * @param outputDirOrFile `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
+ * @param outputDirOrFile? `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
+ * @param options? `OutputFileOptions` [OutputFileOptions](#OutputFileOptions)
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
  */
-function outputFile(input, outputDirOrFile) {
+function outputFile(input, outputDirOrFile, options) {
   if (typeof input === 'string') {
     input = getCommentsData(input, true)
   }
+
+  if (isObject(outputDirOrFile) && !options) {
+    options = outputDirOrFile
+    outputDirOrFile = undefined
+  }
+
   if (
     outputDirOrFile &&
     !fs.existsSync(outputDirOrFile) &&
@@ -285,17 +384,20 @@ function outputFile(input, outputDirOrFile) {
     mkdirSync(outputDirOrFile)
   }
   if (Array.isArray(input)) {
-    return handleOutput(input, outputDirOrFile)
+    return handleOutput(input, outputDirOrFile, options)
   } else {
     return Object.keys(input).map((key) => {
-      return handleOutput(toArray(input[key]), outputDirOrFile)
+      return handleOutput(toArray(input[key]), outputDirOrFile, options)
     })
   }
 }
 
 /**
- * @method getCommentsData(input, needArray?, data?)
+ * @method getCommentsData(input, needArray, data)
  * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
+ * Format is not supported for `Array<string | number>` or `(string | number)[]`,
+ * please use `Array<string> | Array<number>` or `string[] | number[]`
+ *
  * @code #### for example
  *
  * A source file `./src/index.js`, or a directory `./src`.
@@ -305,8 +407,8 @@ function outputFile(input, outputDirOrFile) {
  *  * @method someMethod(param)
  *  * someMethod description 1 ...
  *  * someMethod description 2 ...
- *  * @param param `any` param description
- *  * @returns `object` return description
+ *  * @param param `any` param's description
+ *  * @returns `object` return's description
  *  *\/
  * function someMethod(param) {
  *   // do something ...
@@ -332,8 +434,22 @@ function outputFile(input, outputDirOrFile) {
  * //         'someMethod description 1 ...',
  * //         'someMethod description 2 ...',
  * //       ],
- * //       params: ['param `any` param description'],
- * //       returns: ['`object` return description'],
+ * //       params: [
+ * //         {
+ * //           name: 'param',
+ * //           required: true,
+ * //           desc: ['param\'s description'],
+ * //           types: ['any'],
+ * //           raw: 'param `any` param\'s description',
+ * //         },
+ * //       ],
+ * //       returns: [
+ * //         {
+ * //           types: ['object'],
+ * //           desc: ['return\'s description'],
+ * //           raw: '`object` return\'s description',
+ * //         },
+ * //       ],
  * //       codes: [],
  * //       private: false,
  * //       path: '/usr/.../src/index.js',
@@ -346,20 +462,25 @@ function outputFile(input, outputDirOrFile) {
  * ```
  *
  * @param input `string` The target file or directory.
- * @param needArray `boolean` It's true will be returned an array. default `false`.
- * @param data `object` default `{}`
+ * @param needArray? `boolean` It's true will be returned an array. default `false`.
+ * @param data? `object` default `{}`
  * @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
  */
-function getCommentsData(input, needArray = false, data = {}) {
+function getCommentsData(input, needArray, data = {}) {
+  if (isObject(needArray)) {
+    data = needArray
+    needArray = false
+  }
   const stat = fs.statSync(input)
   if (stat.isDirectory()) {
     fs.readdirSync(input).forEach((file) => {
-      getCommentsData(path.join(input, file), needArray, data)
+      getCommentsData(path.join(input, file), data)
     })
   } else if (stat.isFile() && /\.(ts|js)$/.test(input)) {
     data[input] = {}
     handleFile(input, data[input])
   }
+  handleTypes(data)
   return needArray ? mergeIntoArray(data) : data
 }
 
@@ -379,6 +500,92 @@ function toArray(data) {
   Object.keys(data)
     .sort()
     .forEach((key) => arr.push(data[key]))
+  return arr
+}
+
+function handleTypes(data) {
+  const types = []
+  let item
+  Object.keys(data).forEach((filePath) => {
+    Object.keys(data[filePath]).forEach((typeName) => {
+      item = data[filePath][typeName]
+      const firstCodeLine = item.codes[0] || ''
+
+      if (
+        item.type === TYPES.TYPE &&
+        /(^interface\s|type.+=\s*\{)/.test(firstCodeLine)
+      ) {
+        types.push(item)
+      }
+    })
+  })
+
+  types.forEach((item) => {
+    item.props = handleProps(item, types)
+  })
+}
+
+function handleProps(item, types) {
+  // props has been processed
+  if (item.props) return item.props
+
+  const firstCodeLine = item.codes[0] || ''
+
+  const arr = []
+  let isCodeStart = false
+  let description = []
+
+  item.codes.forEach((line) => {
+    if (!isCodeStart && line.includes('{')) {
+      return (isCodeStart = true)
+    }
+    if (!isCodeStart) {
+      // handle extends, get extends interface or class's props
+      if (/\sextends\s+(.+)\s*\{/.test(firstCodeLine)) {
+        RegExp.$1.split(/\s*,\s*/).forEach((extendName) => {
+          // find extendName from types
+          const typeItem = types.find((item) => item.name === extendName)
+          if (typeItem) {
+            // props for extends type object has been processed
+            if (typeItem.props) {
+              arr.push(...typeItem.props)
+            }
+            // props of extends type object has not been processed
+            else {
+              typeItem.props = handleProps(typeItem, types)
+            }
+          }
+        })
+      }
+      return
+    }
+    // desc?: string[] // description ...
+    if (/^\s*(\w+\??)\s*:\s*(\w+.*)(?:\/\/(.*))?/.test(line)) {
+      description.push(RegExp.$3.trim())
+
+      const name = RegExp.$1
+
+      const data = {
+        name: name.replace(/\?/g, ''),
+        required: !name.includes('?'),
+        desc: description,
+        types: RegExp.$2.trim().split(/\s*\|\s*/),
+      }
+
+      // Has extends, a property with the same name may already exist
+      const index = arr.findIndex((item) => item.name === data.name)
+      if (index >= 0) {
+        arr.splice(index, 1)
+      }
+      arr.push(data)
+
+      // reset
+      description = []
+    } else if (/^\s*\/\/(.+)/.test(line)) {
+      if (!description) description = []
+      description.push(RegExp.$1.trim())
+    }
+  })
   return arr
 }
 
