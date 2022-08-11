@@ -263,22 +263,19 @@ function createTypesDoc(item, lines, options = {}) {
 
   if (typeWithSourceCode && typeWithTable) {
     lines.push(...typeTable, ...codes)
-  }
-  // only source code
-  else if (typeWithSourceCode) {
+  } else if (typeWithSourceCode) {
+    // only source code
     lines.push(...codes)
-  }
-  // only table
-  else if (typeWithTable) {
+  } else if (typeWithTable) {
+    // only table
     lines.push(...typeTable)
-  }
-  // table and source code
-  else {
+  } else {
+    // table and source code
     if (typeTable.length) {
       lines.push(...typeTable, ...details)
     } else {
-      // When typeWithAuto is true and typeTable is not, display only code.
       if (typeWithAuto) {
+        // When typeWithAuto is true and typeTable is not, display only code.
         lines.push(...codes)
       } else {
         // default `<details>...</details>`
