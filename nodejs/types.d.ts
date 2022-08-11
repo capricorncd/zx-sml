@@ -27,6 +27,7 @@ export interface CommentInfoItem {
   private: boolean
   // file path
   path: string
+  // [CommentInfoItemProp](#CommentInfoItemProp)
   props?: CommentInfoItemProp[]
 }
 
@@ -35,9 +36,13 @@ export interface CommentInfoItem {
  * [CommentInfoItem](#CommentInfoItem)'s `params`.
  */
 export interface CommentInfoItemParam {
+  // parameter name or property name
   name: string
+  // Whether the parameter is required, or the field must exist in the returned data.
   required: boolean
+  // parameter or property's descriptions
   desc: string[]
+  // parameter or property's types
   types: string[]
 }
 
@@ -46,7 +51,7 @@ export interface CommentInfoItemParam {
  * The properties of [CommentInfoItem](#CommentInfoItem), only exists when the type is `type` or `interface`.
  */
 export interface CommentInfoItemProp extends CommentInfoItemParam {
-  raw: string
+  raw: string // raw annotation string
 }
 
 /**
@@ -54,8 +59,11 @@ export interface CommentInfoItemProp extends CommentInfoItemParam {
  * [CommentInfoItem](#CommentInfoItem)'s `return`.
  */
 export interface CommentInfoItemReturn {
+  // returned's descriptions.
   desc: string[]
+  // returned's types
   types: string[]
+  // raw annotation string
   raw: string
 }
 
@@ -98,12 +106,12 @@ type OutputFileReturnData<T> = T extends string | CommentInfoItem[]
 export function getCommentsData(
   input: string,
   needArray?: boolean,
-  data?: Record<string, any> = {}
+  data?: Record<string, any>
 ): CommentInfoItem[] | Record<string, CommentInfoItem>
 
 export function getCommentsData(
   input: string,
-  data?: Record<string, any> = {}
+  data?: Record<string, any>
 ): CommentInfoItem[] | Record<string, CommentInfoItem>
 
 /**

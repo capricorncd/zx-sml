@@ -391,7 +391,7 @@ function handleOutput(arr, outputDir, options = {}) {
 /**
  * @method outputFile(input, outputDirOrFile, options)
  * Output the obtained annotation content as a document.
- * @param input `Record<string, Record<string, CommentInfoItem>> | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
+ * @param input `{[filePath]: {[key]: CommentInfoItem}} | CommentInfoItem[] | string` Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
  * @param outputDirOrFile? `string` Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
  * @param options? `OutputFileOptions` [OutputFileOptions](#OutputFileOptions)
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
@@ -559,9 +559,26 @@ function handleProps(item, types) {
   // props has been processed
   if (item.props) return item.props
 
-  const firstCodeLine = item.codes[0] || ''
-
   const arr = []
+
+  const firstCodeLine = item.codes[0] || ''
+  // handle extends, get extends interface or class's props
+  if (/\sextends\s+(.+)\s*\{/.test(firstCodeLine)) {
+    const extendTypes = RegExp.$1.split(/\s*,\s*/).map((name) => name.trim())
+    extendTypes.forEach((extendName) => {
+      // find extendName from types
+      const typeItem = types.find((item) => item.name === extendName)
+
+      if (typeItem) {
+        // props of extends type object has not been processed
+        if (!typeItem.props) {
+          typeItem.props = handleProps(typeItem, types)
+        }
+        arr.push(...typeItem.props)
+      }
+    })
+  }
+
   let isCodeStart = false
   let description = []
 
@@ -569,28 +586,9 @@ function handleProps(item, types) {
     if (!isCodeStart && line.includes('{')) {
       return (isCodeStart = true)
     }
-    if (!isCodeStart) {
-      // handle extends, get extends interface or class's props
-      if (/\sextends\s+(.+)\s*\{/.test(firstCodeLine)) {
-        RegExp.$1.split(/\s*,\s*/).forEach((extendName) => {
-          // find extendName from types
-          const typeItem = types.find((item) => item.name === extendName)
-          if (typeItem) {
-            // props for extends type object has been processed
-            if (typeItem.props) {
-              arr.push(...typeItem.props)
-            }
-            // props of extends type object has not been processed
-            else {
-              typeItem.props = handleProps(typeItem, types)
-            }
-          }
-        })
-      }
-      return
-    }
+
     // desc?: string[] // description ...
-    if (/^\s*(\w+\??)\s*:\s*(\w+.*)(?:\/\/(.*))?/.test(line)) {
+    if (/^\s*(\w+\??)\s*:\s*(\w+[^/]*)(?:\/\/(.*))?/.test(line)) {
       // $1~$3
       const name = RegExp.$1
       const types = RegExp.$2.trim().split(/\s*\|\s*/)

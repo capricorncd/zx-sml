@@ -124,7 +124,7 @@ Output the obtained annotation content as a document.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-input|`Record<string, Record<string, CommentInfoItem>>`/`CommentInfoItem[]`/`string`|yes|Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
+input|`{[filePath]: {[key]: CommentInfoItem}}`/`CommentInfoItem[]`/`string`|yes|Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-data) will be called. What's [CommentInfoItem](#commentinfoitem).
 outputDirOrFile|`string`|no|Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
 options|`OutputFileOptions`|no|[OutputFileOptions](#OutputFileOptions)
 
@@ -157,7 +157,7 @@ returns|`CommentInfoItemReturn[]`|yes|method's returns
 codes|`string[]`|yes|for example codes
 private|`boolean`|yes|Whether the member method of the class is private
 path|`string`|yes|file path
-props|`CommentInfoItemProp[]`|no|-
+props|`CommentInfoItemProp[]`|no|[CommentInfoItemProp](#CommentInfoItemProp)
 
 <details>
 <summary>Source Code</summary>
@@ -182,6 +182,7 @@ interface CommentInfoItem {
   private: boolean
   // file path
   path: string
+  // [CommentInfoItemProp](#CommentInfoItemProp)
   props?: CommentInfoItemProp[]
 }
 ```
@@ -194,19 +195,23 @@ interface CommentInfoItem {
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
-name|`string`|yes|-
-required|`boolean`|yes|-
-desc|`string[]`|yes|-
-types|`string[]`|yes|-
+name|`string`|yes|parameter name or property name
+required|`boolean`|yes|Whether the parameter is required, or the field must exist in the returned data.
+desc|`string[]`|yes|parameter or property's descriptions
+types|`string[]`|yes|parameter or property's types
 
 <details>
 <summary>Source Code</summary>
 
 ```ts
 interface CommentInfoItemParam {
+  // parameter name or property name
   name: string
+  // Whether the parameter is required, or the field must exist in the returned data.
   required: boolean
+  // parameter or property's descriptions
   desc: string[]
+  // parameter or property's types
   types: string[]
 }
 ```
@@ -219,14 +224,18 @@ The properties of [CommentInfoItem](#CommentInfoItem), only exists when the type
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
-raw|`string`|yes|-
+name|`string`|yes|parameter name or property name
+required|`boolean`|yes|Whether the parameter is required, or the field must exist in the returned data.
+desc|`string[]`|yes|parameter or property's descriptions
+types|`string[]`|yes|parameter or property's types
+raw|`string`|yes|raw annotation string
 
 <details>
 <summary>Source Code</summary>
 
 ```ts
 interface CommentInfoItemProp extends CommentInfoItemParam {
-  raw: string
+  raw: string // raw annotation string
 }
 ```
 
@@ -238,17 +247,20 @@ interface CommentInfoItemProp extends CommentInfoItemParam {
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
-desc|`string[]`|yes|-
-types|`string[]`|yes|-
-raw|`string`|yes|-
+desc|`string[]`|yes|returned's descriptions.
+types|`string[]`|yes|returned's types
+raw|`string`|yes|raw annotation string
 
 <details>
 <summary>Source Code</summary>
 
 ```ts
 interface CommentInfoItemReturn {
+  // returned's descriptions.
   desc: string[]
+  // returned's types
   types: string[]
+  // raw annotation string
   raw: string
 }
 ```
