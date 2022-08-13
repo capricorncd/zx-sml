@@ -462,7 +462,11 @@ function outputFile(input, outputDirOrFile, options) {
     return handleOutput(input, outputDirOrFile, options)
   } else {
     return Object.keys(input).map((key) => {
-      return handleOutput(toArray(input[key]), outputDirOrFile, options)
+      return handleOutput(
+        toArray(input[key], options),
+        outputDirOrFile,
+        options
+      )
     })
   }
 }
@@ -551,7 +555,7 @@ function getCommentsData(input, needArray, options = {}) {
   _getCommentsData(input, data, options)
 
   handleTypes(data)
-  return needArray ? mergeIntoArray(data) : data
+  return needArray ? mergeIntoArray(data, options) : data
 }
 
 /**
@@ -580,22 +584,24 @@ function _getCommentsData(input, data, options) {
   }
 }
 
-function mergeIntoArray(data) {
+function mergeIntoArray(data, options) {
   const mergeData = Object.keys(data).reduce((prev, filePath) => {
     Object.keys(data[filePath]).forEach((key) => {
       prev[key] = data[filePath][key]
     })
     return prev
   }, {})
-  return toArray(mergeData)
+  return toArray(mergeData, options)
 }
 
-function toArray(data) {
+function toArray(data, options = {}) {
   const arr = []
-  // sort and push into arr
-  Object.keys(data)
-    .sort()
-    .forEach((key) => arr.push(data[key]))
+  const keys = Object.keys(data)
+  if (!options.disableKeySorting) {
+    keys.sort()
+  }
+
+  keys.forEach((key) => arr.push(data[key]))
   return arr
 }
 

@@ -275,6 +275,7 @@ Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarra
 Prop|Types|Required|Description
 :--|:--|:--|:--
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
+disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
 
 <details>
 <summary>Source Code</summary>
@@ -283,6 +284,8 @@ fileType|`RegExp`|no|Regular expression for the type of file to be read, default
 interface GetCommentsDataOptions {
   // Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
   fileType?: RegExp
+  // Disables key sorting, defaults to `false`, and sorts alphabetically.
+  disableKeySorting?: boolean
 }
 ```
 
@@ -312,6 +315,7 @@ Options of the function [outputFile](#outputfileinput-outputdirorfile-options), 
 Prop|Types|Required|Description
 :--|:--|:--|:--
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
+disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
 methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
 typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
 typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`

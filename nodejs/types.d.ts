@@ -171,4 +171,6 @@ export function error(...args: Array<any>): void
 export interface GetCommentsDataOptions {
   // Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
   fileType?: RegExp
+  // Disables key sorting, defaults to `false`, and sorts alphabetically.
+  disableKeySorting?: boolean
 }
