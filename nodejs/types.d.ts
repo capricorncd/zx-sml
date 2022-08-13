@@ -6,7 +6,7 @@
 
 /**
  * @type CommentInfoItem
- * CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-data) function.
+ * CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-options) function.
  */
 export interface CommentInfoItem {
   // method/type/class/document
@@ -69,7 +69,7 @@ export interface CommentInfoItemReturn {
 
 /**
  * @type OutputFileReturns
- * `OutputFileReturns` returned by the [outputFile](#outputfileinput-outputdirorfile-options) function.
+ * Returned data of function [outputFile](#outputfileinput-outputdirorfile-options).
  */
 export interface OutputFileReturns {
   // outputted filename
@@ -81,19 +81,20 @@ export interface OutputFileReturns {
 }
 
 /**
- * OutputFileInput
- * outputFile's `input` parameter
+ * @type OutputFileInput
+ * A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-options).
  */
 type OutputFileInput =
   | Record<string, CommentInfoItem>
   | CommentInfoItem[]
   | string
+  | string[]
 
 /**
  * OutputFileReturnData<T>
- * outputFile's `input` return data
+ * Returned data of function outputFile.
  */
-type OutputFileReturnData<T> = T extends string | CommentInfoItem[]
+type OutputFileReturnData<T> = T extends string | string[] | CommentInfoItem[]
   ? OutputFileReturns[]
   : OutputFileReturns
 
@@ -104,21 +105,21 @@ type OutputFileReturnData<T> = T extends string | CommentInfoItem[]
  * @param data
  */
 export function getCommentsData(
-  input: string,
+  input: string | string[],
   needArray?: boolean,
   data?: Record<string, any>
 ): CommentInfoItem[] | Record<string, CommentInfoItem>
 
 export function getCommentsData(
-  input: string,
+  input: string | string[],
   data?: Record<string, any>
 ): CommentInfoItem[] | Record<string, CommentInfoItem>
 
 /**
  * @type OutputFileOptions
- * [outputFile](#outputfileinput-outputdirorfile-options)'s options
+ * Options of the function [outputFile](#outputfileinput-outputdirorfile-options), extends [GetCommentsDataOptions](#GetCommentsDataOptions)
  */
-export interface OutputFileOptions {
+export interface OutputFileOptions extends GetCommentsDataOptions {
   // Display `methods` using raw string, not table. default `false`
   methodWithRaw?: boolean
   // Display `types` using only table, not Source Code. default `false`
@@ -162,3 +163,12 @@ export function log(...args: Array<any>): void
 export function warn(...args: Array<any>): void
 
 export function error(...args: Array<any>): void
+
+/**
+ * @type GetCommentsDataOptions
+ * Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarray-options)
+ */
+export interface GetCommentsDataOptions {
+  // Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
+  fileType?: RegExp
+}

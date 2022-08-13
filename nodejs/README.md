@@ -21,7 +21,7 @@ args|`Array<string>`|yes|-
 
 - @returns `void`
 
-### getCommentsData(input, needArray, data)
+### getCommentsData(input, needArray, options)
 
 Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
 Format is not supported for `Array<string | number>` or `(string | number)[]`,
@@ -29,9 +29,9 @@ please use `Array<string> | Array<number>` or `string[] | number[]`
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-input|`string`|yes|The target file or directory.
+input|`string`/`string[]`|yes|The target file or directory.
 needArray|`boolean`|no|It's true will be returned an array. default `false`.
-data|`object`|no|default `{}`
+options|`GetCommentsDataOptions`|no|[GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`
 
 - @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
 
@@ -145,7 +145,7 @@ args|`Array<string>`|yes|-
 
 ### CommentInfoItem
 
-CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-data) function.
+CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-options) function.
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
@@ -268,12 +268,50 @@ interface CommentInfoItemReturn {
 
 </details>
 
-### OutputFileOptions
+### GetCommentsDataOptions
 
-[outputFile](#outputfileinput-outputdirorfile-options)'s options
+Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarray-options)
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
+fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface GetCommentsDataOptions {
+  // Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
+  fileType?: RegExp
+}
+```
+
+</details>
+
+### OutputFileInput
+
+A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-options).
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+type OutputFileInput =
+  | Record<string, CommentInfoItem>
+  | CommentInfoItem[]
+  | string
+  | string[]
+```
+
+</details>
+
+### OutputFileOptions
+
+Options of the function [outputFile](#outputfileinput-outputdirorfile-options), extends [GetCommentsDataOptions](#GetCommentsDataOptions)
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
 methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
 typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
 typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`
@@ -287,7 +325,7 @@ sourceCodeSummary|`string`|no|`<details><summary>Source Code</summary></details>
 <summary>Source Code</summary>
 
 ```ts
-interface OutputFileOptions {
+interface OutputFileOptions extends GetCommentsDataOptions {
   // Display `methods` using raw string, not table. default `false`
   methodWithRaw?: boolean
   // Display `types` using only table, not Source Code. default `false`
@@ -312,7 +350,7 @@ interface OutputFileOptions {
 
 ### OutputFileReturns
 
-`OutputFileReturns` returned by the [outputFile](#outputfileinput-outputdirorfile-options) function.
+Returned data of function [outputFile](#outputfileinput-outputdirorfile-options).
 
 Prop|Types|Required|Description
 :--|:--|:--|:--

@@ -435,10 +435,17 @@ function handleOutput(arr, outputDir, options = {}) {
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
  */
 function outputFile(input, outputDirOrFile, options) {
-  if (typeof input === 'string') {
-    input = getCommentsData(input, true)
+  // file or directory's path, or an array of paths
+  if (
+    // file or directory's path
+    typeof input === 'string' ||
+    // or an array of paths
+    (isValidArray(input) && input.every((str) => typeof str === 'string'))
+  ) {
+    input = getCommentsData(input, true, options)
   }
 
+  // check other parameters
   if (isObject(outputDirOrFile) && !options) {
     options = outputDirOrFile
     outputDirOrFile = undefined
@@ -461,7 +468,7 @@ function outputFile(input, outputDirOrFile, options) {
 }
 
 /**
- * @method getCommentsData(input, needArray, data)
+ * @method getCommentsData(input, needArray, options)
  * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
  * Format is not supported for `Array<string | number>` or `(string | number)[]`,
  * please use `Array<string> | Array<number>` or `string[] | number[]`
@@ -529,27 +536,48 @@ function outputFile(input, outputDirOrFile, options) {
  * // }
  * ```
  *
- * @param input `string` The target file or directory.
+ * @param input `string | string[]` The target file or directory.
  * @param needArray? `boolean` It's true will be returned an array. default `false`.
- * @param data? `object` default `{}`
+ * @param options? `GetCommentsDataOptions` [GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`
  * @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
  */
-function getCommentsData(input, needArray, data = {}) {
+function getCommentsData(input, needArray, options = {}) {
+  const data = {}
   if (isObject(needArray)) {
-    data = needArray
+    options = needArray
     needArray = false
   }
-  const stat = fs.statSync(input)
-  if (stat.isDirectory()) {
-    fs.readdirSync(input).forEach((file) => {
-      getCommentsData(path.join(input, file), data)
-    })
-  } else if (stat.isFile() && /\.(ts|js)$/.test(input)) {
-    data[input] = {}
-    handleFile(input, data[input])
-  }
+
+  _getCommentsData(input, data, options)
+
   handleTypes(data)
   return needArray ? mergeIntoArray(data) : data
+}
+
+/**
+ * _getCommentsData
+ * @param input
+ * @param data
+ * @param options
+ */
+function _getCommentsData(input, data, options) {
+  const { fileType = /\.(ts|js)$/ } = options
+
+  if (Array.isArray(input)) {
+    input.forEach((str) => {
+      _getCommentsData(str, data, options)
+    })
+  } else {
+    const stat = fs.statSync(input)
+    if (stat.isDirectory()) {
+      fs.readdirSync(input).forEach((file) => {
+        _getCommentsData(path.join(input, file), data, options)
+      })
+    } else if (stat.isFile() && fileType.test(input)) {
+      data[input] = {}
+      handleFile(input, data[input])
+    }
+  }
 }
 
 function mergeIntoArray(data) {
