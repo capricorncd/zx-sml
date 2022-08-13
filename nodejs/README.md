@@ -274,14 +274,14 @@ Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarra
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
-fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
+fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 
 <details>
 <summary>Source Code</summary>
 
 ```ts
 interface GetCommentsDataOptions {
-  // Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
+  // Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
   fileType?: RegExp
 }
 ```
@@ -311,7 +311,7 @@ Options of the function [outputFile](#outputfileinput-outputdirorfile-options), 
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
-fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
+fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
 typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
 typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`

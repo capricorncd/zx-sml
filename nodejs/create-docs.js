@@ -601,15 +601,16 @@ function toArray(data) {
 
 function handleTypes(data) {
   const types = []
+  // get types from `data`
   let item
   Object.keys(data).forEach((filePath) => {
     Object.keys(data[filePath]).forEach((typeName) => {
       item = data[filePath][typeName]
-      const firstCodeLine = item.codes[0] || ''
+      // const firstCodeLine = item.codes[0] || ''
 
       if (
-        item.type === TYPES.TYPE &&
-        /(^interface\s|type.+=\s*\{)/.test(firstCodeLine)
+        item.type === TYPES.TYPE
+        // && /(^interface\s|type.+=\s*\{)/.test(firstCodeLine)
       ) {
         types.push(item)
       }

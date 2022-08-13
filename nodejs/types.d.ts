@@ -169,6 +169,6 @@ export function error(...args: Array<any>): void
  * Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarray-options)
  */
 export interface GetCommentsDataOptions {
-  // Regular expression for the type of file to be read, defaults to `/\.(ts|js)$/`.
+  // Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
   fileType?: RegExp
 }
