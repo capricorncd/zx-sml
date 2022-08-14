@@ -554,7 +554,7 @@ function getCommentsData(input, needArray, options = {}) {
 
   _getCommentsData(input, data, options)
 
-  handleTypes(data)
+  handleTypes(data, options)
   return needArray ? mergeIntoArray(data, options) : data
 }
 
@@ -605,29 +605,58 @@ function toArray(data, options = {}) {
   return arr
 }
 
-function handleTypes(data) {
+/**
+ * @method getTypes(data)
+ * Get types from getCommentsData's returned data.
+ * @param data `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]`
+ * @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
+ */
+function getTypes(data) {
+  // CommentInfoItem[]
+  if (Array.isArray(data)) {
+    return data.filter((item) => item.type === TYPES.TYPE)
+  }
+
+  // Record<filePath, Record<commentTypeName, CommentInfoItem>>
   const types = []
   // get types from `data`
   let item
   Object.keys(data).forEach((filePath) => {
     Object.keys(data[filePath]).forEach((typeName) => {
       item = data[filePath][typeName]
-      // const firstCodeLine = item.codes[0] || ''
 
-      if (
-        item.type === TYPES.TYPE
-        // && /(^interface\s|type.+=\s*\{)/.test(firstCodeLine)
-      ) {
+      if (item.type === TYPES.TYPE) {
         types.push(item)
       }
     })
   })
+  return types
+}
+
+/**
+ * handleTypes
+ * @param data ``Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]``
+ * @param options `GetCommentsDataOptions`
+ */
+function handleTypes(data, options) {
+  const types = getTypes(data)
+
+  // `options.types` obtained from other files or directories
+  if (isValidArray(options.types)) {
+    types.push(...options.types)
+  }
 
   types.forEach((item) => {
     item.props = handleProps(item, types)
   })
 }
 
+/**
+ * handleProps
+ * @param item `CommentInfoItem`
+ * @param types `CommentInfoItem[]`
+ * @returns
+ */
 function handleProps(item, types) {
   // props has been processed
   if (item.props) return item.props
@@ -710,4 +739,5 @@ function handleProps(item, types) {
 module.exports = {
   getCommentsData,
   outputFile,
+  getTypes,
 }

@@ -99,6 +99,16 @@ getCommentsData(path.resolve(__dirname, './src'));
 // }
 ```
 
+### getTypes(data)
+
+Get types from getCommentsData's returned data.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+data|`Record<filePath, Record<commentTypeName, CommentInfoItem>>`/`CommentInfoItem[]`|yes|-
+
+- @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
+
 ### log(...args)
 
 Output 😎 green color log in console
@@ -276,6 +286,7 @@ Prop|Types|Required|Description
 :--|:--|:--|:--
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
+types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
 
 <details>
 <summary>Source Code</summary>
@@ -286,6 +297,8 @@ interface GetCommentsDataOptions {
   fileType?: RegExp
   // Disables key sorting, defaults to `false`, and sorts alphabetically.
   disableKeySorting?: boolean
+  // This `types` array is obtained from other files or directories for `extends` related processing.
+  types?: CommentInfoItem[]
 }
 ```
 
@@ -316,6 +329,7 @@ Prop|Types|Required|Description
 :--|:--|:--|:--
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
+types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
 methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
 typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
 typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`

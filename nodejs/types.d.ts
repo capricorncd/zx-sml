@@ -173,4 +173,6 @@ export interface GetCommentsDataOptions {
   fileType?: RegExp
   // Disables key sorting, defaults to `false`, and sorts alphabetically.
   disableKeySorting?: boolean
+  // This `types` array is obtained from other files or directories for `extends` related processing.
+  types?: CommentInfoItem[]
 }

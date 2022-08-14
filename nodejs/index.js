@@ -15,12 +15,13 @@
  * ```
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { getCommentsData, outputFile } = require('./create-docs')
+const { getCommentsData, outputFile, getTypes } = require('./create-docs')
 const { mkdirSync } = require('./helpers')
 const { log, warn, error } = require('./log')
 
 module.exports = {
   getCommentsData,
+  getTypes,
   outputFile,
   mkdirSync,
   log,
