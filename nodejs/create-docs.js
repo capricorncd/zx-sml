@@ -14,6 +14,7 @@ const {
   isValidArray,
   toStrForStrArray,
   findCharIndex,
+  formatAsArray,
 } = require('./helpers')
 const { log } = require('./log')
 
@@ -244,7 +245,6 @@ function createMethodsDoc(item, lines, options = {}) {
     })
   }
   lines.push(
-    BLANK_LINE,
     `### ${item.fullName}`,
     BLANK_LINE,
     ...item.desc,
@@ -256,7 +256,8 @@ function createMethodsDoc(item, lines, options = {}) {
       : createPropsTable(item.params, 'Param')),
     BLANK_LINE,
     ...item.returns.map((ret) => `- @returns ${ret.raw}`),
-    ...item.codes
+    ...item.codes,
+    BLANK_LINE
   )
 }
 
@@ -267,15 +268,9 @@ function createMethodsDoc(item, lines, options = {}) {
  * @param options `{typeWithTable: false, typeWithSourceCode: false}`
  */
 function createTypesDoc(item, lines, options = {}) {
-  lines.push(
-    BLANK_LINE,
-    `### ${item.fullName}`,
-    BLANK_LINE,
-    ...item.desc,
-    BLANK_LINE
-  )
+  lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
   const typeTable = createPropsTable(item.props, 'Prop')
-  const codes = ['```ts', ...item.codes, '```']
+  const codes = ['```ts', ...item.codes, '```', BLANK_LINE]
   const details = [
     '<details>',
     `<summary>${options.sourceCodeSummary || 'Source Code'}</summary>`,
@@ -283,6 +278,7 @@ function createTypesDoc(item, lines, options = {}) {
     ...codes,
     BLANK_LINE,
     '</details>',
+    BLANK_LINE,
   ]
 
   const { typeWithSourceCode, typeWithTable, typeWithAuto } = options
@@ -309,7 +305,6 @@ function createTypesDoc(item, lines, options = {}) {
       }
     }
   }
-  lines.push(BLANK_LINE)
 }
 
 /**
@@ -363,8 +358,13 @@ function handleOutput(arr, outputDir, options = {}) {
 
   // start lines
   if (isValidArray(options.startLines)) {
-    lines.push(...options.startLines)
+    lines.push(...options.startLines, BLANK_LINE)
   }
+
+  // linesAfterType
+  const linesAfterType = options.linesAfterType || {}
+  // linesAfterTitle
+  const linesAfterTitle = options.linesAfterTitle || {}
 
   documents.forEach((item) => {
     lines.push(
@@ -372,33 +372,59 @@ function handleOutput(arr, outputDir, options = {}) {
       BLANK_LINE,
       ...item.desc,
       BLANK_LINE,
-      ...item.codes
+      ...item.codes,
+      BLANK_LINE
     )
   })
 
-  if (isValidArray(options.afterDocumentLines)) {
-    lines.push(...options.afterDocumentLines)
+  // lines after document
+  if (linesAfterType[TYPES.DOCUMENT]) {
+    lines.push(...formatAsArray(linesAfterType[TYPES.DOCUMENT]), BLANK_LINE)
   }
 
   if (methods.length) {
-    lines.push(BLANK_LINE, '## Methods')
+    lines.push('## Methods', BLANK_LINE)
+
+    // insert lines after method title
+    if (linesAfterTitle[TYPES.METHOD]) {
+      lines.push(...formatAsArray(linesAfterTitle[TYPES.METHOD]), BLANK_LINE)
+    }
+
     methods.forEach((item) => {
       createMethodsDoc(item, lines, options)
     })
   }
 
+  // lines after method
+  if (linesAfterType[TYPES.METHOD]) {
+    lines.push(...formatAsArray(linesAfterType[TYPES.METHOD]), BLANK_LINE)
+  }
+
   // ## types
   if (types.length) {
-    lines.push(BLANK_LINE, '## Types', BLANK_LINE)
+    lines.push('## Types', BLANK_LINE)
+
+    // insert lines after type title
+    if (linesAfterTitle[TYPES.TYPE]) {
+      lines.push(...formatAsArray(linesAfterTitle[TYPES.TYPE]), BLANK_LINE)
+    }
+
     types.forEach((item) => {
       createTypesDoc(item, lines, options)
     })
   }
 
+  // lines after types
+  if (linesAfterType[TYPES.TYPE]) {
+    lines.push(...formatAsArray(linesAfterType[TYPES.TYPE]), BLANK_LINE)
+  }
+
   // end lines
   if (isValidArray(options.endLines)) {
-    lines.push(...options.endLines)
+    lines.push(...options.endLines, BLANK_LINE)
   }
+
+  const outputLines = removeConsecutiveBlankLine(lines)
 
   if (outputDir) {
     // file check
@@ -410,18 +436,14 @@ function handleOutput(arr, outputDir, options = {}) {
 
     // output file
     if (outputFileName)
-      fs.writeFileSync(
-        outputFileName,
-        removeConsecutiveBlankLine(lines).join(EOL),
-        'utf8'
-      )
+      fs.writeFileSync(outputFileName, outputLines.join(EOL), 'utf8')
   }
 
   log(outputFileName)
   console.log('Output file is ended.')
   return {
     outputFileName,
-    lines: removeConsecutiveBlankLine(lines),
+    lines: outputLines,
     data: arr,
   }
 }

@@ -52,6 +52,16 @@ function isValidArray(i) {
   return Array.isArray(i) && i.length > 0
 }
 
+/**
+ * input `['str1', 'str2', '...', 'strN']`
+ * output `str1 str2 ... strN`
+ * input `[]`
+ * output `-`
+ * @param arr
+ * @param spliceSymbol
+ * @param defaultReturnValue
+ * @returns
+ */
 function toStrForStrArray(arr, spliceSymbol = ' ', defaultReturnValue = '-') {
   const newArr = arr.filter((str) => !!str)
   return newArr.length ? newArr.join(spliceSymbol) : defaultReturnValue
@@ -73,6 +83,15 @@ function findCharIndex(str, char, times) {
   return index
 }
 
+/**
+ * formatAsArray
+ * @param input `string | string[]`
+ * @returns `string[]`
+ */
+function formatAsArray(input) {
+  return Array.isArray(input) ? input : [input]
+}
+
 module.exports = {
   mkdirSync,
   isFileLike,
@@ -80,4 +99,5 @@ module.exports = {
   isValidArray,
   toStrForStrArray,
   findCharIndex,
+  formatAsArray,
 }

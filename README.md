@@ -48,7 +48,6 @@ outputFile(path.resolve(__dirname, './src'), path.resolve(__dirname, './docs/REA
 ```
 
 <!--METHOD_START-->
-
 ## Methods
 
 ### $$(selector, doc)
@@ -410,6 +409,7 @@ toStrStyles({lineHeight: 1.5, width: '50%'})
 toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
 // line-height:24px;width:50%
 ```
+
 <!--METHOD_END-->
 
 ## License

@@ -133,8 +133,12 @@ export interface OutputFileOptions extends GetCommentsDataOptions {
   startLines?: string[]
   // Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
   endLines?: string[]
-  // This `afterDocumentLines` will be appended to the `@document`, before the `## Methods`
-  afterDocumentLines?: string[]
+  // This `linesAfterType` will be appended to the `[type]`, before the `## [other type]`
+  linesAfterType?: Record<'document' | 'method' | 'type', string | string[]>
+  // It's will be insert after `type` title line.
+  // For example, `{method: ['some type description content']}`,
+  // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+  linesAfterTitle?: Record<'method' | 'type', string | string[]>
   // `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`
   sourceCodeSummary?: string
 }
