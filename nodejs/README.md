@@ -336,8 +336,8 @@ typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not tabl
 typeWithAuto|`boolean`|no|By default, `table` and `<details><summary>Source Code</summary></details>` are displayed, but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
 startLines|`string[]`|no|Lines that need to be added at the start.
 endLines|`string[]`|no|Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
-linesAfterType|`Record<'document'`/`'method'`/`'type', string`/`string[]>`|no|This `linesAfterType` will be appended to the `[type]`, before the `## [other type]`
-linesAfterTitle|`Record<'method'`/`'type', string`/`string[]>`|no|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+linesAfterType|`Record<'document' \| 'method' \| 'type', string \| string[]>`|no|This `linesAfterType` will be appended to the `[type]`, before the `## [other type]`
+linesAfterTitle|`Record<'method' \| 'type', string \| string[]>`|no|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
 sourceCodeSummary|`string`|no|`<details><summary>Source Code</summary></details>`'s summary, default `Source Code`
 
 <details>
