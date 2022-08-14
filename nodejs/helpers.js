@@ -92,6 +92,41 @@ function formatAsArray(input) {
   return Array.isArray(input) ? input : [input]
 }
 
+/**
+ * format as types
+ * @param input
+ * @returns `string[]`
+ */
+function formatAsTypes(input) {
+  input = input.trim()
+
+  // only one type
+  if (
+    !input.includes('|') ||
+    /^(\w+<([^<]|\([^(]+\)\[\]|\w+<[^<]+>)+>|\([^(]+\)\[\])$/.test(input)
+  ) {
+    return [input]
+  }
+
+  // if (!/(\w+<.+>|\(.+\)\[\])/.test(input))
+  return input.split(/\s*\|\s*/)
+
+  // Record<'document' | 'method' | 'type', string | string[]> | OtherType
+  // Record<string, Array<AnyType | OtherType> | Record<string, AnyType>>
+  // Array<string | number> or
+  // (string | number)[] | keyof type SomeObject | OtherType
+  // Array<string> | Array<number> or string[] | number[]
+}
+
+/**
+ * Replace vertical bars in tables so they don't affect table rendering in Markdown.
+ * @param input
+ * @returns
+ */
+function replaceVerticalBarsInTables(input) {
+  return input.replace(/\|/g, '\\|')
+}
+
 module.exports = {
   mkdirSync,
   isFileLike,
@@ -100,4 +135,6 @@ module.exports = {
   toStrForStrArray,
   findCharIndex,
   formatAsArray,
+  formatAsTypes,
+  replaceVerticalBarsInTables,
 }

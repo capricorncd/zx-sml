@@ -24,8 +24,6 @@ args|`Array<string>`|yes|-
 ### getCommentsData(input, needArray, options)
 
 Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
-Format is not supported for `Array<string | number>` or `(string | number)[]`,
-please use `Array<string> | Array<number>` or `string[] | number[]`
 
 Param|Types|Required|Description
 :--|:--|:--|:--

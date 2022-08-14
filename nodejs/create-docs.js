@@ -15,6 +15,8 @@ const {
   toStrForStrArray,
   findCharIndex,
   formatAsArray,
+  formatAsTypes,
+  replaceVerticalBarsInTables,
 } = require('./helpers')
 const { log } = require('./log')
 
@@ -57,7 +59,7 @@ function handleParam(input) {
 
     data.required = !name.includes('?')
     // no support for `Array<string | number>` or `(string | number)[]`
-    data.types = RegExp.$2.split(/\s*\|\s*/)
+    data.types = formatAsTypes(RegExp.$2)
     // desc
     const desc = RegExp.$3 || getSpDescription(input)
     data.desc = [desc.trim()]
@@ -80,7 +82,7 @@ function handleReturn(input) {
   if (/`([^`]+)`\s*(.*)/.test(input)) {
     // no support for `Array<string | number>` or `(string | number)[]`
     // please use `Array<string> | Array<number>` or `string[] | number[]`
-    data.types = RegExp.$1.split(/\s*\|\s*/)
+    data.types = formatAsTypes(RegExp.$1)
 
     data.desc = [RegExp.$2]
   }
@@ -221,11 +223,13 @@ function createPropsTable(props, typeName = 'Name') {
   if (!isValidArray(props)) return []
   const arr = [`${typeName}|Types|Required|Description`, ':--|:--|:--|:--']
   props.forEach((item) => {
-    arr.push(
-      `${item.name}|\`${item.types.join('`/`')}\`|${
-        item.required ? 'yes' : 'no'
-      }|${toStrForStrArray(item.desc)}`
-    )
+    const tdItems = [
+      item.name,
+      '`' + replaceVerticalBarsInTables(item.types.join('`/`')) + '`',
+      item.required ? 'yes' : 'no',
+      replaceVerticalBarsInTables(toStrForStrArray(item.desc)),
+    ]
+    arr.push(tdItems.join('|'))
   })
   arr.push(BLANK_LINE)
   return arr
@@ -496,8 +500,6 @@ function outputFile(input, outputDirOrFile, options) {
 /**
  * @method getCommentsData(input, needArray, options)
  * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
- * Format is not supported for `Array<string | number>` or `(string | number)[]`,
- * please use `Array<string> | Array<number>` or `string[] | number[]`
  *
  * @code #### for example
  *
@@ -731,7 +733,7 @@ function handleProps(item, types) {
     ) {
       // $1~$3
       const name = RegExp.$1
-      const types = RegExp.$2.trim().split(/\s*\|\s*/)
+      const types = formatAsTypes(RegExp.$2)
       description.push(RegExp.$3.trim())
 
       const data = {
