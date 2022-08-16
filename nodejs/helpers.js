@@ -89,6 +89,7 @@ function findCharIndex(str, char, times) {
  * @returns `string[]`
  */
 function formatAsArray(input) {
+  if (typeof input === 'undefined') return []
   return Array.isArray(input) ? input : [input]
 }
 

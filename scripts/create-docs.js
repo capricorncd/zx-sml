@@ -39,12 +39,39 @@ function writeInReadmeFile(inputLines) {
 }
 
 const outputFileOptions = {
-  endLines: [
-    '',
-    '## License',
-    '',
-    'MIT License © 2022-Present [Capricorncd](https://github.com/capricorncd).',
-  ],
+  lines: {
+    // start: [
+    //   'start ============='
+    // ],
+    end: [
+      '',
+      '## License',
+      '',
+      'MIT License © 2022-Present [Capricorncd](https://github.com/capricorncd).',
+    ],
+    //   afterType: {
+    //     document: 'afterType document ------',
+    //     method: ['afterType method', 'method==='],
+    //     type: 'afterType ty[e'
+    //   },
+    //   afterTitle: {
+    //     document: 'afterTitle document ------',
+    //     method: ['afterTitle method', 'method==='],
+    //     type: 'afterTitle type'
+    //   },
+  },
+  // alias: {
+  //   requiredValues: ['x', 'o'],
+  //   tableHead: {
+  //     Param: '参数',
+  //     Prop: '属性',
+  //     Types: '类型',
+  //     Required: '必须',
+  //     Description: '描述'
+  //   },
+  //   sourceCodeSummary: '代码'
+  // },
+  typeWithAuto: true,
 }
 
 function main() {

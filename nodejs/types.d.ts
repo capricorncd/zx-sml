@@ -116,6 +116,51 @@ export function getCommentsData(
 ): CommentInfoItem[] | Record<string, CommentInfoItem>
 
 /**
+ * @type DocTypes
+ */
+export type DocTypes = 'document' | 'method' | 'type' | 'code'
+
+/**
+ * @type OutputFileOptionLines
+ */
+export interface OutputFileOptionLines {
+  // The `start` that need to be added at the start.
+  start: string | string[]
+  // The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
+  end: string | string[]
+  // It's will be appended to the `[type]`, before the `## [other type]`
+  afterType: Record<Omit<DocTypes, 'code'>, string | string[]>
+  // It's will be insert after `type` title line.
+  // For example, `{method: ['some type description content']}`,
+  // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+  afterTitle: Record<Omit<DocTypes, 'code'>, string | string[]>
+}
+
+/**
+ * @type TableHeadInnerText
+ * Table head th inner text of the output file.
+ */
+export type TableHeadInnerText =
+  | 'Name'
+  | 'Param'
+  | 'Prop'
+  | 'Types'
+  | 'Required'
+  | 'Description'
+
+/**
+ * @type OutputFileOptionAlias
+ */
+export interface OutputFileOptionAlias {
+  // Alias of table head th inner text.
+  tableHead: Record<TableHeadInnerText, string>
+  // Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
+  sourceCodeSummary: string
+  // Required values, `{requiredValues: {0: 'no', 1: 'yes'}}`.
+  requiredValues: Record<0 | 1, string>
+}
+
+/**
  * @type OutputFileOptions
  * Options of the function [outputFile](#outputfileinput-outputdirorfile-options), extends [GetCommentsDataOptions](#GetCommentsDataOptions)
  */
@@ -129,18 +174,10 @@ export interface OutputFileOptions extends GetCommentsDataOptions {
   // By default, `table` and `<details><summary>Source Code</summary></details>` are displayed,
   // but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
   typeWithAuto?: boolean
-  // Lines that need to be added at the start.
-  startLines?: string[]
-  // Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
-  endLines?: string[]
-  // This `linesAfterType` will be appended to the `[type]`, before the `## [other type]`
-  linesAfterType?: Record<'document' | 'method' | 'type', string | string[]>
-  // It's will be insert after `type` title line.
-  // For example, `{method: ['some type description content']}`,
-  // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
-  linesAfterTitle?: Record<'method' | 'type', string | string[]>
-  // `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`
-  sourceCodeSummary?: string
+  // lines. [OutputFileOptionLines](#OutputFileOptionLines)
+  lines: OutputFileOptionLines
+  // alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
+  alias: OutputFileOptionAlias
 }
 
 /**

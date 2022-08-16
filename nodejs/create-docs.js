@@ -217,16 +217,31 @@ function handleFile(filePath, data) {
  * createPropsTable
  * @param props `CommentInfoItemParam[] | CommentInfoItemProp[]`
  * @param typeName
+ * @param options `{alias: tableHead?: {...}}`
  * @returns `string[]`
  */
-function createPropsTable(props, typeName = 'Name') {
+function createPropsTable(props, typeName = 'Name', options = {}) {
   if (!isValidArray(props)) return []
-  const arr = [`${typeName}|Types|Required|Description`, ':--|:--|:--|:--']
+  // alias
+  const alias = options.alias || {}
+  const tableHeadAlias = options.tableHeadAlias || alias.tableHead || {}
+  const requiredValues = alias.requiredValues || { 0: 'no', 1: 'yes' }
+  // table head
+  const arr = [
+    [
+      tableHeadAlias[typeName] || typeName,
+      tableHeadAlias['Types'] || 'Types',
+      tableHeadAlias['Required'] || 'Required',
+      tableHeadAlias['Description'] || 'Description',
+    ].join('|'),
+    ':--|:--|:--|:--',
+  ]
+  // table body
   props.forEach((item) => {
     const tdItems = [
       item.name,
-      '`' + replaceVerticalBarsInTables(item.types.join('`/`')) + '`',
-      item.required ? 'yes' : 'no',
+      '`' + replaceVerticalBarsInTables(item.types?.join('`/`')) + '`',
+      requiredValues[+item.required],
       replaceVerticalBarsInTables(toStrForStrArray(item.desc)),
     ]
     arr.push(tdItems.join('|'))
@@ -248,6 +263,7 @@ function createMethodsDoc(item, lines, options = {}) {
       desc: [],
     })
   }
+
   lines.push(
     `### ${item.fullName}`,
     BLANK_LINE,
@@ -257,7 +273,7 @@ function createMethodsDoc(item, lines, options = {}) {
     // item.params.map((param) => `* @param ${param}`),
     ...(options.methodWithRaw
       ? item.params.map((param) => `- @param ${param.raw}`)
-      : createPropsTable(item.params, 'Param')),
+      : createPropsTable(item.params, 'Param', options)),
     BLANK_LINE,
     ...item.returns.map((ret) => `- @returns ${ret.raw}`),
     ...item.codes,
@@ -273,11 +289,16 @@ function createMethodsDoc(item, lines, options = {}) {
  */
 function createTypesDoc(item, lines, options = {}) {
   lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
-  const typeTable = createPropsTable(item.props, 'Prop')
+  // table
+  const typeTable = createPropsTable(item.props, 'Prop', options)
+  // codes
   const codes = ['```ts', ...item.codes, '```', BLANK_LINE]
+  // source code alias
+  const sourceCodeSummary = options.alias?.sourceCodeSummary
+
   const details = [
     '<details>',
-    `<summary>${options.sourceCodeSummary || 'Source Code'}</summary>`,
+    `<summary>${sourceCodeSummary || 'Source Code'}</summary>`,
     BLANK_LINE,
     ...codes,
     BLANK_LINE,
@@ -360,25 +381,38 @@ function handleOutput(arr, outputDir, options = {}) {
 
   const lines = []
 
+  const optionsLines = options.lines || {
+    start: options.startLines,
+    end: options.endLines,
+    afterType: options.linesAfterType,
+    afterTitle: options.linesAfterTitle,
+  }
+
   // start lines
-  if (isValidArray(options.startLines)) {
-    lines.push(...options.startLines, BLANK_LINE)
+  const startLines = formatAsArray(optionsLines.start)
+  if (isValidArray(startLines)) {
+    lines.push(...startLines, BLANK_LINE)
   }
 
   // linesAfterType
-  const linesAfterType = options.linesAfterType || {}
+  const linesAfterType = optionsLines.afterType || {}
   // linesAfterTitle
-  const linesAfterTitle = options.linesAfterTitle || {}
+  const linesAfterTitle = optionsLines.afterTitle || {}
 
-  documents.forEach((item) => {
-    lines.push(
-      `# ${item.fullName}`,
-      BLANK_LINE,
-      ...item.desc,
-      BLANK_LINE,
-      ...item.codes,
-      BLANK_LINE
-    )
+  documents.forEach((item, i) => {
+    if (i === 0) {
+      lines.push(`# ${item.fullName}`, BLANK_LINE)
+      // insert lines after method title
+      if (linesAfterTitle[TYPES.DOCUMENT]) {
+        lines.push(
+          ...formatAsArray(linesAfterTitle[TYPES.DOCUMENT]),
+          BLANK_LINE
+        )
+      }
+    } else {
+      lines.push(`### ${item.fullName}`, BLANK_LINE)
+    }
+    lines.push(...item.desc, BLANK_LINE, ...item.codes, BLANK_LINE)
   })
 
   // lines after document
@@ -424,8 +458,9 @@ function handleOutput(arr, outputDir, options = {}) {
   }
 
   // end lines
-  if (isValidArray(options.endLines)) {
-    lines.push(...options.endLines, BLANK_LINE)
+  const endLines = formatAsArray(optionsLines.end)
+  if (isValidArray(endLines)) {
+    lines.push(...endLines, BLANK_LINE)
   }
 
   const outputLines = removeConsecutiveBlankLine(lines)
@@ -499,7 +534,7 @@ function outputFile(input, outputDirOrFile, options) {
 
 /**
  * @method getCommentsData(input, needArray, options)
- * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
+ * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method`, `code` and more.
  *
  * @code #### for example
  *

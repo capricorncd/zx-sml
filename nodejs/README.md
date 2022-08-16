@@ -23,7 +23,7 @@ args|`Array<string>`|yes|-
 
 ### getCommentsData(input, needArray, options)
 
-Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method` and `class`.
+Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method`, `code` and more.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
@@ -276,6 +276,12 @@ interface CommentInfoItemReturn {
 
 </details>
 
+### DocTypes
+
+```ts
+type DocTypes = 'document' | 'method' | 'type' | 'code'
+```
+
 ### GetCommentsDataOptions
 
 Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarray-options)
@@ -306,15 +312,63 @@ interface GetCommentsDataOptions {
 
 A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-options).
 
-<details>
-<summary>Source Code</summary>
-
 ```ts
 type OutputFileInput =
   | Record<string, CommentInfoItem>
   | CommentInfoItem[]
   | string
   | string[]
+```
+
+### OutputFileOptionAlias
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+tableHead|`Record<TableHeadInnerText, string>`|yes|Alias of table head th inner text.
+sourceCodeSummary|`string`|yes|Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
+requiredValues|`Record<0 \| 1, string>`|yes|Required values, `{requiredValues: {0: 'no', 1: 'yes'}}`.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface OutputFileOptionAlias {
+  // Alias of table head th inner text.
+  tableHead: Record<TableHeadInnerText, string>
+  // Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
+  sourceCodeSummary: string
+  // Required values, `{requiredValues: {0: 'no', 1: 'yes'}}`.
+  requiredValues: Record<0 | 1, string>
+}
+```
+
+</details>
+
+### OutputFileOptionLines
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+start|`string`/`string[]`|yes|The `start` that need to be added at the start.
+end|`string`/`string[]`|yes|The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
+afterType|`Record<Omit<DocTypes, 'code'>, string \| string[]>`|yes|It's will be appended to the `[type]`, before the `## [other type]`
+afterTitle|`Record<Omit<DocTypes, 'code'>, string \| string[]>`|yes|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface OutputFileOptionLines {
+  // The `start` that need to be added at the start.
+  start: string | string[]
+  // The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
+  end: string | string[]
+  // It's will be appended to the `[type]`, before the `## [other type]`
+  afterType: Record<Omit<DocTypes, 'code'>, string | string[]>
+  // It's will be insert after `type` title line.
+  // For example, `{method: ['some type description content']}`,
+  // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+  afterTitle: Record<Omit<DocTypes, 'code'>, string | string[]>
+}
 ```
 
 </details>
@@ -332,11 +386,8 @@ methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. defaul
 typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
 typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`
 typeWithAuto|`boolean`|no|By default, `table` and `<details><summary>Source Code</summary></details>` are displayed, but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
-startLines|`string[]`|no|Lines that need to be added at the start.
-endLines|`string[]`|no|Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
-linesAfterType|`Record<'document' \| 'method' \| 'type', string \| string[]>`|no|This `linesAfterType` will be appended to the `[type]`, before the `## [other type]`
-linesAfterTitle|`Record<'method' \| 'type', string \| string[]>`|no|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
-sourceCodeSummary|`string`|no|`<details><summary>Source Code</summary></details>`'s summary, default `Source Code`
+lines|`OutputFileOptionLines`|yes|lines. [OutputFileOptionLines](#OutputFileOptionLines)
+alias|`OutputFileOptionAlias`|yes|alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
 
 <details>
 <summary>Source Code</summary>
@@ -352,18 +403,10 @@ interface OutputFileOptions extends GetCommentsDataOptions {
   // By default, `table` and `<details><summary>Source Code</summary></details>` are displayed,
   // but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
   typeWithAuto?: boolean
-  // Lines that need to be added at the start.
-  startLines?: string[]
-  // Lines that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`
-  endLines?: string[]
-  // This `linesAfterType` will be appended to the `[type]`, before the `## [other type]`
-  linesAfterType?: Record<'document' | 'method' | 'type', string | string[]>
-  // It's will be insert after `type` title line.
-  // For example, `{method: ['some type description content']}`,
-  // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
-  linesAfterTitle?: Record<'method' | 'type', string | string[]>
-  // `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`
-  sourceCodeSummary?: string
+  // lines. [OutputFileOptionLines](#OutputFileOptionLines)
+  lines: OutputFileOptionLines
+  // alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
+  alias: OutputFileOptionAlias
 }
 ```
 
@@ -394,6 +437,20 @@ interface OutputFileReturns {
 ```
 
 </details>
+
+### TableHeadInnerText
+
+Table head th inner text of the output file.
+
+```ts
+type TableHeadInnerText =
+  | 'Name'
+  | 'Param'
+  | 'Prop'
+  | 'Types'
+  | 'Required'
+  | 'Description'
+```
 
 ## License
 
