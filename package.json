@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "some static method library",
   "main": "dist/zx-sml.umd.js",
   "module": "dist/zx-sml.es.js",
@@ -32,7 +32,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "yarn docs && tsc && vite build --emptyOutDir && node scripts/build-header.js",
+    "build": "yarn docs && vite build --emptyOutDir && node scripts/build-header.js",
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",

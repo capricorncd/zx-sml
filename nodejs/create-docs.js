@@ -12,94 +12,28 @@ const {
   isFileLike,
   isObject,
   isValidArray,
-  toStrForStrArray,
-  findCharIndex,
   formatAsArray,
-  formatAsTypes,
-  replaceVerticalBarsInTables,
+  handleProps,
+  getTypeName,
+  handleReturn,
+  handleParam,
+  createPropsTable,
+  mergeIntoArray,
+  toArray,
 } = require('./helpers')
 const { log } = require('./log')
 
 // blank line
 const BLANK_LINE = ''
 
-// method|type|class|document
-const TYPES = {
-  METHOD: 'method',
-  TYPE: 'type',
-  CLASS: 'class',
-  DOCUMENT: 'document',
-}
-
 /**
- * When the parameter description cannot be obtained using regular expressions
- * @param {*} input
- * @returns
+ * DOC_TYPES
  */
-function getSpDescription(input) {
-  const index = findCharIndex(input, '`', 2)
-  return index === -1 ? '' : input.substr(index + 1)
-}
-
-/**
- * handleParam
- * @param input `string`
- * @returns `CommentInfoItemParam`
- */
-function handleParam(input) {
-  input = input.replace('@param', '').trim()
-  const data = {
-    raw: input,
-  }
-  // paramName? `type` param description
-  // paramName `type1 | type2` param description
-  if (/(\w+\??)\s+`([^`]+)`(.*)/.test(input)) {
-    const name = RegExp.$1
-    data.name = name.replace('?', '')
-
-    data.required = !name.includes('?')
-    // no support for `Array<string | number>` or `(string | number)[]`
-    data.types = formatAsTypes(RegExp.$2)
-    // desc
-    const desc = RegExp.$3 || getSpDescription(input)
-    data.desc = [desc.trim()]
-  }
-  return data
-}
-
-/**
- * handleReturn
- * @param input `string`
- * @returns `CommentInfoItemReturn`
- */
-function handleReturn(input) {
-  input = input.replace(/@returns?/, '').trim()
-  const data = {
-    raw: input,
-  }
-  // `type` Return's description
-  // `type1 | type2` Return's description
-  if (/`([^`]+)`\s*(.*)/.test(input)) {
-    // no support for `Array<string | number>` or `(string | number)[]`
-    // please use `Array<string> | Array<number>` or `string[] | number[]`
-    data.types = formatAsTypes(RegExp.$1)
-
-    data.desc = [RegExp.$2]
-  }
-  return data
-}
-
-/**
- * Get type name:
- * setContents(box, newContents)  -> setContents
- * InterfaceName<Type1, Type2>    -> InterfaceName
- * classInstance.someMethod(param)-> classInstance.someMethod
- * @param fullName `string`
- * @returns
- */
-function getTypeName(fullName) {
-  // only words and '.'
-  return fullName.replace(/^([\w.]+).*/, '$1')
+const DOC_TYPES = {
+  method: 'method',
+  type: 'type',
+  document: 'document',
+  constant: 'constant',
 }
 
 /**
@@ -107,9 +41,30 @@ function getTypeName(fullName) {
  * get `method|type|class|document` annotations in file.
  * @param filePath `string` absolute file path.
  * @param data `object`
+ * @param options `GetCommentsDataOptions`
  * @returns `Record<string, CommentInfoItem>`
  */
-function handleFile(filePath, data) {
+function handleFile(filePath, data, options = {}) {
+  // target types
+  const targetTypes = Object.keys(DOC_TYPES)
+  if (isValidArray(options.expendTypes)) {
+    options.expendTypes.forEach((t) => {
+      if (t && !targetTypes.includes(t)) {
+        targetTypes.push(t)
+      }
+    })
+  }
+
+  const typesRegExp = new RegExp(`^\\*\\s*@(${targetTypes.join('|')})\\s*(.+)`)
+
+  // types of source code
+  const codeTypes = [DOC_TYPES.type, DOC_TYPES.constant]
+  if (isValidArray(options.codeTypes)) {
+    options.codeTypes.forEach((t) => {
+      codeTypes.push(t)
+    })
+  }
+
   let isTargetComment = false
   let isCode = false
   let type = null
@@ -124,8 +79,8 @@ function handleFile(filePath, data) {
     .forEach((line) => {
       const originalLine = line
       line = line.trim()
-      // Start with method|type|class|document annotations
-      if (/^\*\s*@(method|type|class|document)\s*(.+)/.test(line)) {
+      // Start with method|type|document annotations
+      if (typesRegExp.test(line)) {
         isTargetComment = true
 
         type = RegExp.$1
@@ -166,88 +121,58 @@ function handleFile(filePath, data) {
       }
       if (!isTargetComment || !typeName) {
         // type codes
-        if (typeName && type === TYPES.TYPE && line) {
+        if (typeName && codeTypes.includes(type) && line) {
           data[dataKey].codes.push(
-            originalLine.replace(/^export( default)?\s*/, '')
+            originalLine.replace(/^export(\s+default)?\s*/, '')
           )
         }
         return
       }
 
-      if (/^\*\s*(```\w+|@code)/.test(line)) {
-        isCode = true
-      }
-
-      if (/^\*(.*)/.test(line)) {
-        tempStr = RegExp.$1
-        const temp = tempStr.trim()
-        if (temp.startsWith('@param')) {
-          data[dataKey].params.push(handleParam(temp))
-        } else if (temp.startsWith('@return')) {
-          data[dataKey].returns.push(handleReturn(temp))
-        } else if (temp.startsWith('@private')) {
-          data[dataKey].private = true
-        } else if (isCode) {
-          if (temp.startsWith('@code')) {
-            // push a blank line.
-            data[dataKey].codes.push('')
-            tempStr = tempStr.replace(/@code\w*/, '').trim()
-          }
-          // push `tempStr` to `codes`
-          data[dataKey].codes.push(
-            tempStr
-              // Remove first null character of `tempStr`
-              .replace(/^\s/, '')
-              // Restore escaped strings in comments
-              .replace('*\\/', '*/')
-          )
-        } else {
-          data[dataKey].desc.push(temp.replace('@description', '').trim())
+      // custom handler
+      if (typeof options.expendTypesHandlers?.[type] === 'function') {
+        options.expendTypesHandlers[type](data[dataKey], line)
+      } else {
+        // default handler
+        if (/^\*\s*(```\w+|@code)/.test(line)) {
+          isCode = true
         }
-      }
 
-      if (isCode && /^\*\s*```$/.test(line)) {
-        isCode = false
+        if (/^\*(.*)/.test(line)) {
+          tempStr = RegExp.$1
+
+          const temp = tempStr.trim()
+          if (temp.startsWith('@param')) {
+            data[dataKey].params.push(handleParam(temp))
+          } else if (temp.startsWith('@return')) {
+            data[dataKey].returns.push(handleReturn(temp))
+          } else if (temp.startsWith('@private')) {
+            data[dataKey].private = true
+          } else if (isCode) {
+            if (temp.startsWith('@code')) {
+              // push a blank line.
+              data[dataKey].codes.push('')
+              tempStr = tempStr.replace(/@code\w*/, '').trim()
+            }
+            // push `tempStr` to `codes`
+            data[dataKey].codes.push(
+              tempStr
+                // Remove first null character of `tempStr`
+                .replace(/^\s/, '')
+                // Restore escaped strings in comments
+                .replace('*\\/', '*/')
+            )
+          } else {
+            data[dataKey].desc.push(temp.replace('@description', '').trim())
+          }
+        }
+
+        if (isCode && /^\*\s*```$/.test(line)) {
+          isCode = false
+        }
       }
     })
   return data
-}
-
-/**
- * createPropsTable
- * @param props `CommentInfoItemParam[] | CommentInfoItemProp[]`
- * @param typeName
- * @param options `{alias: tableHead?: {...}}`
- * @returns `string[]`
- */
-function createPropsTable(props, typeName = 'Name', options = {}) {
-  if (!isValidArray(props)) return []
-  // alias
-  const alias = options.alias || {}
-  const tableHeadAlias = options.tableHeadAlias || alias.tableHead || {}
-  const requiredValues = alias.requiredValues || { 0: 'no', 1: 'yes' }
-  // table head
-  const arr = [
-    [
-      tableHeadAlias[typeName] || typeName,
-      tableHeadAlias['Types'] || 'Types',
-      tableHeadAlias['Required'] || 'Required',
-      tableHeadAlias['Description'] || 'Description',
-    ].join('|'),
-    ':--|:--|:--|:--',
-  ]
-  // table body
-  props.forEach((item) => {
-    const tdItems = [
-      item.name,
-      '`' + replaceVerticalBarsInTables(item.types?.join('`/`')) + '`',
-      requiredValues[+item.required],
-      replaceVerticalBarsInTables(toStrForStrArray(item.desc)),
-    ]
-    arr.push(tdItems.join('|'))
-  })
-  arr.push(BLANK_LINE)
-  return arr
 }
 
 /**
@@ -273,7 +198,7 @@ function createMethodsDoc(item, lines, options = {}) {
     // item.params.map((param) => `* @param ${param}`),
     ...(options.methodWithRaw
       ? item.params.map((param) => `- @param ${param.raw}`)
-      : createPropsTable(item.params, 'Param', options)),
+      : createPropsTable(item.params, DOC_TYPES.method, 'Param', options)),
     BLANK_LINE,
     ...item.returns.map((ret) => `- @returns ${ret.raw}`),
     ...item.codes,
@@ -290,7 +215,12 @@ function createMethodsDoc(item, lines, options = {}) {
 function createTypesDoc(item, lines, options = {}) {
   lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
   // table
-  const typeTable = createPropsTable(item.props, 'Prop', options)
+  const typeTable = createPropsTable(
+    item.props,
+    DOC_TYPES.type,
+    'Prop',
+    options
+  )
   // codes
   const codes = ['```ts', ...item.codes, '```', BLANK_LINE]
   // source code alias
@@ -352,6 +282,95 @@ function removeConsecutiveBlankLine(lines) {
   return outputLines
 }
 
+// # Documents
+function handleDocumentLines(arr, options, lines) {
+  if (!isValidArray(arr)) return
+  // types alias
+  const typesAlias = options.alias?.types || {}
+  const linesAfterTitles = formatAsArray(
+    options.lines?.afterTitle?.[DOC_TYPES.document]
+  )
+
+  let outputFileName = null
+
+  arr.forEach((item, i) => {
+    if (i === 0) {
+      outputFileName = item.name + '.md'
+      lines.push(
+        `# ${typesAlias[DOC_TYPES.document] || item.fullName}`,
+        BLANK_LINE
+      )
+      // insert lines after method title
+      if (isValidArray(linesAfterTitles)) {
+        lines.push(...linesAfterTitles, BLANK_LINE)
+      }
+    } else {
+      lines.push(`### ${item.fullName}`, BLANK_LINE)
+    }
+    lines.push(...item.desc, BLANK_LINE, ...item.codes, BLANK_LINE)
+  })
+
+  return outputFileName
+}
+
+// ## Methods
+function handleMethodLines(arr, options, lines) {
+  if (!isValidArray(arr)) return
+  const typesAlias = options.alias?.types || {}
+  const linesAfterTitles = formatAsArray(
+    options.lines?.afterTitle?.[DOC_TYPES.method]
+  )
+
+  lines.push(`## ${typesAlias[DOC_TYPES.method] || 'Methods'}`, BLANK_LINE)
+
+  // insert lines after method title
+  if (isValidArray(linesAfterTitles)) {
+    lines.push(...linesAfterTitles, BLANK_LINE)
+  }
+
+  arr.forEach((item) => {
+    createMethodsDoc(item, lines, options)
+  })
+}
+
+// ## Types
+function handleTypesLines(arr, options, lines) {
+  if (!isValidArray(arr)) return
+  const typesAlias = options.alias?.types || {}
+  const linesAfterTitles = formatAsArray(
+    options.lines?.afterTitle?.[DOC_TYPES.type]
+  )
+
+  lines.push(`## ${typesAlias[DOC_TYPES.type] || 'Types'}`, BLANK_LINE)
+
+  // insert lines after type title
+  if (isValidArray(linesAfterTitles)) {
+    lines.push(...linesAfterTitles, BLANK_LINE)
+  }
+
+  arr.forEach((item) => {
+    createTypesDoc(item, lines, options)
+  })
+}
+
+function handleConstLines(arr, options, lines) {
+  if (!isValidArray(arr)) return
+  lines.push('## Constant', BLANK_LINE)
+
+  const linesAfterType = options.lines?.afterType?.[DOC_TYPES.constant]
+
+  if (isValidArray(linesAfterType)) {
+    lines.push(...linesAfterType, BLANK_LINE)
+  }
+
+  arr.forEach((item) => {
+    lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
+    if (isValidArray(item.codes)) {
+      lines.push('```ts', ...item.codes, '```', BLANK_LINE)
+    }
+  })
+}
+
 /**
  * handle output
  * @param arr `CommentInfoItem[]`
@@ -361,104 +380,59 @@ function removeConsecutiveBlankLine(lines) {
  */
 function handleOutput(arr, outputDir, options = {}) {
   console.log('Output file is start ...')
-  // method|type|class|document
-  const documents = []
-  const types = []
-  const methods = []
+  // method|type|constant|document|component|...
+  const originalData = {}
 
   let outputFileName = null
 
   arr.forEach((item) => {
-    if (item.type === TYPES.DOCUMENT) {
-      outputFileName = item.name + '.md'
-      documents.push(item)
-    } else if (item.type === TYPES.TYPE) {
-      types.push(item)
-    } else if (item.type === TYPES.METHOD && !item.private) {
-      methods.push(item)
+    if (!originalData[item.type]) {
+      originalData[item.type] = []
     }
+    originalData[item.type].push(item)
   })
 
   const lines = []
 
-  const optionsLines = options.lines || {
-    start: options.startLines,
-    end: options.endLines,
-    afterType: options.linesAfterType,
-    afterTitle: options.linesAfterTitle,
-  }
-
   // start lines
-  const startLines = formatAsArray(optionsLines.start)
+  const startLines = formatAsArray(options.lines?.start)
   if (isValidArray(startLines)) {
     lines.push(...startLines, BLANK_LINE)
   }
 
   // linesAfterType
-  const linesAfterType = optionsLines.afterType || {}
-  // linesAfterTitle
-  const linesAfterTitle = optionsLines.afterTitle || {}
+  const linesAfterType = options.lines?.afterType || {}
 
-  documents.forEach((item, i) => {
-    if (i === 0) {
-      lines.push(`# ${item.fullName}`, BLANK_LINE)
-      // insert lines after method title
-      if (linesAfterTitle[TYPES.DOCUMENT]) {
-        lines.push(
-          ...formatAsArray(linesAfterTitle[TYPES.DOCUMENT]),
-          BLANK_LINE
-        )
-      }
+  // Output types and their order
+  const outputDocTypesAndOrder = isValidArray(options.outputDocTypesAndOrder)
+    ? options.outputDocTypesAndOrder
+    : ['document', 'method', 'type', 'constant']
+
+  outputDocTypesAndOrder.forEach((type) => {
+    const handler = options.handlers?.[type]
+    if (typeof handler === 'function') {
+      handler(originalData[type], options, lines)
     } else {
-      lines.push(`### ${item.fullName}`, BLANK_LINE)
+      // # document
+      if (type === DOC_TYPES.document) {
+        outputFileName = handleDocumentLines(originalData[type], options, lines)
+      } else if (type === DOC_TYPES.method) {
+        handleMethodLines(originalData[type], options, lines)
+      } else if (type === DOC_TYPES.type) {
+        handleTypesLines(originalData[type], options, lines)
+      } else if (type === DOC_TYPES.constant) {
+        handleConstLines(originalData[type], options, lines)
+      }
     }
-    lines.push(...item.desc, BLANK_LINE, ...item.codes, BLANK_LINE)
+
+    // lines after docTypes
+    if (linesAfterType[type]) {
+      lines.push(...formatAsArray(linesAfterType[type]), BLANK_LINE)
+    }
   })
 
-  // lines after document
-  if (linesAfterType[TYPES.DOCUMENT]) {
-    lines.push(...formatAsArray(linesAfterType[TYPES.DOCUMENT]), BLANK_LINE)
-  }
-
-  if (methods.length) {
-    lines.push('## Methods', BLANK_LINE)
-
-    // insert lines after method title
-    if (linesAfterTitle[TYPES.METHOD]) {
-      lines.push(...formatAsArray(linesAfterTitle[TYPES.METHOD]), BLANK_LINE)
-    }
-
-    methods.forEach((item) => {
-      createMethodsDoc(item, lines, options)
-    })
-  }
-
-  // lines after method
-  if (linesAfterType[TYPES.METHOD]) {
-    lines.push(...formatAsArray(linesAfterType[TYPES.METHOD]), BLANK_LINE)
-  }
-
-  // ## types
-  if (types.length) {
-    lines.push('## Types', BLANK_LINE)
-
-    // insert lines after type title
-    if (linesAfterTitle[TYPES.TYPE]) {
-      lines.push(...formatAsArray(linesAfterTitle[TYPES.TYPE]), BLANK_LINE)
-    }
-
-    types.forEach((item) => {
-      createTypesDoc(item, lines, options)
-    })
-  }
-
-  // lines after types
-  if (linesAfterType[TYPES.TYPE]) {
-    lines.push(...formatAsArray(linesAfterType[TYPES.TYPE]), BLANK_LINE)
-  }
-
   // end lines
-  const endLines = formatAsArray(optionsLines.end)
+  const endLines = formatAsArray(options.lines?.end)
   if (isValidArray(endLines)) {
     lines.push(...endLines, BLANK_LINE)
   }
@@ -495,7 +469,7 @@ function handleOutput(arr, outputDir, options = {}) {
  * @param options? `OutputFileOptions` [OutputFileOptions](#OutputFileOptions)
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
  */
-function outputFile(input, outputDirOrFile, options) {
+function outputFile(input, outputDirOrFile, options = {}) {
   // file or directory's path, or an array of paths
   if (
     // file or directory's path
@@ -510,6 +484,21 @@ function outputFile(input, outputDirOrFile, options) {
   if (isObject(outputDirOrFile) && !options) {
     options = outputDirOrFile
     outputDirOrFile = undefined
+  }
+
+  // Options Compatibility Handling, which will be removed in a later version.
+  const optionsLines = options.lines || {
+    start: options.startLines,
+    end: options.endLines,
+    afterType: options.linesAfterType,
+    afterTitle: options.linesAfterTitle,
+  }
+
+  options = {
+    ...options,
+    lines: {
+      ...optionsLines,
+    },
   }
 
   if (
@@ -638,30 +627,9 @@ function _getCommentsData(input, data, options) {
       })
     } else if (stat.isFile() && fileType.test(input)) {
       data[input] = {}
-      handleFile(input, data[input])
+      handleFile(input, data[input], options)
     }
   }
-}
-
-function mergeIntoArray(data, options) {
-  const mergeData = Object.keys(data).reduce((prev, filePath) => {
-    Object.keys(data[filePath]).forEach((key) => {
-      prev[key] = data[filePath][key]
-    })
-    return prev
-  }, {})
-  return toArray(mergeData, options)
-}
-
-function toArray(data, options = {}) {
-  const arr = []
-  const keys = Object.keys(data)
-  if (!options.disableKeySorting) {
-    keys.sort()
-  }
-
-  keys.forEach((key) => arr.push(data[key]))
-  return arr
 }
 
 /**
@@ -673,7 +641,7 @@ function toArray(data, options = {}) {
 function getTypes(data) {
   // CommentInfoItem[]
   if (Array.isArray(data)) {
-    return data.filter((item) => item.type === TYPES.TYPE)
+    return data.filter((item) => item.type === DOC_TYPES.type)
   }
 
   // Record<filePath, Record<commentTypeName, CommentInfoItem>>
@@ -684,7 +652,7 @@ function getTypes(data) {
     Object.keys(data[filePath]).forEach((typeName) => {
       item = data[filePath][typeName]
 
-      if (item.type === TYPES.TYPE) {
+      if (item.type === DOC_TYPES.type) {
         types.push(item)
       }
     })
@@ -708,91 +676,6 @@ function handleTypes(data, options) {
   types.forEach((item) => {
     item.props = handleProps(item, types)
   })
-}
-
-/**
- * handleProps
- * @param item `CommentInfoItem`
- * @param types `CommentInfoItem[]`
- * @returns
- */
-function handleProps(item, types) {
-  // props has been processed
-  if (item.props) return item.props
-
-  const arr = []
-
-  const firstCodeLine = item.codes[0] || ''
-  // handle extends, get extends interface or class's props
-  // interface ColorfulCircle<T> extends Colorful<T>, Circle {}
-  if (/\sextends\s+(.+)\s*\{/.test(firstCodeLine)) {
-    const extendTypes = RegExp.$1
-      .split(/\s*,\s*/)
-      // Colorful<T> -> Colorful
-      .map((name) => getTypeName(name.trim()))
-    extendTypes.forEach((extendName) => {
-      // find extendName from types
-      const typeItem = types.find((item) => item.name === extendName)
-
-      if (typeItem) {
-        // props of extends type object has not been processed
-        if (!typeItem.props) {
-          typeItem.props = handleProps(typeItem, types)
-        }
-        arr.push(...typeItem.props)
-      }
-    })
-  }
-
-  let isCodeStart = false
-  let description = []
-
-  item.codes.forEach((line) => {
-    // type A = {
-    //   prop: type
-    // }
-    if (!isCodeStart && /\{\s*$/.test(line)) {
-      return (isCodeStart = true)
-    }
-
-    // desc?: string[] | OtherType // description ...
-    // install: (e: Editor, parent?: HTMLElement) => void // description ...
-    // [key]: any, or [key: string]: OtherType // description ...
-    // interface ReadonlyStringArray {
-    //   readonly [index: number]: string;
-    // }
-    if (
-      /^\s*(?:(?:readonly|static|public)\s*)?((?:\w|\[.+\])+\??)\s*:\s*([^/]*)(?:\/\/(.*))?/.test(
-        line
-      )
-    ) {
-      // $1~$3
-      const name = RegExp.$1
-      const types = formatAsTypes(RegExp.$2)
-      description.push(RegExp.$3.trim())
-
-      const data = {
-        name: name.replace(/\?/g, ''),
-        required: !name.includes('?'),
-        desc: description,
-        types,
-      }
-
-      // Has extends, a property with the same name may already exist
-      const index = arr.findIndex((item) => item.name === data.name)
-      if (index >= 0) {
-        arr.splice(index, 1)
-      }
-      arr.push(data)
-
-      // reset
-      description = []
-    } else if (/^\s*\/\/(.+)/.test(line)) {
-      if (!description) description = []
-      description.push(RegExp.$1.trim())
-    }
-  })
-  return arr
 }
 
 module.exports = {

@@ -16,15 +16,47 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { getCommentsData, outputFile, getTypes } = require('./create-docs')
-const { mkdirSync } = require('./helpers')
+const {
+  mkdirSync,
+  isFileLike,
+  isObject,
+  isValidArray,
+  toStrForStrArray,
+  findCharIndex,
+  formatAsArray,
+  formatAsTypes,
+  replaceVerticalBarsInTables,
+  getTypeName,
+  handleReturn,
+  handleParam,
+  handleProps,
+  createPropsTable,
+  mergeIntoArray,
+  toArray,
+} = require('./helpers')
 const { log, warn, error } = require('./log')
 
 module.exports = {
   getCommentsData,
   getTypes,
   outputFile,
-  mkdirSync,
   log,
   warn,
   error,
+  mkdirSync,
+  isFileLike,
+  isObject,
+  isValidArray,
+  toStrForStrArray,
+  findCharIndex,
+  formatAsArray,
+  formatAsTypes,
+  replaceVerticalBarsInTables,
+  getTypeName,
+  handleReturn,
+  handleParam,
+  handleProps,
+  createPropsTable,
+  mergeIntoArray,
+  toArray,
 }

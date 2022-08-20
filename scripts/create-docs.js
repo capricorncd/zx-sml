@@ -60,18 +60,53 @@ const outputFileOptions = {
     //     type: 'afterTitle type'
     //   },
   },
-  // alias: {
-  //   requiredValues: ['x', 'o'],
-  //   tableHead: {
-  //     Param: '参数',
-  //     Prop: '属性',
-  //     Types: '类型',
-  //     Required: '必须',
-  //     Description: '描述'
-  //   },
-  //   sourceCodeSummary: '代码'
-  // },
+  alias: {
+    // requiredValues: ['x', 'o'],
+    // requiredValues: {
+    //    0: 'x',
+    //    1: 'o',
+    //   //  method: ['no', 'yes'],
+    //    type: ['可选', '必须'],
+    // },
+    //   tableHead: {
+    //     Param: '参数',
+    //     Prop: '属性',
+    //     Types: '类型',
+    //     Required: '必须',
+    //     Description: '描述'
+    //   },
+    //   sourceCodeSummary: '代码'
+    // types: {
+    //   method: '函数',
+    // },
+  },
   typeWithAuto: true,
+  // // outputDocTypesAndOrder: ['document', 'constant', 'type', 'method'],
+  handlers: {
+    // constant: (arr, options, lines) => {
+    //   if (isValidArray(arr)) {
+    //     lines.push('## Constant', '')
+    //     const linesAfterType = options.lines?.afterType?.['constant']
+    //     if (isValidArray(linesAfterType)) {
+    //       lines.push(...linesAfterType)
+    //     }
+    //     arr.forEach((item) => {
+    //       lines.push(`### ${item.fullName}`, '', ...item.desc, '')
+    //       if (isValidArray(item.codes)) {
+    //         lines.push('```ts', ...item.codes, '```', '')
+    //       }
+    //     })
+    //   }
+    //   // console.log(arr, options, lines)
+    // },
+  },
+  // // GetCommentsDataOptions
+  // expendTypesHandlers: {
+  //   // constant: (data, line) => {
+  //   //   console.log(line)
+  //   // },
+  // },
+  // codeTypes: [],
 }
 
 function main() {

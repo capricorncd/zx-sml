@@ -108,32 +108,32 @@ export function getCommentsData(
   input: string | string[],
   needArray?: boolean,
   data?: Record<string, any>
-): CommentInfoItem[] | Record<string, CommentInfoItem>
+): CommentInfoItem[] | Record<string, Record<string, CommentInfoItem>>
 
 export function getCommentsData(
   input: string | string[],
   data?: Record<string, any>
-): CommentInfoItem[] | Record<string, CommentInfoItem>
+): CommentInfoItem[] | Record<string, Record<string, CommentInfoItem>>
 
 /**
  * @type DocTypes
  */
-export type DocTypes = 'document' | 'method' | 'type' | 'code'
+export type DocTypes = 'document' | 'method' | 'type' | 'constant'
 
 /**
  * @type OutputFileOptionLines
  */
 export interface OutputFileOptionLines {
   // The `start` that need to be added at the start.
-  start: string | string[]
+  start?: string | string[]
   // The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
-  end: string | string[]
+  end?: string | string[]
   // It's will be appended to the `[type]`, before the `## [other type]`
-  afterType: Record<Omit<DocTypes, 'code'>, string | string[]>
+  afterType?: Record<DocTypes, string | string[]>
   // It's will be insert after `type` title line.
   // For example, `{method: ['some type description content']}`,
   // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
-  afterTitle: Record<Omit<DocTypes, 'code'>, string | string[]>
+  afterTitle?: Record<DocTypes, string | string[]>
 }
 
 /**
@@ -149,16 +149,36 @@ export type TableHeadInnerText =
   | 'Description'
 
 /**
+ * @type OutputFileOptionAliasRequiredValues
+ * Required values of [OutputFileOptionAlias](#OutputFileOptionAlias). For example `{requiredValues: {0: 'no', 1: 'yes'}}` or `{requiredValues: {method: {0: 'no', 1: 'yes'}}}`. And `{requiredValues: ['no', 'yes']}` or `{requiredValues: {method: ['no', 'yes']}}`
+ */
+export type OutputFileOptionAliasRequiredValues =
+  | Record<0 | 1, string>
+  | Record<DocTypes, Record<0 | 1, string>>
+
+/**
  * @type OutputFileOptionAlias
  */
 export interface OutputFileOptionAlias {
   // Alias of table head th inner text.
-  tableHead: Record<TableHeadInnerText, string>
+  tableHead?: Record<TableHeadInnerText, string>
   // Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
-  sourceCodeSummary: string
-  // Required values, `{requiredValues: {0: 'no', 1: 'yes'}}`.
-  requiredValues: Record<0 | 1, string>
+  sourceCodeSummary?: string
+  // Required values
+  requiredValues?: OutputFileOptionAliasRequiredValues
+  // Alias of the DocTypes name.
+  types?: Record<DocTypes, string>
 }
+
+/**
+ * @type OutputFileOptionHandler
+ * Custom type output handler.
+ */
+export type OutputFileOptionHandler = (
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) => void
 
 /**
  * @type OutputFileOptions
@@ -175,9 +195,13 @@ export interface OutputFileOptions extends GetCommentsDataOptions {
   // but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
   typeWithAuto?: boolean
   // lines. [OutputFileOptionLines](#OutputFileOptionLines)
-  lines: OutputFileOptionLines
+  lines?: OutputFileOptionLines
   // alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
-  alias: OutputFileOptionAlias
+  alias?: OutputFileOptionAlias
+  // Output types and their order, default `['document', 'method', 'type', 'constant']`
+  outputDocTypesAndOrder?: string[]
+  // Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
+  handlers?: Record<string, OutputFileOptionHandler>
 }
 
 /**
@@ -216,4 +240,28 @@ export interface GetCommentsDataOptions {
   disableKeySorting?: boolean
   // This `types` array is obtained from other files or directories for `extends` related processing.
   types?: CommentInfoItem[]
+  // expend types of getCommentsData function.
+  expendTypes?: string[]
+  // handler of the expend types.
+  expendTypesHandlers?: Record<string, ExpendTypesHandler>
+  // Need to get source code of the type, default `['type', 'constant']`.
+  codeTypes?: string[]
 }
+
+/**
+ * @type ExpendTypesHandler
+ * expend types handler of [GetCommentsDataOptions](#GetCommentsDataOptions)
+ */
+export type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
+
+/**
+ * isValidArray
+ * @param arr
+ */
+export function isValidArray(arr: any): boolean
+
+/**
+ * isFileLike
+ * @param input
+ */
+export function isFileLike(input: any): boolean

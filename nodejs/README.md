@@ -107,6 +107,26 @@ data|`Record<filePath, Record<commentTypeName, CommentInfoItem>>`/`CommentInfoIt
 
 - @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
 
+### isFileLike(filePath)
+
+is file like, `*.ext`.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+filePath|`string`|yes|-
+
+- @returns `boolean`
+
+### isValidArray<T>(arr)
+
+Determine whether `arr` is an array and it has some elements.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+arr|`T[]`|yes|-
+
+- @returns `boolean`
+
 ### log(...args)
 
 Output 😎 green color log in console
@@ -279,7 +299,15 @@ interface CommentInfoItemReturn {
 ### DocTypes
 
 ```ts
-type DocTypes = 'document' | 'method' | 'type' | 'code'
+type DocTypes = 'document' | 'method' | 'type' | 'constant'
+```
+
+### ExpendTypesHandler
+
+expend types handler of [GetCommentsDataOptions](#GetCommentsDataOptions)
+
+```ts
+type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
 ```
 
 ### GetCommentsDataOptions
@@ -291,6 +319,9 @@ Prop|Types|Required|Description
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
 types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
+expendTypes|`string[]`|no|expend types of getCommentsData function.
+expendTypesHandlers|`Record<string, ExpendTypesHandler>`|no|handler of the expend types.
+codeTypes|`string[]`|no|Need to get source code of the type, default `['type', 'constant']`.
 
 <details>
 <summary>Source Code</summary>
@@ -303,6 +334,12 @@ interface GetCommentsDataOptions {
   disableKeySorting?: boolean
   // This `types` array is obtained from other files or directories for `extends` related processing.
   types?: CommentInfoItem[]
+  // expend types of getCommentsData function.
+  expendTypes?: string[]
+  // handler of the expend types.
+  expendTypesHandlers?: Record<string, ExpendTypesHandler>
+  // Need to get source code of the type, default `['type', 'constant']`.
+  codeTypes?: string[]
 }
 ```
 
@@ -324,9 +361,10 @@ type OutputFileInput =
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
-tableHead|`Record<TableHeadInnerText, string>`|yes|Alias of table head th inner text.
-sourceCodeSummary|`string`|yes|Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
-requiredValues|`Record<0 \| 1, string>`|yes|Required values, `{requiredValues: {0: 'no', 1: 'yes'}}`.
+tableHead|`Record<TableHeadInnerText, string>`|no|Alias of table head th inner text.
+sourceCodeSummary|`string`|no|Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
+requiredValues|`OutputFileOptionAliasRequiredValues`|no|Required values
+types|`Record<DocTypes, string>`|no|Alias of the DocTypes name.
 
 <details>
 <summary>Source Code</summary>
@@ -334,12 +372,47 @@ requiredValues|`Record<0 \| 1, string>`|yes|Required values, `{requiredValues: {
 ```ts
 interface OutputFileOptionAlias {
   // Alias of table head th inner text.
-  tableHead: Record<TableHeadInnerText, string>
+  tableHead?: Record<TableHeadInnerText, string>
   // Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
-  sourceCodeSummary: string
-  // Required values, `{requiredValues: {0: 'no', 1: 'yes'}}`.
-  requiredValues: Record<0 | 1, string>
+  sourceCodeSummary?: string
+  // Required values
+  requiredValues?: OutputFileOptionAliasRequiredValues
+  // Alias of the DocTypes name.
+  types?: Record<DocTypes, string>
 }
+```
+
+</details>
+
+### OutputFileOptionAliasRequiredValues
+
+Required values of [OutputFileOptionAlias](#OutputFileOptionAlias). For example `{requiredValues: {0: 'no', 1: 'yes'}}` or `{requiredValues: {method: {0: 'no', 1: 'yes'}}}`. And `{requiredValues: ['no', 'yes']}` or `{requiredValues: {method: ['no', 'yes']}}`
+
+```ts
+type OutputFileOptionAliasRequiredValues =
+  | Record<0 | 1, string>
+  | Record<DocTypes, Record<0 | 1, string>>
+```
+
+### OutputFileOptionHandler
+
+Custom type output handler.
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+arr|`CommentInfoItem[],`|yes|-
+options|`OutputFileOptions,`|yes|-
+lines|`string[]`|yes|-
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+type OutputFileOptionHandler = (
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) => void
 ```
 
 </details>
@@ -348,10 +421,10 @@ interface OutputFileOptionAlias {
 
 Prop|Types|Required|Description
 :--|:--|:--|:--
-start|`string`/`string[]`|yes|The `start` that need to be added at the start.
-end|`string`/`string[]`|yes|The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
-afterType|`Record<Omit<DocTypes, 'code'>, string \| string[]>`|yes|It's will be appended to the `[type]`, before the `## [other type]`
-afterTitle|`Record<Omit<DocTypes, 'code'>, string \| string[]>`|yes|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+start|`string`/`string[]`|no|The `start` that need to be added at the start.
+end|`string`/`string[]`|no|The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
+afterType|`Record<DocTypes, string \| string[]>`|no|It's will be appended to the `[type]`, before the `## [other type]`
+afterTitle|`Record<DocTypes, string \| string[]>`|no|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
 
 <details>
 <summary>Source Code</summary>
@@ -359,15 +432,15 @@ afterTitle|`Record<Omit<DocTypes, 'code'>, string \| string[]>`|yes|It's will be
 ```ts
 interface OutputFileOptionLines {
   // The `start` that need to be added at the start.
-  start: string | string[]
+  start?: string | string[]
   // The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
-  end: string | string[]
+  end?: string | string[]
   // It's will be appended to the `[type]`, before the `## [other type]`
-  afterType: Record<Omit<DocTypes, 'code'>, string | string[]>
+  afterType?: Record<DocTypes, string | string[]>
   // It's will be insert after `type` title line.
   // For example, `{method: ['some type description content']}`,
   // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
-  afterTitle: Record<Omit<DocTypes, 'code'>, string | string[]>
+  afterTitle?: Record<DocTypes, string | string[]>
 }
 ```
 
@@ -382,12 +455,17 @@ Prop|Types|Required|Description
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
 types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
+expendTypes|`string[]`|no|expend types of getCommentsData function.
+expendTypesHandlers|`Record<string, ExpendTypesHandler>`|no|handler of the expend types.
+codeTypes|`string[]`|no|Need to get source code of the type, default `['type', 'constant']`.
 methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
 typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
 typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`
 typeWithAuto|`boolean`|no|By default, `table` and `<details><summary>Source Code</summary></details>` are displayed, but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
-lines|`OutputFileOptionLines`|yes|lines. [OutputFileOptionLines](#OutputFileOptionLines)
-alias|`OutputFileOptionAlias`|yes|alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
+lines|`OutputFileOptionLines`|no|lines. [OutputFileOptionLines](#OutputFileOptionLines)
+alias|`OutputFileOptionAlias`|no|alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
+outputDocTypesAndOrder|`string[]`|no|Output types and their order, default `['document', 'method', 'type', 'constant']`
+handlers|`Record<string, OutputFileOptionHandler>`|no|Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
 
 <details>
 <summary>Source Code</summary>
@@ -404,9 +482,13 @@ interface OutputFileOptions extends GetCommentsDataOptions {
   // but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
   typeWithAuto?: boolean
   // lines. [OutputFileOptionLines](#OutputFileOptionLines)
-  lines: OutputFileOptionLines
+  lines?: OutputFileOptionLines
   // alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
-  alias: OutputFileOptionAlias
+  alias?: OutputFileOptionAlias
+  // Output types and their order, default `['document', 'method', 'type', 'constant']`
+  outputDocTypesAndOrder?: string[]
+  // Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
+  handlers?: Record<string, OutputFileOptionHandler>
 }
 ```
 
