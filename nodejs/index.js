@@ -19,7 +19,6 @@ const { getCommentsData, outputFile, getTypes } = require('./create-docs')
 const {
   mkdirSync,
   isFileLike,
-  isObject,
   isValidArray,
   toStrForStrArray,
   findCharIndex,
@@ -45,7 +44,6 @@ module.exports = {
   error,
   mkdirSync,
   isFileLike,
-  isObject,
   isValidArray,
   toStrForStrArray,
   findCharIndex,

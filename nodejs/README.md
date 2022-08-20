@@ -351,7 +351,7 @@ A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-op
 
 ```ts
 type OutputFileInput =
-  | Record<string, CommentInfoItem>
+  | Record<string, Record<string, CommentInfoItem>>
   | CommentInfoItem[]
   | string
   | string[]

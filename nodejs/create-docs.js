@@ -7,10 +7,10 @@
 const fs = require('fs')
 const { EOL } = require('os')
 const path = require('path')
+const { isObject } = require('../dist/zx-sml.umd')
 const {
   mkdirSync,
   isFileLike,
-  isObject,
   isValidArray,
   formatAsArray,
   handleProps,

@@ -85,7 +85,7 @@ export interface OutputFileReturns {
  * A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-options).
  */
 type OutputFileInput =
-  | Record<string, CommentInfoItem>
+  | Record<string, Record<string, CommentInfoItem>>
   | CommentInfoItem[]
   | string
   | string[]

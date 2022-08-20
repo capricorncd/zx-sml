@@ -46,15 +46,6 @@ function isFileLike(filePath) {
 }
 
 /**
- * determine whether `o` is an object
- * @param o
- * @returns `boolean`
- */
-function isObject(o) {
-  return !!o && typeof o === 'object'
-}
-
-/**
  * @method isValidArray<T>(arr)
  * Determine whether `arr` is an array and it has some elements.
  * @param arr `T[]`
@@ -381,7 +372,6 @@ function handleProps(item, types) {
 module.exports = {
   mkdirSync,
   isFileLike,
-  isObject,
   isValidArray,
   toStrForStrArray,
   findCharIndex,
