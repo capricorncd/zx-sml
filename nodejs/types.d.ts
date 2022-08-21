@@ -255,10 +255,10 @@ export interface GetCommentsDataOptions {
 export type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
 
 /**
- * @type ToTableLinesData
+ * @type ToTableLinesParamData
  * The options type of function [toTableLines](#totablelinesdata).
  */
-export interface ToTableLinesData {
+export interface ToTableLinesParamData {
   // Alignment of the table content, left, center or right, the default is left.
   align?: string | Record<string, string>
   // The table header displays a one-dimensional array of content.
@@ -270,10 +270,15 @@ export interface ToTableLinesData {
 }
 
 /**
- * toTableLines
- * @param data `ToTableLinesData`
+ * 兼容处理，后期版本移除
  */
-export function toTableLines(data: ToTableLinesData): string[]
+export type ToTableLinesData = ToTableLinesParamData
+
+/**
+ * toTableLines
+ * @param data `ToTableLinesParamData`
+ */
+export function toTableLines(data: ToTableLinesParamData): string[]
 
 /**
  * isValidArray

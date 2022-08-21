@@ -385,7 +385,7 @@ const TABLE_ALIGNS = {
 /**
  * @method toTableLines(data)
  * Convert `data` to a table in Markdown format.
- * @param data `ToTableLinesData` see type [ToTableLinesData](#ToTableLinesData).
+ * @param data `ToTableLinesParamData` see type [ToTableLinesParamData](#ToTableLinesParamData).
  * @returns `string[]`
  */
 function toTableLines(data) {

@@ -165,7 +165,7 @@ Convert `data` to a table in Markdown format.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-data|`ToTableLinesData`|yes|see type [ToTableLinesData](#ToTableLinesData).
+data|`ToTableLinesParamData`|yes|see type [ToTableLinesParamData](#ToTableLinesParamData).
 
 - @returns `string[]`
 
@@ -544,7 +544,7 @@ type TableHeadInnerText =
   | 'Description'
 ```
 
-### ToTableLinesData
+### ToTableLinesParamData
 
 The options type of function [toTableLines](#totablelinesdata).
 
@@ -558,7 +558,7 @@ tbody|`string[][]`|no|The table body displays a two-dimensional array of content
 <summary>Source Code</summary>
 
 ```ts
-interface ToTableLinesData {
+interface ToTableLinesParamData {
   // Alignment of the table content, left, center or right, the default is left.
   align?: string | Record<string, string>
   // The table header displays a one-dimensional array of content.
