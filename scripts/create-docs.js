@@ -68,13 +68,13 @@ const outputFileOptions = {
     //   //  method: ['no', 'yes'],
     //    type: ['可选', '必须'],
     // },
-    //   tableHead: {
-    //     Param: '参数',
-    //     Prop: '属性',
-    //     Types: '类型',
-    //     Required: '必须',
-    //     Description: '描述'
-    //   },
+    // tableHead: {
+    //   Param: '参数',
+    //   Prop: '属性',
+    //   Types: '类型',
+    //   Required: '必须',
+    //   Description: '描述'
+    // },
     //   sourceCodeSummary: '代码'
     // types: {
     //   method: '函数',

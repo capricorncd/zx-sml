@@ -159,6 +159,16 @@ options|`OutputFileOptions`|no|[OutputFileOptions](#OutputFileOptions)
 
 - @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
 
+### toTableLines(data)
+
+Convert `data` to a table in Markdown format.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+data|`ToTableLinesData`|yes|see type [ToTableLinesData](#ToTableLinesData).
+
+- @returns `string[]`
+
 ### warn(...args)
 
 Output 😕 yellow color log in console
@@ -533,6 +543,34 @@ type TableHeadInnerText =
   | 'Required'
   | 'Description'
 ```
+
+### ToTableLinesData
+
+The options type of function [toTableLines](#totablelinesdata).
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+align|`string`/`Record<string, string>`|no|Alignment of the table content, left, center or right, the default is left.
+thead|`string[]`|no|The table header displays a one-dimensional array of content. `{thead: ['Name', 'Description']}`.
+tbody|`string[][]`|no|The table body displays a two-dimensional array of contents. `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface ToTableLinesData {
+  // Alignment of the table content, left, center or right, the default is left.
+  align?: string | Record<string, string>
+  // The table header displays a one-dimensional array of content.
+  // `{thead: ['Name', 'Description']}`.
+  thead?: string[]
+  // The table body displays a two-dimensional array of contents.
+  // `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.
+  tbody?: string[][]
+}
+```
+
+</details>
 
 ## License
 

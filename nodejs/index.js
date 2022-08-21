@@ -32,6 +32,7 @@ const {
   createPropsTable,
   mergeIntoArray,
   toArray,
+  toTableLines,
 } = require('./helpers')
 const { log, warn, error } = require('./log')
 
@@ -57,4 +58,5 @@ module.exports = {
   createPropsTable,
   mergeIntoArray,
   toArray,
+  toTableLines,
 }

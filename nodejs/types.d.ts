@@ -255,6 +255,27 @@ export interface GetCommentsDataOptions {
 export type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
 
 /**
+ * @type ToTableLinesData
+ * The options type of function [toTableLines](#totablelinesdata).
+ */
+export interface ToTableLinesData {
+  // Alignment of the table content, left, center or right, the default is left.
+  align?: string | Record<string, string>
+  // The table header displays a one-dimensional array of content.
+  // `{thead: ['Name', 'Description']}`.
+  thead?: string[]
+  // The table body displays a two-dimensional array of contents.
+  // `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.
+  tbody?: string[][]
+}
+
+/**
+ * toTableLines
+ * @param data `ToTableLinesData`
+ */
+export function toTableLines(data: ToTableLinesData): string[]
+
+/**
  * isValidArray
  * @param arr
  */

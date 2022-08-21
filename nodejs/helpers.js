@@ -5,6 +5,7 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs')
+const { isObject } = require('../dist/zx-sml.umd')
 const { warn } = require('./log')
 
 /**
@@ -215,7 +216,7 @@ function createPropsTable(props, docType, typeName = 'Name', options = {}) {
   if (!isValidArray(props)) return []
   // alias
   const alias = options.alias || {}
-  const tableHeadAlias = options.tableHeadAlias || alias.tableHead || {}
+  const tableHeadAlias = alias.tableHead || {}
   // requiredValues
   let requiredValues = { 0: 'no', 1: 'yes' }
   if (alias.requiredValues) {
@@ -225,29 +226,30 @@ function createPropsTable(props, docType, typeName = 'Name', options = {}) {
       requiredValues = alias.requiredValues
     }
   }
-  // table head
-  const arr = [
-    [
+  const tableData = {
+    // table head
+    thead: [
       tableHeadAlias[typeName] || typeName,
       tableHeadAlias['Types'] || 'Types',
       tableHeadAlias['Required'] || 'Required',
       tableHeadAlias['Description'] || 'Description',
-    ].join('|'),
-    ':--|:--|:--|:--',
-  ]
-  // table body
-  props.forEach((item) => {
-    const tdItems = [
-      item.name,
-      '`' + replaceVerticalBarsInTables(item.types?.join('`/`')) + '`',
-      requiredValues[+item.required],
-      replaceVerticalBarsInTables(toStrForStrArray(item.desc)),
-    ]
-    arr.push(tdItems.join('|'))
-  })
+    ],
+    // table body
+    tbody: props.map((item) => {
+      return [
+        item.name,
+        '`' + replaceVerticalBarsInTables(item.types?.join('`/`')) + '`',
+        requiredValues[+item.required],
+        replaceVerticalBarsInTables(toStrForStrArray(item.desc)),
+      ]
+    }),
+  }
+
+  const lines = toTableLines(tableData)
   // BLANK_LINE
-  arr.push('')
-  return arr
+  lines.push('')
+
+  return lines
 }
 
 /**
@@ -369,6 +371,62 @@ function handleProps(item, types) {
   return arr
 }
 
+const DEF_TABLE_ALIGN = ':--'
+
+/**
+ * TABLE_ALIGNS
+ */
+const TABLE_ALIGNS = {
+  left: DEF_TABLE_ALIGN,
+  center: ':--:',
+  right: '--:',
+}
+
+/**
+ * @method toTableLines(data)
+ * Convert `data` to a table in Markdown format.
+ * @param data `ToTableLinesData` see type [ToTableLinesData](#ToTableLinesData).
+ * @returns `string[]`
+ */
+function toTableLines(data) {
+  if (!isObject(data) || !isValidArray(data.tbody)) return []
+  let { align, thead, tbody } = data
+  const lines = []
+
+  let i = 0
+  // thead
+  if (isValidArray(thead)) {
+    lines.push(thead.join('|'))
+    if (align) {
+      if (typeof align === 'string') {
+        align = thead.reduce((prev, field) => {
+          prev[field] = align
+          return prev
+        }, {})
+      }
+      lines.push(
+        thead
+          .map((field) => TABLE_ALIGNS[align[field]] || DEF_TABLE_ALIGN)
+          .join('|')
+      )
+    } else {
+      lines.push(thead.map(() => DEF_TABLE_ALIGN).join('|'))
+    }
+  } else {
+    lines.push(
+      tbody[0].join('|'),
+      tbody[0].map(() => DEF_TABLE_ALIGN).join('|')
+    )
+    i = 1
+  }
+
+  for (; i < tbody.length; i++) {
+    lines.push(tbody[i].join('|'))
+  }
+
+  return lines
+}
+
 module.exports = {
   mkdirSync,
   isFileLike,
@@ -385,4 +443,5 @@ module.exports = {
   createPropsTable,
   mergeIntoArray,
   toArray,
+  toTableLines,
 }

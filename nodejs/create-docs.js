@@ -494,11 +494,14 @@ function outputFile(input, outputDirOrFile, options = {}) {
     afterTitle: options.linesAfterTitle,
   }
 
+  const optionsAlias = options.alias || {
+    tableHead: options.tableHeadAlias,
+  }
+
   options = {
     ...options,
-    lines: {
-      ...optionsLines,
-    },
+    lines: optionsLines,
+    alias: optionsAlias,
   }
 
   if (
