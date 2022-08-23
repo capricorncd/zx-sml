@@ -33,7 +33,7 @@ options|`GetCommentsDataOptions`|no|[GetCommentsDataOptions](#GetCommentsDataOpt
 
 - @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
 
-#### for example
+#### For example
 
 A source file `./src/index.js`, or a directory `./src`.
 
@@ -584,7 +584,7 @@ const BLANK_LINE = ''
 
 ### DOC_TYPES
 
-These types of annotation that will be processed.
+Supported annotation types.
 
 ```ts
 const DOC_TYPES = {

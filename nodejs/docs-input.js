@@ -161,7 +161,7 @@ function handleFile(filePath, data, options = {}) {
  * @method getCommentsData(input, needArray, options)
  * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method`, `code` and more.
  *
- * @code #### for example
+ * @code #### For example
  *
  * A source file `./src/index.js`, or a directory `./src`.
  *
