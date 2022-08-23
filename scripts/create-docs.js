@@ -76,9 +76,10 @@ const outputFileOptions = {
     //   Description: '描述'
     // },
     //   sourceCodeSummary: '代码'
-    // types: {
-    //   method: '函数',
-    // },
+    types: {
+      // method: '函数',
+      // constant: '常量'
+    },
   },
   typeWithAuto: true,
   // // outputDocTypesAndOrder: ['document', 'constant', 'type', 'method'],

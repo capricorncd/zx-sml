@@ -167,7 +167,7 @@ export interface OutputFileOptionAlias {
   // Required values
   requiredValues?: OutputFileOptionAliasRequiredValues
   // Alias of the DocTypes name.
-  types?: Record<DocTypes, string>
+  types?: Record<Omit<DocTypes, 'document'>, string>
 }
 
 /**

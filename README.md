@@ -37,7 +37,9 @@ formatDate('2020-12-04', 'yyyy/MM/dd W')
 // 2020/12/04 Fri
 ```
 
-zx-sml/nodejs's [docs](./nodejs/README.md).
+### zx-sml/nodejs
+
+Some tool functions used in the Nodejs environment, [docs](./nodejs/README.md).
 
 ```js
 const { log, outputFile } = require('zx-sml/nodejs');

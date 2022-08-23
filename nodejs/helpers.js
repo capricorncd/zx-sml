@@ -6,6 +6,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs')
 const { isObject } = require('../dist/zx-sml.umd')
+const { BLANK_LINE } = require('./const')
 const { warn } = require('./log')
 
 /**
@@ -247,7 +248,7 @@ function createPropsTable(props, docType, typeName = 'Name', options = {}) {
 
   const lines = toTableLines(tableData)
   // BLANK_LINE
-  lines.push('')
+  lines.push(BLANK_LINE)
 
   return lines
 }

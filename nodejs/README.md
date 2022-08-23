@@ -374,7 +374,7 @@ Prop|Types|Required|Description
 tableHead|`Record<TableHeadInnerText, string>`|no|Alias of table head th inner text.
 sourceCodeSummary|`string`|no|Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
 requiredValues|`OutputFileOptionAliasRequiredValues`|no|Required values
-types|`Record<DocTypes, string>`|no|Alias of the DocTypes name.
+types|`Record<Omit<DocTypes, 'document'>, string>`|no|Alias of the DocTypes name.
 
 <details>
 <summary>Source Code</summary>
@@ -388,7 +388,7 @@ interface OutputFileOptionAlias {
   // Required values
   requiredValues?: OutputFileOptionAliasRequiredValues
   // Alias of the DocTypes name.
-  types?: Record<DocTypes, string>
+  types?: Record<Omit<DocTypes, 'document'>, string>
 }
 ```
 
@@ -571,6 +571,29 @@ interface ToTableLinesParamData {
 ```
 
 </details>
+
+## Constants
+
+### BLANK_LINE
+
+blank line.
+
+```ts
+const BLANK_LINE = ''
+```
+
+### DOC_TYPES
+
+These types of annotation that will be processed.
+
+```ts
+const DOC_TYPES = {
+  method: 'method',
+  type: 'type',
+  document: 'document',
+  constant: 'constant',
+}
+```
 
 ## License
 
