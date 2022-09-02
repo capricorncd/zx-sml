@@ -94,6 +94,7 @@ Param|Types|Required|Description
 args|`string`/`string[]`/`{ className1: true, className2: false }`|yes|-
 
 - @returns `string`
+
 ```js
 classNames({ active: true }, ['text-center'], 'flex')
 // 'active text-center flex'
@@ -131,6 +132,7 @@ url|`string`|yes|-
 params|`Record<string, unknown>`|yes|-
 
 - @returns `string`
+
 ```js
 createUrlForGetRequest('api/user', { age: 18 })
 // 'api/user?age=18'
@@ -172,6 +174,7 @@ format|`string`|yes|like this `yyyy-MM-dd hh:mm:ss W`
 langPackage|`ILangPackage`|no|-
 
 - @returns `string`
+
 ```js
 // timestamp
 formatDate( 20210101 , 'yyyy-MM-dd hh:mm:ss') // 1970-01-01 14:36:50
@@ -189,6 +192,7 @@ obj|`object`|yes|-
 isCamelCase|`boolean`|no|Whether the key of the object uses camel-case or snake-case, default `false`
 
 - @returns `object`
+
 ```js
 formatObjKeys({lineHeight: 1.5}) // {'line-height': 1.5}
 formatObjKeys({lineHeight: 1.5, childObj: {maxWidth: 100}})
@@ -279,6 +283,7 @@ Param|Types|Required|Description
 args|`string[]`|yes|-
 
 - @returns `string`
+
 ```js
 joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
 // https://a.com/news/detail/100001?x=9
@@ -294,6 +299,7 @@ arrayLike|`pseudo-array`|yes|-
 offset|`number`|no|default `0`
 
 - @returns `array T[]`
+
 ```js
 slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
 ```
@@ -318,6 +324,7 @@ Param|Types|Required|Description
 input|`string`/`number`|yes|-
 
 - @returns `[number, string]`
+
 ```js
 splitValue('100px') // [100, 'px']
 splitValue(100) // [100, '']
@@ -339,6 +346,7 @@ input|`string`|yes|-
 isFirstCapitalLetter|`boolean`|no|whether to capitalize the first letter, default `false`
 
 - @returns `string`
+
 ```js
 toCamelCase('hello_world') // helloWorld
 toCamelCase('hello-world') // helloWorld
@@ -367,6 +375,7 @@ input|`any`|yes|-
 isStrictMode|`boolean`|no|Whether it is strict mode, default `false`
 
 - @returns `number`
+
 ```js
 toNumber('1.3rem') // 1.3
 toNumber('1.3rem', true) // 0
@@ -386,6 +395,7 @@ input|`string`|yes|any string
 connectSymbol|`string`|no|word connect symbol, default `-`
 
 - @returns `string`
+
 ```js
 toSnakeCase('helloWorld') // hello-world
 toSnakeCase('HelloWorld') // hello-world
@@ -403,6 +413,7 @@ Param|Types|Required|Description
 styles|`object[]`/`CSSStyleDeclaration[]`|yes|-
 
 - @returns `string`
+
 ```js
 toStrStyles({'line-height': 1.5, width: '50%'})
 // `line-height:1.5;width:'50%'`

@@ -102,18 +102,18 @@ type OutputFileReturnData<T> = T extends string | string[] | CommentInfoItem[]
  * getCommentsData
  * @param input
  * @param needArray
- * @param data
+ * @param options
  */
 export function getCommentsData(
   input: string | string[],
   needArray?: boolean,
-  data?: Record<string, any>
+  options?: GetCommentsDataOptions
 ): CommentInfoItem[] | Record<string, Record<string, CommentInfoItem>>
 
 export function getCommentsData(
   input: string | string[],
-  data?: Record<string, any>
-): CommentInfoItem[] | Record<string, Record<string, CommentInfoItem>>
+  options?: GetCommentsDataOptions
+): Record<string, Record<string, CommentInfoItem>>
 
 /**
  * @type DocTypes
@@ -291,3 +291,11 @@ export function isValidArray(arr: any): boolean
  * @param input
  */
 export function isFileLike(input: any): boolean
+
+/**
+ * getTypes
+ * @param data
+ */
+export function getTypes(
+  data: Record<string, Record<string, CommentInfoItem>> | CommentInfoItem[]
+): CommentInfoItem[]

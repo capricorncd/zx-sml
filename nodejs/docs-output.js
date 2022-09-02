@@ -16,7 +16,7 @@ const {
   isValidArray,
   formatAsArray,
   createPropsTable,
-  toArray,
+  mergeIntoArray,
 } = require('./helpers')
 const { log } = require('./log')
 
@@ -347,23 +347,32 @@ function outputFile(input, outputDirOrFile, options = {}) {
     alias: optionsAlias,
   }
 
-  if (
-    outputDirOrFile &&
-    !fs.existsSync(outputDirOrFile) &&
-    !isFileLike(outputDirOrFile)
-  ) {
-    mkdirSync(outputDirOrFile)
+  if (outputDirOrFile && !fs.existsSync(outputDirOrFile)) {
+    if (isFileLike(outputDirOrFile)) {
+      const outputDir = outputDirOrFile.split('/')
+      outputDir.pop()
+      mkdirSync(outputDir.join('/'))
+    } else {
+      mkdirSync(outputDirOrFile)
+    }
   }
   if (Array.isArray(input)) {
     return handleOutput(input, outputDirOrFile, options)
   } else {
-    return Object.keys(input).map((key) => {
-      return handleOutput(
-        toArray(input[key], options),
-        outputDirOrFile,
-        options
-      )
-    })
+    // Combine output into one file
+    return handleOutput(
+      mergeIntoArray(input, options),
+      outputDirOrFile,
+      options
+    )
+    // // Separate output of different files, provided that outputDirOrFile is a file directory, and each file contains `@document`.
+    // return Object.keys(input).map((key) => {
+    //   return handleOutput(
+    //     toArray(input[key], options),
+    //     outputDirOrFile,
+    //     options
+    //   )
+    // })
   }
 }
 
