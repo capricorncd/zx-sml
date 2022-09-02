@@ -106,6 +106,12 @@ function formatAsArray(input) {
 function formatAsTypes(input) {
   input = input.trim()
 
+  // remove last ';' of type string
+  // e.g. `Array<string>;` => `Array<string>`
+  if (input.endsWith(';')) {
+    input = input.substr(0, input.length - 1)
+  }
+
   // only one type
   if (
     !input.includes('|') ||
