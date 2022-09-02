@@ -46,6 +46,7 @@ function createMethodsDoc(item, lines, options = {}) {
       : createPropsTable(item.params, DOC_TYPES.method, 'Param', options)),
     BLANK_LINE,
     ...item.returns.map((ret) => `- @returns ${ret.raw}`),
+    BLANK_LINE,
     ...item.codes,
     BLANK_LINE
   )
