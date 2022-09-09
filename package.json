@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "some static method library",
   "main": "dist/zx-sml.umd.js",
   "module": "dist/zx-sml.es.js",
@@ -60,6 +60,6 @@
     "vitest": "^0.14.2"
   },
   "repository": "https://github.com/capricorncd/zx-sml",
-  "author": "Capricorncd <capricorncd@qq.com>",
+  "author": "Xing Zhong<zx198401@gmail.com>",
   "license": "MIT"
 }

@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.5.1
- * Author: Capricorncd <capricorncd@qq.com>
+ * zx-sml version 0.6.0
+ * Author: Xing Zhong<zx198401@gmail.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2022-08-14 09:57:06 (GMT+0900)
+ * Released on: 2022-09-09 21:21:26 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -321,7 +321,41 @@ function base64ToBlob(base64, type) {
   }
   return new Blob([ia], { type });
 }
+function setLocalStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+function getLocalStorage(key, def) {
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : def;
+  } catch (err) {
+    return def;
+  }
+}
+function removeLocalStorage(key) {
+  localStorage.removeItem(key);
+}
+function clearLocalStorage() {
+  localStorage.clear();
+}
+function setSessionStorage(key, value) {
+  sessionStorage.setItem(key, JSON.stringify(value));
+}
+function getSessionStorage(key, def) {
+  try {
+    const data = sessionStorage.getItem(key);
+    return data ? JSON.parse(data) : def;
+  } catch (err) {
+    return def;
+  }
+}
+function removeSessionStorage(key) {
+  sessionStorage.removeItem(key);
+}
+function clearSessionStorage() {
+  sessionStorage.clear();
+}
 var formatDate = dateUtils2020.exports.formatDate;
 var toDate = dateUtils2020.exports.toDate;
 var toTwoDigits = dateUtils2020.exports.toTwoDigits;
-export { $, $$, base64ToBlob, classNames, createBlobURL, createElement, createUrlForGetRequest, fileToBase64, formatBytes, formatDate, formatKeys, getMaxZIndex, getScrollParents, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, slice, splitBase64, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };
+export { $, $$, base64ToBlob, classNames, clearLocalStorage, clearSessionStorage, createBlobURL, createElement, createUrlForGetRequest, fileToBase64, formatBytes, formatDate, formatKeys, getLocalStorage, getMaxZIndex, getScrollParents, getSessionStorage, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, removeLocalStorage, removeSessionStorage, setLocalStorage, setSessionStorage, slice, splitBase64, splitValue, toCamelCase, toDate, toNumber, toSnakeCase, toStrStyles, toTwoDigits };

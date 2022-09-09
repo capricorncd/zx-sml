@@ -100,6 +100,18 @@ classNames({ active: true }, ['text-center'], 'flex')
 // 'active text-center flex'
 ```
 
+### clearLocalStorage()
+
+Removing all the `localStorage` items.
+
+- @returns `void`
+
+### clearSessionStorage()
+
+Removing all the `sessionStorage` items.
+
+- @returns `void`
+
 ### createBlobURL(blob)
 
 creates a string containing a URL representing the object given in the parameter.
@@ -202,6 +214,17 @@ formatObjKeys({'line-height': 1.5, 'child-obj': {'max-width': 100}}, true)
 // {lineHeight: 1.5, childObj: {maxWidth: 100}}
 ```
 
+### getLocalStorage(key, def)
+
+Reading the `localStorage` item.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+key|`string`|yes|-
+def|`any`|yes|-
+
+- @returns `any`
+
 ### getMaxZIndex(defaultZIndex)
 
 Get the max zIndex value in the document
@@ -221,6 +244,17 @@ Param|Types|Required|Description
 el|`HTMLElement`|yes|-
 
 - @returns `HTMLElement[]`
+
+### getSessionStorage(key, def)
+
+Reading the `sessionStorage` item.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+key|`string`|yes|-
+def|`any`|yes|-
+
+- @returns `any`
 
 ### getStyleValue(el, attr, isNumber)
 
@@ -288,6 +322,48 @@ args|`string[]`|yes|-
 joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
 // https://a.com/news/detail/100001?x=9
 ```
+
+### removeLocalStorage(key)
+
+Removing the `localStorage` item.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+key|`string`|yes|-
+
+- @returns `void`
+
+### removeSessionStorage(key)
+
+Removing the `sessionStorage` item.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+key|`string`|yes|-
+
+- @returns `void`
+
+### setLocalStorage(key, value)
+
+It's accesses the current domain's `localStorage` object and adds a `value` to it using `localStorage.setItem()`.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+key|`string`|yes|-
+value|`any`|yes|-
+
+- @returns `void`
+
+### setSessionStorage(key, value)
+
+It's accesses the current domain's `sessionStorage` object and adds a `value` to it using `sessionStorage.setItem()`.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+key|`string`|yes|-
+value|`any`|yes|-
+
+- @returns `void`
 
 ### slice(arrayLike, offset)
 
