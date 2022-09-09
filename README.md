@@ -220,10 +220,10 @@ Reading the `localStorage` item.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-key|`string`|yes|-
-def|`any`|yes|-
+key|`string`|yes|A string containing the name of the `key` you want to retrieve the value of.
+def|`any`|yes|If the `key` does not exist, `def` is returned.
 
-- @returns `any`
+- @returns `any` Any object the value of the `key`. If the `key` does not exist, `def` is returned.
 
 ### getMaxZIndex(defaultZIndex)
 
@@ -251,10 +251,10 @@ Reading the `sessionStorage` item.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-key|`string`|yes|-
-def|`any`|yes|-
+key|`string`|yes|A string containing the name of the `key` you want to retrieve the value of.
+def|`any`|yes|If the `key` does not exist, `def` is returned.
 
-- @returns `any`
+- @returns `any` Any object the value of the `key`. If the `key` does not exist, `def` is returned.
 
 ### getStyleValue(el, attr, isNumber)
 
@@ -329,7 +329,7 @@ Removing the `localStorage` item.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-key|`string`|yes|-
+key|`string`|yes|A string containing the name of the key you want to remove.
 
 - @returns `void`
 
@@ -339,7 +339,7 @@ Removing the `sessionStorage` item.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-key|`string`|yes|-
+key|`string`|yes|A string containing the name of the key you want to remove.
 
 - @returns `void`
 
@@ -349,8 +349,8 @@ It's accesses the current domain's `localStorage` object and adds a `value` to i
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-key|`string`|yes|-
-value|`any`|yes|-
+key|`string`|yes|A `string` containing the name of the key you want to create/update.
+value|`any`|yes|Any `object` the value you want to give the `key` you are creating/updating.
 
 - @returns `void`
 
@@ -360,8 +360,8 @@ It's accesses the current domain's `sessionStorage` object and adds a `value` to
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-key|`string`|yes|-
-value|`any`|yes|-
+key|`string`|yes|A `string` containing the name of the key you want to create/update.
+value|`any`|yes|Any `object` the value you want to give the `key` you are creating/updating.
 
 - @returns `void`
 

@@ -8,8 +8,8 @@
 /**
  * @method setLocalStorage(key, value)
  * It's accesses the current domain's `localStorage` object and adds a `value` to it using `localStorage.setItem()`.
- * @param key `string`
- * @param value `any`
+ * @param key `string` A `string` containing the name of the key you want to create/update.
+ * @param value `any` Any `object` the value you want to give the `key` you are creating/updating.
  * @returns `void`
  */
 export function setLocalStorage<T>(key: string, value: T): void {
@@ -19,9 +19,9 @@ export function setLocalStorage<T>(key: string, value: T): void {
 /**
  * @method getLocalStorage(key, def)
  * Reading the `localStorage` item.
- * @param key `string`
- * @param def `any`
- * @returns `any`
+ * @param key `string` A string containing the name of the `key` you want to retrieve the value of.
+ * @param def `any` If the `key` does not exist, `def` is returned.
+ * @returns `any` Any object the value of the `key`. If the `key` does not exist, `def` is returned.
  */
 export function getLocalStorage<T>(key: string, def: T): T {
   try {
@@ -35,7 +35,7 @@ export function getLocalStorage<T>(key: string, def: T): T {
 /**
  * @method removeLocalStorage(key)
  * Removing the `localStorage` item.
- * @param key `string`
+ * @param key `string` A string containing the name of the key you want to remove.
  * @returns `void`
  */
 export function removeLocalStorage(key: string): void {
@@ -54,8 +54,8 @@ export function clearLocalStorage(): void {
 /**
  * @method setSessionStorage(key, value)
  * It's accesses the current domain's `sessionStorage` object and adds a `value` to it using `sessionStorage.setItem()`.
- * @param key `string`
- * @param value `any`
+ * @param key `string` A `string` containing the name of the key you want to create/update.
+ * @param value `any` Any `object` the value you want to give the `key` you are creating/updating.
  * @returns `void`
  */
 export function setSessionStorage<T>(key: string, value: T): void {
@@ -65,9 +65,9 @@ export function setSessionStorage<T>(key: string, value: T): void {
 /**
  * @method getSessionStorage(key, def)
  * Reading the `sessionStorage` item.
- * @param key `string`
- * @param def `any`
- * @returns `any`
+ * @param key `string` A string containing the name of the `key` you want to retrieve the value of.
+ * @param def `any` If the `key` does not exist, `def` is returned.
+ * @returns `any` Any object the value of the `key`. If the `key` does not exist, `def` is returned.
  */
 export function getSessionStorage<T>(key: string, def: T): T {
   try {
@@ -81,7 +81,7 @@ export function getSessionStorage<T>(key: string, def: T): T {
 /**
  * @method removeSessionStorage(key)
  * Removing the `sessionStorage` item.
- * @param key `string`
+ * @param key `string` A string containing the name of the key you want to remove.
  * @returns `void`
  */
 export function removeSessionStorage(key: string): void {
