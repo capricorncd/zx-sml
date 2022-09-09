@@ -103,7 +103,7 @@ Get types from getCommentsData's returned data.
 
 Param|Types|Required|Description
 :--|:--|:--|:--
-data|`Record<filePath, Record<commentTypeName, CommentInfoItem>>`/`CommentInfoItem[]`|yes|-
+data|`Record<filePath, Record<commentTypeName, CommentInfoItem>>`/`CommentInfoItem[]`|yes|The data obtained using the [getCommentsData](#getcommentsdatainput-needarray-options) method
 
 - @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
 

@@ -38,7 +38,12 @@ function writeInReadmeFile(inputLines) {
   fs.writeFileSync(readmeFile, lines.join(EOL))
 }
 
+const getCommentsDataOptions = {
+  // disableKeySorting: true,
+}
+
 const outputFileOptions = {
+  ...getCommentsDataOptions,
   lines: {
     // start: [
     //   'start ============='

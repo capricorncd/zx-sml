@@ -100,8 +100,20 @@ function formatAsArray(input) {
 
 /**
  * format as types
- * @param input
+ * @param input `string` Type string data of members of `interface` etc.
  * @returns `string[]`
+ *
+ * @code For example `interface IF`
+ *
+ * ```ts
+ * interface IF {
+ *   fieldA: string | number;
+ * }
+ * ```
+ *
+ * ```ts
+ * formatAsTypes(' string | number;') // ['string', 'number']
+ * ```
  */
 function formatAsTypes(input) {
   input = input.trim()
@@ -152,8 +164,9 @@ function getSpDescription(input) {
 
 /**
  * handleParam
- * @param input `string`
- * @returns `CommentInfoItemParam`
+ * Convert function's parameter raw string to [CommentInfoItemParam](#CommentInfoItemParam) object.
+ * @param input `string` raw string.
+ * @returns `CommentInfoItemParam` [CommentInfoItemParam](#CommentInfoItemParam).
  */
 function handleParam(input) {
   input = input.replace('@param', '').trim()
@@ -167,7 +180,7 @@ function handleParam(input) {
     data.name = name.replace('?', '')
 
     data.required = !name.includes('?')
-    // no support for `Array<string | number>` or `(string | number)[]`
+    // Convert type string to array
     data.types = formatAsTypes(RegExp.$2)
     // desc
     const desc = RegExp.$3 || getSpDescription(input)
@@ -178,6 +191,7 @@ function handleParam(input) {
 
 /**
  * handleReturn
+ * Convert function's returns raw string to [CommentInfoItemReturn](#CommentInfoItemReturn) object.
  * @param input `string`
  * @returns `CommentInfoItemReturn`
  */
@@ -200,9 +214,9 @@ function handleReturn(input) {
 
 /**
  * Get type name:
- * setContents(box, newContents)  -> setContents
- * InterfaceName<Type1, Type2>    -> InterfaceName
- * classInstance.someMethod(param)-> classInstance.someMethod
+ * `setContents(box, newContents)`  -> `setContents`.
+ * `InterfaceName<Type1, Type2>`    -> `InterfaceName`.
+ * `classInstance.someMethod(param)`-> `classInstance.someMethod`.
  * @param fullName `string`
  * @returns `string`
  */
@@ -260,9 +274,9 @@ function createPropsTable(props, docType, typeName = 'Name', options = {}) {
 }
 
 /**
- *
- * @param {*} data
- * @param {*} options
+ * mergeIntoArray
+ * @param data `Record<filePath, Record<commentTypeName, CommentInfoItem>>`
+ * @param options `GetCommentsDataOptions` [GetCommentsDataOptions](#getcommentsdataoptions)
  * @returns `CommentInfoItem[]`
  */
 function mergeIntoArray(data, options) {

@@ -271,7 +271,7 @@ function _getCommentsData(input, data, options) {
 /**
  * @method getTypes(data)
  * Get types from getCommentsData's returned data.
- * @param data `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]`
+ * @param data `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` The data obtained using the [getCommentsData](#getcommentsdatainput-needarray-options) method
  * @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
  */
 function getTypes(data) {
