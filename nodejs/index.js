@@ -17,7 +17,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { BLANK_LINE, DOC_TYPES } = require('./const')
 const { getCommentsData, getTypes } = require('./docs-input')
-const { outputFile } = require('./docs-output')
+const { outputFile, writeFileSync } = require('./docs-output')
 const {
   mkdirSync,
   isFileLike,
@@ -44,6 +44,7 @@ module.exports = {
   getCommentsData,
   getTypes,
   outputFile,
+  writeFileSync,
   log,
   warn,
   error,

@@ -6,7 +6,9 @@
   <a href="https://www.npmjs.com/package/zx-sml"><img src="https://img.shields.io/npm/l/zx-sml.svg?sanitize=true" alt="License"></a>
 </p>
 
-zx-sml are some static method libraries that I commonly use.
+zx-sml is some static method library, which contains [toSnakeCase](#tosnakecaseinput-connectsymbol), [splitValue](#splitvalueinput), [getLocalStorage](#getlocalstoragekey-def), [formatDate](#formatdatedate-format-langpackage), [createElement](#createelementtag-attrs-children), [classNames](#classnamesargs) and [other methods](#methods).
+
+[zx-sml/nodejs](./nodejs) is some tool functions used in the Nodejs environment, which contains [getCommentsData](./nodejs/README.md#getcommentsdatainput-needarray-options), [outputFile](./nodejs/README.md#outputfileinput-outputdirorfile-options), [mkdirSync](./nodejs/README.md#mkdirsyncdir) and other methods. It is mainly used to obtain the comment information in the code, and then output it as a Markdown file.
 
 ## Setup
 

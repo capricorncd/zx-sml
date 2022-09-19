@@ -299,3 +299,13 @@ export function isFileLike(input: any): boolean
 export function getTypes(
   data: Record<string, Record<string, CommentInfoItem>> | CommentInfoItem[]
 ): CommentInfoItem[]
+
+/**
+ * writeFileSync
+ * @param outputFileName `string`
+ * @param outputLines `string[]`
+ */
+export function writeFileSync(
+  outputFileName: string,
+  outputLines: string[] | NodeJS.ArrayBufferView | string
+): void

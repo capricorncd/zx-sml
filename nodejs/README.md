@@ -179,6 +179,17 @@ args|`Array<string>`|yes|-
 
 - @returns `void`
 
+### writeFileSync(outputFileName, outputLines)
+
+Synchronized file write function.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+outputFileName|`string`|yes|Output filename, absolute path.
+outputLines|`string[]`/`NodeJS.ArrayBufferView`/`string`|yes|The output file content, an array of strings.
+
+- @returns `void`
+
 ## Types
 
 ### CommentInfoItem

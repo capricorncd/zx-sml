@@ -291,8 +291,7 @@ function handleOutput(arr, outputDir, options = {}) {
     }
 
     // output file
-    if (outputFileName)
-      fs.writeFileSync(outputFileName, outputLines.join(EOL), 'utf8')
+    if (outputFileName) writeFileSync(outputFileName, outputLines)
   }
 
   log(outputFileName)
@@ -302,6 +301,19 @@ function handleOutput(arr, outputDir, options = {}) {
     lines: outputLines,
     data: arr,
   }
+}
+
+/**
+ * @method writeFileSync(outputFileName, outputLines)
+ * Synchronized file write function.
+ * @param outputFileName `string` Output filename, absolute path.
+ * @param outputLines `string[] | NodeJS.ArrayBufferView | string` The output file content, an array of strings.
+ */
+function writeFileSync(outputFileName, outputLines) {
+  if (Array.isArray(outputLines)) {
+    outputLines = outputLines.join(EOL)
+  }
+  fs.writeFileSync(outputFileName, outputLines, 'utf8')
 }
 
 /**
@@ -378,4 +390,5 @@ function outputFile(input, outputDirOrFile, options = {}) {
 
 module.exports = {
   outputFile,
+  writeFileSync,
 }
