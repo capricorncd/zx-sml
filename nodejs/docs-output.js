@@ -336,7 +336,7 @@ function outputFile(input, outputDirOrFile, options = {}) {
   }
 
   // check other parameters
-  if (isObject(outputDirOrFile) && !options) {
+  if (isObject(outputDirOrFile)) {
     options = outputDirOrFile
     outputDirOrFile = undefined
   }
