@@ -16,6 +16,7 @@ const {
   handleReturn,
   handleParam,
   mergeIntoArray,
+  handleSort,
 } = require('./helpers')
 
 /**
@@ -83,6 +84,7 @@ function handleFile(filePath, data, options = {}) {
         // data
         data[dataKey] = {
           type,
+          sort: 0,
           name: typeName,
           fullName,
           desc: [],
@@ -130,6 +132,8 @@ function handleFile(filePath, data, options = {}) {
             data[dataKey].returns.push(handleReturn(temp))
           } else if (temp.startsWith('@private')) {
             data[dataKey].private = true
+          } else if (temp.startsWith('@sort')) {
+            data[dataKey].sort = handleSort(temp)
           } else if (isCode) {
             if (temp.startsWith('@code')) {
               // push a blank line.
@@ -172,6 +176,7 @@ function handleFile(filePath, data, options = {}) {
  *  * someMethod description 2 ...
  *  * @param param `any` param's description
  *  * @returns `object` return's description
+ *  * @sort 192
  *  *\/
  * function someMethod(param) {
  *   // do something ...
@@ -186,44 +191,88 @@ function handleFile(filePath, data, options = {}) {
  * const path = require('path')
  * const { getCommentsData } = require('zx-sml/nodejs')
  *
- * getCommentsData(path.resolve(__dirname, './src'));
- * // {
- * //   '/usr/.../src/index.js': {
- * //     method_someMethod: {
- * //       type: 'method',
- * //       name: 'someMethod',
- * //       fullName: 'someMethod(param)',
- * //       desc: [
- * //         'someMethod description 1 ...',
- * //         'someMethod description 2 ...',
- * //       ],
- * //       params: [
- * //         {
- * //           name: 'param',
- * //           required: true,
- * //           desc: ['param\'s description'],
- * //           types: ['any'],
- * //           raw: 'param `any` param\'s description',
- * //         },
- * //       ],
- * //       returns: [
- * //         {
- * //           types: ['object'],
- * //           desc: ['return\'s description'],
- * //           raw: '`object` return\'s description',
- * //         },
- * //       ],
- * //       codes: [],
- * //       private: false,
- * //       path: '/usr/.../src/index.js',
- * //     },
- * //     method_someMethod2: { ... },
- * //     document_someDocument: { ... },
- * //     type_someTypeName: { ... },
- * //   }
- * // }
+ * const result = getCommentsData(path.resolve(__dirname, './src'));
+ * console.log(result);
  * ```
  *
+ * @code result
+ *
+ * ```js
+ * {
+ *   '/usr/.../src/index.js': {
+ *     method_someMethod: {
+ *       type: 'method',
+ *       sort: 192,
+ *       name: 'someMethod',
+ *       fullName: 'someMethod(param)',
+ *       desc: [
+ *         'someMethod description 1 ...',
+ *         'someMethod description 2 ...',
+ *       ],
+ *       params: [
+ *         {
+ *           name: 'param',
+ *           required: true,
+ *           desc: ['param\'s description'],
+ *           types: ['any'],
+ *           raw: 'param `any` param\'s description',
+ *         },
+ *       ],
+ *       returns: [
+ *         {
+ *           types: ['object'],
+ *           desc: ['return\'s description'],
+ *           raw: '`object` return\'s description',
+ *         },
+ *       ],
+ *       codes: [],
+ *       private: false,
+ *       path: '/usr/.../src/index.js',
+ *     },
+ *     method_someMethod2: { ... },
+ *     document_someDocument: { ... },
+ *     type_someTypeName: { ... },
+ *     ...
+ *   }
+ * }
+ * ```
+ *
+ * @code Parameter `needArray` is `true`, or `const { data } = outputFile(path.resolve(__dirname, './src'))`, result/data:
+ *
+ * ```js
+ * [
+ *   {
+ *     type: 'method',
+ *     sort: 192,
+ *     name: 'someMethod',
+ *     fullName: 'someMethod(param)',
+ *     desc: [
+ *       'someMethod description 1 ...',
+ *       'someMethod description 2 ...',
+ *     ],
+ *     params: [
+ *       {
+ *         name: 'param',
+ *         required: true,
+ *         desc: ['param\'s description'],
+ *         types: ['any'],
+ *         raw: 'param `any` param\'s description',
+ *       },
+ *     ],
+ *     returns: [
+ *       {
+ *         types: ['object'],
+ *         desc: ['return\'s description'],
+ *         raw: '`object` return\'s description',
+ *       },
+ *     ],
+ *     codes: [],
+ *     private: false,
+ *     path: '/usr/.../src/index.js',
+ *   },
+ *   ...
+ * ]
+ * ```
  * @param input `string | string[]` The target file or directory.
  * @param needArray? `boolean` It's true will be returned an array. default `false`.
  * @param options? `GetCommentsDataOptions` [GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`

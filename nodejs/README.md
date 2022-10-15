@@ -44,6 +44,7 @@ A source file `./src/index.js`, or a directory `./src`.
  * someMethod description 2 ...
  * @param param `any` param's description
  * @returns `object` return's description
+ * @sort 192
  */
 function someMethod(param) {
   // do something ...
@@ -59,42 +60,87 @@ nodejs file `./scripts/create-docs.js`.
 const path = require('path')
 const { getCommentsData } = require('zx-sml/nodejs')
 
-getCommentsData(path.resolve(__dirname, './src'));
-// {
-//   '/usr/.../src/index.js': {
-//     method_someMethod: {
-//       type: 'method',
-//       name: 'someMethod',
-//       fullName: 'someMethod(param)',
-//       desc: [
-//         'someMethod description 1 ...',
-//         'someMethod description 2 ...',
-//       ],
-//       params: [
-//         {
-//           name: 'param',
-//           required: true,
-//           desc: ['param\'s description'],
-//           types: ['any'],
-//           raw: 'param `any` param\'s description',
-//         },
-//       ],
-//       returns: [
-//         {
-//           types: ['object'],
-//           desc: ['return\'s description'],
-//           raw: '`object` return\'s description',
-//         },
-//       ],
-//       codes: [],
-//       private: false,
-//       path: '/usr/.../src/index.js',
-//     },
-//     method_someMethod2: { ... },
-//     document_someDocument: { ... },
-//     type_someTypeName: { ... },
-//   }
-// }
+const result = getCommentsData(path.resolve(__dirname, './src'));
+console.log(result);
+```
+
+result
+
+```js
+{
+  '/usr/.../src/index.js': {
+    method_someMethod: {
+      type: 'method',
+      sort: 192,
+      name: 'someMethod',
+      fullName: 'someMethod(param)',
+      desc: [
+        'someMethod description 1 ...',
+        'someMethod description 2 ...',
+      ],
+      params: [
+        {
+          name: 'param',
+          required: true,
+          desc: ['param\'s description'],
+          types: ['any'],
+          raw: 'param `any` param\'s description',
+        },
+      ],
+      returns: [
+        {
+          types: ['object'],
+          desc: ['return\'s description'],
+          raw: '`object` return\'s description',
+        },
+      ],
+      codes: [],
+      private: false,
+      path: '/usr/.../src/index.js',
+    },
+    method_someMethod2: { ... },
+    document_someDocument: { ... },
+    type_someTypeName: { ... },
+    ...
+  }
+}
+```
+
+Parameter `needArray` is `true`, or `const { data } = outputFile(path.resolve(__dirname, './src'))`, result/data:
+
+```js
+[
+  {
+    type: 'method',
+    sort: 192,
+    name: 'someMethod',
+    fullName: 'someMethod(param)',
+    desc: [
+      'someMethod description 1 ...',
+      'someMethod description 2 ...',
+    ],
+    params: [
+      {
+        name: 'param',
+        required: true,
+        desc: ['param\'s description'],
+        types: ['any'],
+        raw: 'param `any` param\'s description',
+      },
+    ],
+    returns: [
+      {
+        types: ['object'],
+        desc: ['return\'s description'],
+        raw: '`object` return\'s description',
+      },
+    ],
+    codes: [],
+    private: false,
+    path: '/usr/.../src/index.js',
+  },
+  ...
+]
 ```
 
 ### getTypes(data)

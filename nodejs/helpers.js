@@ -5,7 +5,7 @@
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs')
-const { isObject } = require('../dist/zx-sml.umd')
+const { isObject, toNumber } = require('../dist/zx-sml.umd')
 const { BLANK_LINE } = require('./const')
 const { warn } = require('./log')
 
@@ -210,6 +210,18 @@ function handleReturn(input) {
     data.desc = [RegExp.$2]
   }
   return data
+}
+
+/**
+ * handle sort number of line
+ * @param line `string`
+ * @return {number}
+ */
+function handleSort(line) {
+  if (/@sort\s*(\d+)/.test(line)) {
+    return toNumber(RegExp.$1)
+  }
+  return 0
 }
 
 /**
@@ -461,6 +473,7 @@ module.exports = {
   handleReturn,
   handleParam,
   handleProps,
+  handleSort,
   createPropsTable,
   mergeIntoArray,
   toArray,
