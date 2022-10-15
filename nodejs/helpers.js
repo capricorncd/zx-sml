@@ -218,7 +218,7 @@ function handleReturn(input) {
  * @return {number}
  */
 function handleSort(line) {
-  if (/@sort\s*(\d+)/.test(line)) {
+  if (/@sort\s*(-?\d+)/.test(line)) {
     return toNumber(RegExp.$1)
   }
   return 0
@@ -310,12 +310,18 @@ function mergeIntoArray(data, options) {
 function toArray(data, options = {}) {
   const arr = []
   const keys = Object.keys(data)
-  // sort keys
+  // sort by keys
   if (!options.disableKeySorting) {
     keys.sort()
   }
 
   keys.forEach((key) => arr.push(data[key]))
+
+  // sort by item.sort
+  if (arr.some((item) => item.sort)) {
+    arr.sort((a, b) => a.sort - b.sort)
+  }
+
   return arr
 }
 
