@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "some static method library",
   "main": "dist/zx-sml.umd.js",
   "module": "dist/zx-sml.es.js",
@@ -40,7 +40,7 @@
     "lint": "eslint . --fix --ext .js,.cjs,.ts,.tsx,.json"
   },
   "dependencies": {
-    "date-utils-2020": "^1.0.3"
+    "date-utils-2020": "^1.1.0"
   },
   "devDependencies": {
     "@types/jsdom": "^16.2.14",

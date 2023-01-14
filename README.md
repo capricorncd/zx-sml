@@ -503,6 +503,18 @@ toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
 
 <!--METHOD_END-->
 
+## Types
+
+### ILangPackage
+
+```ts
+interface ILangPackage {
+  // Starting on sunday. For example ['周日', '周一', ..., '周六']
+  weeks: string[],
+  [key: string]: any
+}
+```
+
 ## License
 
 [MIT](./LICENSE) License © 2022-Present [Capricorncd](https://github.com/capricorncd).

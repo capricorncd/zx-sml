@@ -4,7 +4,8 @@
  * Date: 2022/06/11 09:57:51 (GMT+0900)
  */
 // https://github.com/capricorncd/date-utils-2020
-import { formatDate, toDate } from 'date-utils-2020'
+export { formatDate, toDate, toTwoDigits } from 'date-utils-2020'
+export type { ILangPackage } from 'date-utils-2020'
 /**
  * @method formatDate(date, format, langPackage)
  * @description Date format,
@@ -28,5 +29,3 @@ import { formatDate, toDate } from 'date-utils-2020'
  * @param input `any` any type of object
  * @returns `Date | null`
  */
-
-export { formatDate, toDate }
