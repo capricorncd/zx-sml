@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.6.5
+ * zx-sml version 0.6.6
  * Author: Xing Zhong<zx198401@gmail.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-01-14 14:20:30 (GMT+0900)
+ * Released on: 2023-02-05 17:54:33 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
