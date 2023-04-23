@@ -59,6 +59,9 @@
     "vite": "^2.9.12",
     "vitest": "^0.14.2"
   },
+  "lint-staged": {
+    "*.{js,ts,cjs}": "eslint --fix"
+  },
   "repository": "https://github.com/capricorncd/zx-sml",
   "author": "Xing Zhong<zx198401@gmail.com>",
   "license": "MIT"
