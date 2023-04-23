@@ -325,6 +325,27 @@ joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
 // https://a.com/news/detail/100001?x=9
 ```
 
+### randomId(prefix, suffix)
+
+Generate a random string id.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+prefix|`string`|no|A prefix of the id
+suffix|`string`|no|A suffix of the id
+
+- @returns `string` Like this `prefix-xxxxx-xxxxx-xxxxxxxxxx-suffix`
+
+### randomStr(length)
+
+Generate a random string with a maximum length of 1000.
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+length|`number`|no|The length of the random string, which has a maximum value of 1000.
+
+- @returns `string`
+
 ### removeLocalStorage(key)
 
 Removing the `localStorage` item.
