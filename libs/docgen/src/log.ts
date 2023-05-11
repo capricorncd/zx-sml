@@ -34,7 +34,7 @@ const colors = {
  * Output 😎 green color log in console
  * @param args `Array<string>`
  */
-function log(...args) {
+export function log(...args: unknown[]): void {
   console.log('😎', colors.green, ...args, colors.white)
 }
 
@@ -43,7 +43,7 @@ function log(...args) {
  * Output 😕 yellow color log in console
  * @param args `Array<string>`
  */
-function warn(...args) {
+export function warn(...args: unknown[]) {
   console.log('😕', colors.yellow, ...args, colors.white)
 }
 
@@ -52,12 +52,6 @@ function warn(...args) {
  * Output 😡 red color log in console
  * @param args `Array<string>`
  */
-function error(...args) {
+export function error(...args: unknown[]) {
   console.log('😡', colors.red, ...args, colors.white)
-}
-
-module.exports = {
-  log,
-  warn,
-  error,
 }

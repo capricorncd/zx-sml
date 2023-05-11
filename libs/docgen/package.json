@@ -1,0 +1,22 @@
+{
+  "name": "@zx/docgen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "devDependencies": {},
+  "scripts": {
+    "build": "vite build --emptyOutDir",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capricorncd/zx-sml.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/capricorncd/zx-sml/issues"
+  },
+  "homepage": "https://github.com/capricorncd/zx-sml#readme"
+}

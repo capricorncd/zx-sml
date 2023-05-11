@@ -8,7 +8,7 @@
 
 zx-sml is some static method library, which contains [toSnakeCase](#tosnakecaseinput-connectsymbol), [splitValue](#splitvalueinput), [getLocalStorage](#getlocalstoragekey-def), [formatDate](#formatdatedate-format-langpackage), [createElement](#createelementtag-attrs-children), [classNames](#classnamesargs) and [other methods](#methods).
 
-[zx-sml/nodejs](./nodejs) is some tool functions used in the Nodejs environment, which contains [getCommentsData](./nodejs/README.md#getcommentsdatainput-needarray-options), [outputFile](./nodejs/README.md#outputfileinput-outputdirorfile-options), [mkdirSync](./nodejs/README.md#mkdirsyncdir) and other methods. It is mainly used to obtain the comment information in the code, and then output it as a Markdown file.
+[zx-sml/docgen](./docs/docgen.md) is some tool functions used in the Nodejs environment, which contains [getCommentsData](./docs/docgen.md#getcommentsdatainput-needarray-options), [outputFile](./docs/docgen.md#outputfileinput-outputdirorfile-options), [mkdirSync](./docs/docgen.md#mkdirsyncdir) and other methods. It is mainly used to obtain the comment information in the code, and then output it as a Markdown file.
 
 ## Install
 
@@ -39,12 +39,12 @@ formatDate('2020-12-04', 'yyyy/MM/dd W')
 // 2020/12/04 Fri
 ```
 
-### zx-sml/nodejs
+### zx-sml/docgen
 
-Some tool functions used in the Nodejs environment, [docs](./nodejs/README.md).
+Some tool functions used in the Nodejs environment, [docs](./docs/docgen.md).
 
 ```js
-const { log, outputFile } = require('zx-sml/nodejs');
+const { log, outputFile } = require('zx-sml/docgen');
 
 log('hello nodejs')
 

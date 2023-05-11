@@ -13,7 +13,7 @@ import {
   getMaxZIndex,
   getStyleValue,
   getScrollParents,
-} from '@core/dom'
+} from './dom'
 
 describe('dom', () => {
   it('$', () => {
@@ -83,6 +83,7 @@ describe('dom', () => {
       '<!doctype html><html><body><div style="width: 100px;height: 100px;overflow: auto"><p style="height: 500px">1</p><span>2</span></div></body></html>'
     )
     vi.stubGlobal('document', window.document)
+
     const el = $('p')
     expect(getScrollParents(el!).length).toBe(1)
   })

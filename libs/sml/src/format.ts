@@ -3,7 +3,6 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 09:58:54 (GMT+0900)
  */
-import { AnyObject } from '../types'
 import { isObject } from './check'
 
 /**
@@ -218,14 +217,14 @@ export function slice<T, P>(arrayLike: P, offset = 0): T[] {
  * ```
  */
 export function formatKeys(
-  obj: AnyObject = {},
+  obj: Record<string, unknown> = {},
   isCamelCase = false
-): AnyObject {
+): Record<string, unknown> {
   const formatter = isCamelCase ? toCamelCase : toSnakeCase
-  const result: AnyObject = {}
+  const result: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(obj)) {
     result[formatter(key)] = isObject(value)
-      ? formatKeys(value, isCamelCase)
+      ? formatKeys(value as Record<string, unknown>, isCamelCase)
       : value
   }
   return result

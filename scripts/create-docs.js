@@ -6,7 +6,7 @@
 const fs = require('fs')
 const { EOL } = require('os')
 const path = require('path')
-const { outputFile } = require('../nodejs')
+const { outputFile, writeFileSync } = require('../dist/zx-docgen/index.umd')
 
 const METHOD_START = '<!--METHOD_START-->'
 const METHOD_END = '<!--METHOD_END-->'
@@ -117,17 +117,22 @@ const outputFileOptions = {
 
 function main() {
   // zx-sml default docs
-  const srcDir = path.resolve(__dirname, '../src')
+  const srcDir = path.resolve(__dirname, '../libs/sml/src')
   const { lines } = outputFile(srcDir)
   // README.md
   writeInReadmeFile(lines)
 
   // zx-sml/nodejs docs
-  const input = path.resolve(__dirname, '../nodejs')
-  outputFile(
+  const input = path.resolve(__dirname, '../libs/docgen/src')
+  const { lines: docGenLines } = outputFile(
     input,
-    path.resolve(__dirname, '../nodejs/README.md'),
+    path.resolve(__dirname, '../docs/docgen.md'),
     outputFileOptions
+  )
+
+  writeFileSync(
+    path.resolve(__dirname, '../libs/docgen/README.md'),
+    docGenLines
   )
 }
 

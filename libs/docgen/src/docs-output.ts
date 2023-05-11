@@ -4,21 +4,21 @@
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const fs = require('fs')
-const { EOL } = require('os')
-const path = require('path')
-const { isObject } = require('../dist/zx-sml.umd')
-const { BLANK_LINE, DOC_TYPES } = require('./const')
-const { getCommentsData } = require('./docs-input')
-const {
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+import { isObject } from '@zx/sml'
+import { BLANK_LINE, DOC_TYPES } from './const'
+import { getCommentsData } from './docs-input'
+import {
   mkdirSync,
   isFileLike,
   isValidArray,
   formatAsArray,
   createPropsTable,
   mergeIntoArray,
-} = require('./helpers')
-const { log } = require('./log')
+} from './helpers'
+import { log } from './log'
 
 /**
  * create method docs
@@ -309,9 +309,12 @@ function handleOutput(arr, outputDir, options = {}) {
  * @param outputFileName `string` Output filename, absolute path.
  * @param outputLines `string[] | NodeJS.ArrayBufferView | string` The output file content, an array of strings.
  */
-function writeFileSync(outputFileName, outputLines) {
+export function writeFileSync(
+  outputFileName: string,
+  outputLines: string[] | NodeJS.ArrayBufferView | string
+) {
   if (Array.isArray(outputLines)) {
-    outputLines = outputLines.join(EOL)
+    outputLines = outputLines.join(os.EOL)
   }
   fs.writeFileSync(outputFileName, outputLines, 'utf8')
 }
@@ -324,7 +327,7 @@ function writeFileSync(outputFileName, outputLines) {
  * @param options? `OutputFileOptions` [OutputFileOptions](#OutputFileOptions)
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
  */
-function outputFile(input, outputDirOrFile, options = {}) {
+export function outputFile(input, outputDirOrFile, options = {}) {
   // file or directory's path, or an array of paths
   if (
     // file or directory's path
@@ -386,9 +389,4 @@ function outputFile(input, outputDirOrFile, options = {}) {
     //   )
     // })
   }
-}
-
-module.exports = {
-  outputFile,
-  writeFileSync,
 }

@@ -1,7 +1,6 @@
 /**
  * Created by Xing Zhong.
  * https://github.com/capricorncd
- * https://github.com/xing1984
  * Date: 2022/09/03 13:47:40 (GMT+0900)
  */
 

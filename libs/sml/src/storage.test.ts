@@ -1,7 +1,6 @@
 /**
  * Created by Xing Zhong.
  * https://github.com/capricorncd
- * https://github.com/xing1984
  * Date: 2022/09/09 21:08:27 (GMT+0900)
  */
 import { describe, it, expect } from 'vitest'
@@ -14,7 +13,7 @@ import {
   getSessionStorage,
   removeSessionStorage,
   clearSessionStorage,
-} from '@core/storage'
+} from './storage'
 
 const key1 = 'key1'
 const key2 = 'key2'

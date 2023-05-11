@@ -15,7 +15,7 @@ import {
   toNumber,
   formatKeys,
   formatBytes,
-} from '@core/format'
+} from './format'
 
 describe('format', () => {
   it('slice', () => {
