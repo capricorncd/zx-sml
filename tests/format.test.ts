@@ -5,7 +5,6 @@
  */
 import { describe, it, expect } from 'vitest'
 import {
-  toTwoDigits,
   slice,
   toCamelCase,
   toSnakeCase,
@@ -19,13 +18,6 @@ import {
 } from '@core/format'
 
 describe('format', () => {
-  it('toTwoDigits', () => {
-    expect(toTwoDigits('1')).toBe('01')
-    expect(toTwoDigits('0')).toBe('00')
-    expect(toTwoDigits('11')).toBe('11')
-    expect(toTwoDigits('111')).toBe('111')
-  })
-
   it('slice', () => {
     expect(slice([1, 3], 1)).toStrictEqual([3])
     expect(slice({ length: 2, 0: 100, 1: 100 })).toStrictEqual([100, 100])

@@ -3,11 +3,8 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 09:58:54 (GMT+0900)
  */
-import { toTwoDigits } from 'date-utils-2020'
 import { AnyObject } from '../types'
 import { isObject } from './check'
-
-export { toTwoDigits }
 
 /**
  * @method createUrlForGetRequest(url, params)
@@ -96,7 +93,7 @@ function restoreUSLocalString(input: string): string {
  * @param isStrictMode? `boolean` Whether it is strict mode, default `false`
  * @returns `number`
  */
-export function toNumber<T>(input: T, isStrictMode = false): number {
+export function toNumber(input: unknown, isStrictMode = false): number {
   if (typeof input === 'number') return input
   if (typeof input === 'string') {
     if (

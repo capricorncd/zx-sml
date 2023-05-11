@@ -10,7 +10,7 @@
  * @param input `any` any type of object
  * @returns `boolean`
  */
-export function isArray<T>(input: T): boolean {
+export function isArray<T>(input: unknown): input is Array<T> {
   return Array.isArray(input)
 }
 
@@ -20,8 +20,8 @@ export function isArray<T>(input: T): boolean {
  * @param input `any` any type of object
  * @returns `boolean`
  */
-export function isObject<T>(input: T): boolean {
-  return input !== null && !isArray(input) && typeof input === 'object'
+export function isObject(input: unknown): input is object {
+  return typeof input === 'object' && input !== null && !isArray(input)
 }
 
 /**

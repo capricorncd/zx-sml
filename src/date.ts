@@ -4,8 +4,8 @@
  * Date: 2022/06/11 09:57:51 (GMT+0900)
  */
 // https://github.com/capricorncd/date-utils-2020
-export { formatDate, toDate } from 'date-utils-2020'
-export type { ILangPackage } from 'date-utils-2020'
+export * from 'date-utils-2020'
+
 /**
  * @method formatDate(date, format, langPackage)
  * @description Date format,

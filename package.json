@@ -1,14 +1,15 @@
 {
   "name": "zx-sml",
-  "version": "0.6.6",
-  "description": "some static method library",
+  "version": "0.7.0",
+  "description": "some static method library and documentation generator",
   "main": "dist/zx-sml.umd.js",
   "module": "dist/zx-sml.es.js",
-  "types": "types",
+  "types": "types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/zx-sml.es.js",
-      "require": "./dist/zx-sml.umd.js"
+      "require": "./dist/zx-sml.umd.js",
+      "types": "./types/index.d.ts"
     },
     "./nodejs": {
       "require": "./nodejs/index.js",
@@ -37,7 +38,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "docs": "node scripts/create-docs.js",
-    "lint": "eslint . --fix --ext .js,.cjs,.ts,.tsx,.json"
+    "lint": "prettier --write ."
   },
   "dependencies": {
     "date-utils-2020": "^1.1.0"
