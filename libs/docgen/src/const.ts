@@ -8,23 +8,15 @@
  * @constant BLANK_LINE
  * blank line.
  */
-const BLANK_LINE = ''
+export const BLANK_LINE = ''
 
 /**
  * @constant DOC_TYPES
  * Supported annotation types.
  */
-const DOC_TYPES = {
+export const DOC_TYPES = {
   method: 'method',
   type: 'type',
   document: 'document',
   constant: 'constant',
-}
-
-/**
- * exports
- */
-module.exports = {
-  BLANK_LINE,
-  DOC_TYPES,
 }

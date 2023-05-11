@@ -6,7 +6,7 @@
 const fs = require('fs')
 const { EOL } = require('os')
 const path = require('path')
-const { formatDate } = require('../dist/zx-sml.umd')
+const { formatDate } = require('../dist/zx-sml/index.umd')
 const pkg = require('../package.json')
 
 const header = [
@@ -23,8 +23,8 @@ function addHeader(file) {
   fs.writeFileSync(file, [...header, ...liens].join(EOL))
 }
 
-function main() {
-  const distDir = path.resolve(__dirname, '../dist')
+function main(lib) {
+  const distDir = path.resolve(__dirname, `../dist/${lib}`)
   fs.readdirSync(distDir).forEach((file) => {
     if (/\.js$/.test(file)) {
       addHeader(path.join(distDir, file))
@@ -32,4 +32,5 @@ function main() {
   })
 }
 
-main()
+main('zx-sml')
+main('zx-docgen')

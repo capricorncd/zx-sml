@@ -4,23 +4,26 @@
   "description": "some static method library and documentation generator",
   "main": "dist/zx-sml.umd.js",
   "module": "dist/zx-sml.es.js",
-  "types": "types/index.d.ts",
+  "types": "libs/sml/types.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/zx-sml.es.js",
-      "require": "./dist/zx-sml.umd.js",
-      "types": "./types/index.d.ts"
+      "import": "./dist/zx-sml/index.es.js",
+      "require": "./dist/zx-sml/index.umd.js",
+      "types": "./libs/sml/types.d.ts"
+    },
+    "./docgen": {
+      "import": "./dist/zx-docgen/index.es.js",
+      "require": "./dist/zx-docgen/index.umd.js",
+      "types": "./libs/docgen/types.d.ts"
     },
     "./nodejs": {
-      "require": "./nodejs/index.js",
-      "types": "./nodejs/types.d.ts"
+      "require": "./dist/zx-docgen/index.umd.js",
+      "types": "./libs/docgen/types.d.ts"
     }
   },
   "files": [
     "dist",
-    "src",
-    "nodejs",
-    "types"
+    "libs"
   ],
   "keywords": [
     "zx-sml",
@@ -32,10 +35,13 @@
     "vitest"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "yarn docs && vite build --emptyOutDir && node scripts/build-header.js",
-    "preview": "vite preview",
-    "test": "vitest",
+    "build": "npm run build:sml && npm run build:docgen && npm run build:header",
+    "build:sml": "npm run build -w libs/sml",
+    "build:docgen": "npm run build -w libs/docgen",
+    "build:header": "node scripts/build-header.js",
+    "test": "npm run test:sml && npm run test:docgen",
+    "test:sml": "npm run test -w libs/sml",
+    "test:docgen": "npm run test -w libs/docgen",
     "coverage": "vitest run --coverage",
     "docs": "node scripts/create-docs.js",
     "lint": "prettier --write ."
@@ -62,6 +68,13 @@
   },
   "lint-staged": {
     "*.{js,ts,cjs}": "eslint --fix"
+  },
+  "workspaces": [
+    "./libs/*"
+  ],
+  "engines": {
+    "node": ">=16.13.1",
+    "npm": ">=8.1.2"
   },
   "repository": "https://github.com/capricorncd/zx-sml",
   "author": "Xing Zhong<zx198401@gmail.com>",

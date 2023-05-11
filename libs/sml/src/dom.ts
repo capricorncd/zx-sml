@@ -3,7 +3,6 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 10:44:51 (GMT+0900)
  */
-import { AnyObject } from '../types'
 import { isObject, isElement } from './check'
 import { slice, formatKeys, toNumber, toCamelCase, toSnakeCase } from './format'
 
@@ -47,14 +46,16 @@ export function $$<T extends HTMLElement>(
  */
 export function createElement<T extends HTMLElement>(
   tag: string,
-  attrs: AnyObject = {},
+  attrs: Record<string, unknown> = {},
   children?: string | HTMLElement | Node | (string | HTMLElement | Node)[]
 ): T {
   const el = document.createElement(tag) as T
   for (const [key, val] of Object.entries(attrs)) {
     el.setAttribute(
       toSnakeCase(key),
-      key === 'style' && isObject(val) ? toStrStyles(val) : val
+      key === 'style' && isObject(val)
+        ? toStrStyles(val as Record<string, unknown>)
+        : String(val)
     )
   }
   if (children) {
@@ -89,8 +90,8 @@ export function createElement<T extends HTMLElement>(
  * // line-height:24px;width:50%
  * ```
  */
-export function toStrStyles(...args: AnyObject[]): string {
-  const styles: AnyObject = args.reduce((prev, obj) => {
+export function toStrStyles(...args: Record<string, unknown>[]): string {
+  const styles: Record<string, unknown> = args.reduce((prev, obj) => {
     return { ...prev, ...formatKeys(obj) }
   }, {})
   const arr: string[] = []

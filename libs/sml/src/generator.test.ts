@@ -4,7 +4,7 @@
  * Date: 2022/06/11 11:40:27 (GMT+0900)
  */
 import { describe, it, expect } from 'vitest'
-import { randomStr, randomId } from '@core/generator'
+import { randomStr, randomId } from './generator'
 
 describe('generator', () => {
   it('randomStr', () => {

@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.6.6
+ * zx-sml version 0.7.0
  * Author: Xing Zhong<zx198401@gmail.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-02-05 17:54:33 (GMT+0900)
+ * Released on: 2023-05-11 21:58:45 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
@@ -24,7 +24,7 @@ function isArray(input) {
   return Array.isArray(input);
 }
 function isObject(input) {
-  return input !== null && !isArray(input) && typeof input === "object";
+  return typeof input === "object" && input !== null && !isArray(input);
 }
 function isElement(el) {
   return el && el.nodeType === 1;
@@ -199,7 +199,7 @@ function $$(selector, doc = document) {
 function createElement(tag, attrs = {}, children) {
   const el = document.createElement(tag);
   for (const [key, val] of Object.entries(attrs)) {
-    el.setAttribute(toSnakeCase(key), key === "style" && isObject(val) ? toStrStyles(val) : val);
+    el.setAttribute(toSnakeCase(key), key === "style" && isObject(val) ? toStrStyles(val) : String(val));
   }
   if (children) {
     if (!Array.isArray(children)) {
@@ -349,4 +349,11 @@ function removeSessionStorage(key) {
 function clearSessionStorage() {
   sessionStorage.clear();
 }
-export { $, $$, base64ToBlob, classNames, clearLocalStorage, clearSessionStorage, createBlobURL, createElement, createUrlForGetRequest, fileToBase64, formatBytes, u as formatDate, formatKeys, getLocalStorage, getMaxZIndex, getScrollParents, getSessionStorage, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, removeLocalStorage, removeSessionStorage, setLocalStorage, setSessionStorage, slice, splitBase64, splitValue, toCamelCase, c as toDate, toNumber, toSnakeCase, toStrStyles, l as toTwoDigits };
+function randomStr(n) {
+  const str = Math.random().toString(16).replace(/^0\.\d*/, "");
+  return typeof n === "number" ? n > str.length ? str.padEnd(Math.min(n, 1e3), str) : str.substring(0, n) : str;
+}
+function randomId(prefix, suffix) {
+  return [prefix, randomStr(5), randomStr(5), randomStr(), suffix].filter(Boolean).join("-");
+}
+export { $, $$, base64ToBlob, classNames, clearLocalStorage, clearSessionStorage, createBlobURL, createElement, createUrlForGetRequest, fileToBase64, formatBytes, u as formatDate, formatKeys, getLocalStorage, getMaxZIndex, getScrollParents, getSessionStorage, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, randomId, randomStr, removeLocalStorage, removeSessionStorage, setLocalStorage, setSessionStorage, slice, splitBase64, splitValue, toCamelCase, c as toDate, toNumber, toSnakeCase, toStrStyles, l as toTwoDigits };

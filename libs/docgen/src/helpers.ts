@@ -3,11 +3,10 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
-/* eslint-disable @typescript-eslint/no-var-requires */
-const fs = require('fs')
-const { isObject, toNumber } = require('../dist/zx-sml.umd')
-const { BLANK_LINE } = require('./const')
-const { warn } = require('./log')
+import fs from 'node:fs'
+import { isObject, toNumber } from '@zx/sml'
+import { BLANK_LINE } from './const'
+import { warn } from './log'
 
 /**
  * @method mkdirSync(dir)
@@ -15,7 +14,7 @@ const { warn } = require('./log')
  * @param dir `string` directory path
  * @returns `void`
  */
-function mkdirSync(dir) {
+export function mkdirSync(dir) {
   if (!dir || fs.existsSync(dir)) {
     warn(`The directory already exists, or is null, ${dir}`)
     return
@@ -40,7 +39,7 @@ function mkdirSync(dir) {
  * @param filePath `string`
  * @returns `boolean`
  */
-function isFileLike(filePath) {
+export function isFileLike(filePath) {
   if (typeof filePath === 'string') {
     return /.+\.\w+$/.test(filePath)
   }
@@ -53,7 +52,7 @@ function isFileLike(filePath) {
  * @param arr `T[]`
  * @returns `boolean`
  */
-function isValidArray(i) {
+export function isValidArray(i) {
   return Array.isArray(i) && i.length > 0
 }
 
@@ -67,7 +66,11 @@ function isValidArray(i) {
  * @param defaultReturnValue
  * @returns `string`
  */
-function toStrForStrArray(arr, spliceSymbol = ' ', defaultReturnValue = '-') {
+export function toStrForStrArray(
+  arr,
+  spliceSymbol = ' ',
+  defaultReturnValue = '-'
+) {
   const newArr = arr.filter((str) => !!str)
   return newArr.length ? newArr.join(spliceSymbol) : defaultReturnValue
 }
@@ -79,7 +82,7 @@ function toStrForStrArray(arr, spliceSymbol = ' ', defaultReturnValue = '-') {
  * @param {*} times `number`
  * @returns `number`
  */
-function findCharIndex(str, char, times) {
+export function findCharIndex(str, char, times) {
   let index = -1
   for (let i = 0; i < times; i++) {
     index = str.indexOf(char, index + 1)
@@ -93,7 +96,7 @@ function findCharIndex(str, char, times) {
  * @param input `string | string[]`
  * @returns `string[]`
  */
-function formatAsArray(input) {
+export function formatAsArray(input) {
   if (typeof input === 'undefined') return []
   return Array.isArray(input) ? input : [input]
 }
@@ -115,7 +118,7 @@ function formatAsArray(input) {
  * formatAsTypes(' string | number;') // ['string', 'number']
  * ```
  */
-function formatAsTypes(input) {
+export function formatAsTypes(input) {
   input = input.trim()
 
   // remove last ';' of type string
@@ -147,7 +150,7 @@ function formatAsTypes(input) {
  * @param input
  * @returns `string`
  */
-function replaceVerticalBarsInTables(input) {
+export function replaceVerticalBarsInTables(input) {
   return input.replace(/\|/g, '\\|')
 }
 
@@ -168,7 +171,7 @@ function getSpDescription(input) {
  * @param input `string` raw string.
  * @returns `CommentInfoItemParam` [CommentInfoItemParam](#CommentInfoItemParam).
  */
-function handleParam(input) {
+export function handleParam(input) {
   input = input.replace('@param', '').trim()
   const data = {
     raw: input,
@@ -195,7 +198,7 @@ function handleParam(input) {
  * @param input `string`
  * @returns `CommentInfoItemReturn`
  */
-function handleReturn(input) {
+export function handleReturn(input) {
   input = input.replace(/@returns?/, '').trim()
   const data = {
     raw: input,
@@ -217,7 +220,7 @@ function handleReturn(input) {
  * @param line `string`
  * @return {number}
  */
-function handleSort(line) {
+export function handleSort(line) {
   if (/@sort\s*(-?\d+)/.test(line)) {
     return toNumber(RegExp.$1)
   }
@@ -232,7 +235,7 @@ function handleSort(line) {
  * @param fullName `string`
  * @returns `string`
  */
-function getTypeName(fullName) {
+export function getTypeName(fullName) {
   // only words and '.'
   return fullName.replace(/^([\w.]+).*/, '$1')
 }
@@ -245,7 +248,12 @@ function getTypeName(fullName) {
  * @param options `{alias: tableHead?: {...}}`
  * @returns `string[]`
  */
-function createPropsTable(props, docType, typeName = 'Name', options = {}) {
+export function createPropsTable(
+  props,
+  docType,
+  typeName = 'Name',
+  options = {}
+) {
   if (!isValidArray(props)) return []
   // alias
   const alias = options.alias || {}
@@ -291,7 +299,7 @@ function createPropsTable(props, docType, typeName = 'Name', options = {}) {
  * @param options `GetCommentsDataOptions` [GetCommentsDataOptions](#getcommentsdataoptions)
  * @returns `CommentInfoItem[]`
  */
-function mergeIntoArray(data, options) {
+export function mergeIntoArray(data, options) {
   const mergeData = Object.keys(data).reduce((prev, filePath) => {
     Object.keys(data[filePath]).forEach((key) => {
       prev[key] = data[filePath][key]
@@ -307,7 +315,7 @@ function mergeIntoArray(data, options) {
  * @param options `GetCommentsDataOptions`
  * @returns `CommentInfoItem[]`
  */
-function toArray(data, options = {}) {
+export function toArray(data, options = {}) {
   const arr = []
   const keys = Object.keys(data)
   // sort by keys
@@ -331,7 +339,7 @@ function toArray(data, options = {}) {
  * @param types `CommentInfoItem[]`
  * @returns `CommentInfoItemProp[]` [CommentInfoItemProp](#CommentInfoItemProp)
  */
-function handleProps(item, types) {
+export function handleProps(item, types) {
   // props has been processed
   if (item.props) return item.props
 
@@ -360,7 +368,7 @@ function handleProps(item, types) {
   }
 
   let isCodeStart = false
-  let description = []
+  let description: string[] = []
 
   item.codes.forEach((line) => {
     // type A = {
@@ -373,11 +381,12 @@ function handleProps(item, types) {
     // desc?: string[] | OtherType // description ...
     // install: (e: Editor, parent?: HTMLElement) => void // description ...
     // [key]: any, or [key: string]: OtherType // description ...
+    // 'hello-world': any
     // interface ReadonlyStringArray {
     //   readonly [index: number]: string;
     // }
     if (
-      /^\s*(?:(?:readonly|static|public)\s*)?((?:\w|\[.+\])+\??)\s*:\s*([^/]*)(?:\/\/(.*))?/.test(
+      /^\s*(?:(?:readonly|static|public)\s+)?((?:(?:\w|\[.+\])+|(?:'.+')|(?:".+"))\??)\s*:\s*([^/]*)(?:\/\/(.*))?/.test(
         line
       )
     ) {
@@ -387,9 +396,9 @@ function handleProps(item, types) {
       description.push(RegExp.$3.trim())
 
       const data = {
-        name: name.replace(/\?/g, ''),
+        name: name.replace(/('|")(.+)\1\??/, '$2'),
         required: !name.includes('?'),
-        desc: description,
+        desc: description.filter(Boolean),
         types,
       }
 
@@ -427,9 +436,10 @@ const TABLE_ALIGNS = {
  * @param data `ToTableLinesParamData` see type [ToTableLinesParamData](#ToTableLinesParamData).
  * @returns `string[]`
  */
-function toTableLines(data) {
+export function toTableLines(data) {
   if (!isObject(data) || !isValidArray(data.tbody)) return []
-  let { align, thead, tbody } = data
+  let { align } = data
+  const { thead, tbody } = data
   const lines = []
 
   let i = 0
@@ -464,24 +474,4 @@ function toTableLines(data) {
   }
 
   return lines
-}
-
-module.exports = {
-  mkdirSync,
-  isFileLike,
-  isValidArray,
-  toStrForStrArray,
-  findCharIndex,
-  formatAsArray,
-  formatAsTypes,
-  replaceVerticalBarsInTables,
-  getTypeName,
-  handleReturn,
-  handleParam,
-  handleProps,
-  handleSort,
-  createPropsTable,
-  mergeIntoArray,
-  toArray,
-  toTableLines,
 }

@@ -4,12 +4,12 @@
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const fs = require('fs')
-const { EOL } = require('os')
-const path = require('path')
-const { isObject } = require('../dist/zx-sml.umd')
-const { DOC_TYPES } = require('./const')
-const {
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+import { isObject } from '@zx/sml'
+import { DOC_TYPES } from './const'
+import {
   isValidArray,
   handleProps,
   getTypeName,
@@ -17,7 +17,7 @@ const {
   handleParam,
   mergeIntoArray,
   handleSort,
-} = require('./helpers')
+} from './helpers'
 
 /**
  * handle file
@@ -58,7 +58,7 @@ function handleFile(filePath, data, options = {}) {
   let tempStr
   fs.readFileSync(filePath, 'utf8')
     .toString()
-    .split(new RegExp(EOL))
+    .split(new RegExp(os.EOL))
     .forEach((line) => {
       const originalLine = line
       line = line.trim()
@@ -278,7 +278,7 @@ function handleFile(filePath, data, options = {}) {
  * @param options? `GetCommentsDataOptions` [GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`
  * @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
  */
-function getCommentsData(input, needArray, options = {}) {
+export function getCommentsData(input, needArray, options = {}) {
   const data = {}
   if (isObject(needArray)) {
     options = needArray
@@ -323,7 +323,7 @@ function _getCommentsData(input, data, options) {
  * @param data `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` The data obtained using the [getCommentsData](#getcommentsdatainput-needarray-options) method
  * @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
  */
-function getTypes(data) {
+export function getTypes(data) {
   // CommentInfoItem[]
   if (Array.isArray(data)) {
     return data.filter((item) => item.type === DOC_TYPES.type)
@@ -361,9 +361,4 @@ function handleTypes(data, options) {
   types.forEach((item) => {
     item.props = handleProps(item, types)
   })
-}
-
-module.exports = {
-  getCommentsData,
-  getTypes,
 }
