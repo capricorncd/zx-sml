@@ -5,17 +5,19 @@
  *
  * @document zx-sml/docgen
  *
- * Some tool functions used in the Nodejs environment.
- * see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.js)
+ * A document generator that read the comments in the code and automatically generate MarkDown documents.
  *
  * ```js
  * const { mkdirSync } = require('zx-sml/docgen')
+ * // import { mkdirSync } from 'zx-sml/docgen'
  *
  * mkdirSync('./a/b/c')
  * ```
+ *
+ * see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.js)
  */
 export * from './const'
-export * from './docs-input'
+export { getCommentsData, getTypes } from './docs-input'
 export * from './docs-output'
 export * from './helpers'
 export * from './log'

@@ -3,7 +3,6 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
-/* eslint-disable @typescript-eslint/no-var-requires */
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -27,7 +26,11 @@ import {
  * @param options `GetCommentsDataOptions`
  * @returns `Record<string, CommentInfoItem>`
  */
-function handleFile(filePath, data, options = {}) {
+export function handleFile(
+  filePath: string,
+  data: Record<string, unknown>,
+  options = {}
+) {
   // target types
   const targetTypes = Object.keys(DOC_TYPES)
   if (isValidArray(options.expendTypes)) {
@@ -137,17 +140,25 @@ function handleFile(filePath, data, options = {}) {
           } else if (isCode) {
             if (temp.startsWith('@code')) {
               // push a blank line.
-              data[dataKey].codes.push('')
+              if (options.isExtractCodeFromComments) {
+                data[dataKey].codes.push('')
+              }
               tempStr = tempStr.replace(/@code\w*/, '').trim()
             }
-            // push `tempStr` to `codes`
-            data[dataKey].codes.push(
-              tempStr
-                // Remove first null character of `tempStr`
-                .replace(/^\s/, '')
-                // Restore escaped strings in comments
-                .replace('*\\/', '*/')
-            )
+
+            const codeStr = tempStr
+              // Remove first null character of `tempStr`
+              .replace(/^\s/, '')
+              // Restore escaped strings in comments
+              .replace('*\\/', '*/')
+
+            // push `codeStr` to `codes`
+            //  是否将注释中的代码提出，并单独处理
+            if (options.isExtractCodeFromComments) {
+              data[dataKey].codes.push(codeStr)
+            } else {
+              data[dataKey].desc.push(codeStr)
+            }
           } else {
             data[dataKey].desc.push(temp.replace('@description', '').trim())
           }
@@ -165,7 +176,7 @@ function handleFile(filePath, data, options = {}) {
  * @method getCommentsData(input, needArray, options)
  * Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method`, `code` and more.
  *
- * @code #### For example
+ * #### For example
  *
  * A source file `./src/index.js`, or a directory `./src`.
  *
@@ -183,7 +194,8 @@ function handleFile(filePath, data, options = {}) {
  *   return {...};
  * }
  *```
- * @code Get comments info form `./src` or `./src/index.js`
+ *
+ * Get comments info form `./src` or `./src/index.js`
  *
  * nodejs file `./scripts/create-docs.js`.
  *
@@ -195,7 +207,7 @@ function handleFile(filePath, data, options = {}) {
  * console.log(result);
  * ```
  *
- * @code result
+ * result
  *
  * ```js
  * {
@@ -237,7 +249,7 @@ function handleFile(filePath, data, options = {}) {
  * }
  * ```
  *
- * @code Parameter `needArray` is `true`, or `const { data } = outputFile(path.resolve(__dirname, './src'))`, result/data:
+ * Parameter `needArray` is `true`, or `const { data } = outputFile(path.resolve(__dirname, './src'))`, result/data:
  *
  * ```js
  * [

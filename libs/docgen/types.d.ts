@@ -246,6 +246,8 @@ export interface GetCommentsDataOptions {
   expendTypesHandlers?: Record<string, ExpendTypesHandler>
   // Need to get source code of the type, default `['type', 'constant']`.
   codeTypes?: string[]
+  // If true, the code in the comment will be added to the end of the @document or @method.
+  isExtractCodeFromComments?: boolean
 }
 
 /**

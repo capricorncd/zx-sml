@@ -46,10 +46,21 @@ function createMethodsDoc(item, lines, options = {}) {
       : createPropsTable(item.params, DOC_TYPES.method, 'Param', options)),
     BLANK_LINE,
     ...item.returns.map((ret) => `- @returns ${ret.raw}`),
-    BLANK_LINE,
-    ...item.codes,
     BLANK_LINE
   )
+  pushCodesIntoLines(item.codes, lines, options)
+}
+
+/**
+ * 将注释中的代码，添加到desc的后面
+ * @param codes 注释中的代码数组
+ * @param lines 已处理的文档行数组
+ * @param options
+ */
+function pushCodesIntoLines(codes: string[], lines: string[], options = {}) {
+  if (options.isExtractCodeFromComments) {
+    lines.push(...codes, BLANK_LINE)
+  }
 }
 
 /**
@@ -153,7 +164,9 @@ function handleDocumentLines(arr, options, lines) {
     } else {
       lines.push(`### ${item.fullName}`, BLANK_LINE)
     }
-    lines.push(...item.desc, BLANK_LINE, ...item.codes, BLANK_LINE)
+    lines.push(...item.desc, BLANK_LINE)
+
+    pushCodesIntoLines(item.codes, lines, options)
   })
 
   return outputFileName
@@ -328,6 +341,12 @@ export function writeFileSync(
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
  */
 export function outputFile(input, outputDirOrFile, options = {}) {
+  // check other parameters
+  if (isObject(outputDirOrFile)) {
+    options = outputDirOrFile
+    outputDirOrFile = undefined
+  }
+
   // file or directory's path, or an array of paths
   if (
     // file or directory's path
@@ -336,12 +355,6 @@ export function outputFile(input, outputDirOrFile, options = {}) {
     (isValidArray(input) && input.every((str) => typeof str === 'string'))
   ) {
     input = getCommentsData(input, true, options)
-  }
-
-  // check other parameters
-  if (isObject(outputDirOrFile)) {
-    options = outputDirOrFile
-    outputDirOrFile = undefined
   }
 
   // Options Compatibility Handling, which will be removed in a later version.

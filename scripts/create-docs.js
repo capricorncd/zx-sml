@@ -40,6 +40,7 @@ function writeInReadmeFile(inputLines) {
 
 const getCommentsDataOptions = {
   // disableKeySorting: true,
+  // isExtractCodeFromComments: true,
 }
 
 const outputFileOptions = {
@@ -118,7 +119,7 @@ const outputFileOptions = {
 function main() {
   // zx-sml default docs
   const srcDir = path.resolve(__dirname, '../libs/sml/src')
-  const { lines } = outputFile(srcDir)
+  const { lines } = outputFile(srcDir, getCommentsDataOptions)
   // README.md
   writeInReadmeFile(lines)
 
