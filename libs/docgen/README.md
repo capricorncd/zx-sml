@@ -1,13 +1,15 @@
 # zx-sml/docgen
 
-Some tool functions used in the Nodejs environment.
-see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.js)
+A document generator that read the comments in the code and automatically generate MarkDown documents.
 
 ```js
 const { mkdirSync } = require('zx-sml/docgen')
+// import { mkdirSync } from 'zx-sml/docgen'
 
 mkdirSync('./a/b/c')
 ```
+
+see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.js)
 
 ## Methods
 
@@ -24,14 +26,6 @@ args|`Array<string>`|yes|-
 ### getCommentsData(input, needArray, options)
 
 Get comments from the `input` file or directory. Supported keywords are `type`, `document`, `method`, `code` and more.
-
-Param|Types|Required|Description
-:--|:--|:--|:--
-input|`string`/`string[]`|yes|The target file or directory.
-needArray|`boolean`|no|It's true will be returned an array. default `false`.
-options|`GetCommentsDataOptions`|no|[GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`
-
-- @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
 
 #### For example
 
@@ -142,6 +136,14 @@ Parameter `needArray` is `true`, or `const { data } = outputFile(path.resolve(__
   ...
 ]
 ```
+
+Param|Types|Required|Description
+:--|:--|:--|:--
+input|`string`/`string[]`|yes|The target file or directory.
+needArray|`boolean`|no|It's true will be returned an array. default `false`.
+options|`GetCommentsDataOptions`|no|[GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`
+
+- @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
 
 ### getTypes(data)
 

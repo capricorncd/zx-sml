@@ -396,7 +396,7 @@ export function handleProps(item, types) {
       description.push(RegExp.$3.trim())
 
       const data = {
-        name: name.replace(/('|")(.+)\1\??/, '$2'),
+        name: name.replace(/('|")(.+)\1/, '$2').replace(/\?/g, ''),
         required: !name.includes('?'),
         desc: description.filter(Boolean),
         types,

@@ -11,6 +11,7 @@ describe('helpers', () => {
             '// userId',
             `'data-user-id': string`,
             `'data-user-id2'?: string // userId2`,
+            'disabled?: boolean',
             '}',
           ],
         },
@@ -28,6 +29,12 @@ describe('helpers', () => {
         name: 'data-user-id2',
         required: false,
         types: ['string'],
+      },
+      {
+        desc: [],
+        name: 'disabled',
+        required: false,
+        types: ['boolean'],
       },
     ])
   })

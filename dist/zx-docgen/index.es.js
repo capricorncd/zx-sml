@@ -2,7 +2,7 @@
  * zx-sml version 0.7.0
  * Author: Xing Zhong<zx198401@gmail.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-05-11 21:58:45 (GMT+0900)
+ * Released on: 2023-05-12 21:09:17 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -249,9 +249,9 @@ function handleProps(item, types) {
       const types2 = formatAsTypes(RegExp.$2);
       description.push(RegExp.$3.trim());
       const data = {
-        name: name.replace(/('|")(.+)\1\??/, "$2"),
+        name: name.replace(/('|")(.+)\1/, "$2").replace(/\?/g, ""),
         required: !name.includes("?"),
-        desc: description,
+        desc: description.filter(Boolean),
         types: types2
       };
       const index = arr.findIndex((item2) => item2.name === data.name);
@@ -277,7 +277,8 @@ const TABLE_ALIGNS = {
 function toTableLines(data) {
   if (!isObject(data) || !isValidArray(data.tbody))
     return [];
-  let { align, thead, tbody } = data;
+  let { align } = data;
+  const { thead, tbody } = data;
   const lines = [];
   let i = 0;
   if (isValidArray(thead)) {
@@ -379,10 +380,17 @@ function handleFile(filePath, data, options = {}) {
           data[dataKey].sort = handleSort(temp);
         } else if (isCode) {
           if (temp.startsWith("@code")) {
-            data[dataKey].codes.push("");
+            if (options.isExtractCodeFromComments) {
+              data[dataKey].codes.push("");
+            }
             tempStr = tempStr.replace(/@code\w*/, "").trim();
           }
-          data[dataKey].codes.push(tempStr.replace(/^\s/, "").replace("*\\/", "*/"));
+          const codeStr = tempStr.replace(/^\s/, "").replace("*\\/", "*/");
+          if (options.isExtractCodeFromComments) {
+            data[dataKey].codes.push(codeStr);
+          } else {
+            data[dataKey].desc.push(codeStr);
+          }
         } else {
           data[dataKey].desc.push(temp.replace("@description", "").trim());
         }
@@ -455,7 +463,13 @@ function createMethodsDoc(item, lines, options = {}) {
       desc: []
     });
   }
-  lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE, ...options.methodWithRaw ? item.params.map((param) => `- @param ${param.raw}`) : createPropsTable(item.params, DOC_TYPES.method, "Param", options), BLANK_LINE, ...item.returns.map((ret) => `- @returns ${ret.raw}`), BLANK_LINE, ...item.codes, BLANK_LINE);
+  lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE, ...options.methodWithRaw ? item.params.map((param) => `- @param ${param.raw}`) : createPropsTable(item.params, DOC_TYPES.method, "Param", options), BLANK_LINE, ...item.returns.map((ret) => `- @returns ${ret.raw}`), BLANK_LINE);
+  pushCodesIntoLines(item.codes, lines, options);
+}
+function pushCodesIntoLines(codes, lines, options = {}) {
+  if (options.isExtractCodeFromComments) {
+    lines.push(...codes, BLANK_LINE);
+  }
 }
 function createTypesDoc(item, lines, options = {}) {
   var _a;
@@ -523,7 +537,8 @@ function handleDocumentLines(arr, options, lines) {
     } else {
       lines.push(`### ${item.fullName}`, BLANK_LINE);
     }
-    lines.push(...item.desc, BLANK_LINE, ...item.codes, BLANK_LINE);
+    lines.push(...item.desc, BLANK_LINE);
+    pushCodesIntoLines(item.codes, lines, options);
   });
   return outputFileName;
 }
@@ -636,12 +651,12 @@ function writeFileSync(outputFileName, outputLines) {
   fs.writeFileSync(outputFileName, outputLines, "utf8");
 }
 function outputFile(input, outputDirOrFile, options = {}) {
-  if (typeof input === "string" || isValidArray(input) && input.every((str) => typeof str === "string")) {
-    input = getCommentsData(input, true, options);
-  }
   if (isObject(outputDirOrFile)) {
     options = outputDirOrFile;
     outputDirOrFile = void 0;
+  }
+  if (typeof input === "string" || isValidArray(input) && input.every((str) => typeof str === "string")) {
+    input = getCommentsData(input, true, options);
   }
   const optionsLines = options.lines || {
     start: options.startLines,
