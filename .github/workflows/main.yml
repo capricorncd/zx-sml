@@ -7,34 +7,33 @@ on:
       - 'libs/docgen/src/**'
       - 'libs/sml/src/**'
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 16
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
 
-    - name: Generate documentation
-      run: npm run docs
+      - name: Generate documentation
+        run: npm run docs
 
-    - name: Commit and push changes
-      run: |
-        git config --global user.name "capricorncd"
-        git config --global user.email "capricorncd@qq.com"
-        git checkout -b build
-        git add ./dist ./docs ./README.md ./libs
-        git commit -m "build: Build assets and generate documentation"
-        git push origin build
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "capricorncd"
+          git config --global user.email "capricorncd@qq.com"
+          git checkout -b build
+          git add ./dist ./docs ./README.md ./libs
+          git commit -m "build: Build assets and generate documentation"
+          git push origin build
