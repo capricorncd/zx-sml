@@ -41,6 +41,9 @@ function writeInReadmeFile(inputLines) {
 const getCommentsDataOptions = {
   // disableKeySorting: true,
   // isExtractCodeFromComments: true,
+  tableAlign: {
+    Required: 'center',
+  },
 }
 
 const outputFileOptions = {

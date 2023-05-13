@@ -19,13 +19,22 @@ import {
   mergeIntoArray,
 } from './helpers'
 import { log } from './log'
+import type {
+  OutputFileOptions,
+  CommentInfoItem,
+  OutputFileInput,
+} from './types.d'
 
 /**
  * create method docs
  * @param item `CommentInfoItem`
  * @param lines `string[]`
  */
-function createMethodsDoc(item, lines, options = {}) {
+function createMethodsDoc(
+  item,
+  lines: string[],
+  options: OutputFileOptions = {}
+) {
   if (!item.returns.length) {
     item.returns.push({
       raw: '`void`',
@@ -57,7 +66,11 @@ function createMethodsDoc(item, lines, options = {}) {
  * @param lines 已处理的文档行数组
  * @param options
  */
-function pushCodesIntoLines(codes: string[], lines: string[], options = {}) {
+function pushCodesIntoLines(
+  codes: string[],
+  lines: string[],
+  options: OutputFileOptions = {}
+) {
   if (options.isExtractCodeFromComments) {
     lines.push(...codes, BLANK_LINE)
   }
@@ -69,7 +82,11 @@ function pushCodesIntoLines(codes: string[], lines: string[], options = {}) {
  * @param lines `string[]`
  * @param options `{typeWithTable: false, typeWithSourceCode: false}`
  */
-function createTypesDoc(item, lines, options = {}) {
+function createTypesDoc(
+  item: CommentInfoItem,
+  lines: string[],
+  options: OutputFileOptions = {}
+) {
   lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
   // table
   const typeTable = createPropsTable(
@@ -124,9 +141,9 @@ function createTypesDoc(item, lines, options = {}) {
  * @param lines `string[]`
  * @returns `string[]`
  */
-function removeConsecutiveBlankLine(lines) {
+function removeConsecutiveBlankLine(lines: string[]) {
   let blankLineCount = 0
-  const outputLines = []
+  const outputLines: string[] = []
   lines.forEach((line) => {
     if (line === BLANK_LINE) {
       blankLineCount++
@@ -140,7 +157,11 @@ function removeConsecutiveBlankLine(lines) {
 }
 
 // # Documents
-function handleDocumentLines(arr, options, lines) {
+function handleDocumentLines(
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) {
   if (!isValidArray(arr)) return
   // types alias
   const typesAlias = options.alias?.types || {}
@@ -173,7 +194,11 @@ function handleDocumentLines(arr, options, lines) {
 }
 
 // ## Methods
-function handleMethodLines(arr, options, lines) {
+function handleMethodLines(
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) {
   if (!isValidArray(arr)) return
 
   handleMarkdownTitle(DOC_TYPES.method, options, lines)
@@ -184,7 +209,11 @@ function handleMethodLines(arr, options, lines) {
 }
 
 // ## Types
-function handleTypesLines(arr, options, lines) {
+function handleTypesLines(
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) {
   if (!isValidArray(arr)) return
 
   handleMarkdownTitle(DOC_TYPES.type, options, lines)
@@ -194,7 +223,11 @@ function handleTypesLines(arr, options, lines) {
   })
 }
 
-function handleMarkdownTitle(type, options, lines) {
+function handleMarkdownTitle(
+  type: string,
+  options: OutputFileOptions,
+  lines: string[]
+) {
   const typesAlias = options.alias?.types || {}
 
   const mdTitles = {
@@ -204,7 +237,10 @@ function handleMarkdownTitle(type, options, lines) {
     constant: 'Constants',
   }
 
-  lines.push(`## ${typesAlias[type] || mdTitles[type] || type}`, BLANK_LINE)
+  lines.push(
+    `## ${typesAlias[type] || mdTitles[type as keyof typeof mdTitles] || type}`,
+    BLANK_LINE
+  )
 
   const linesAfterTitles = formatAsArray(options.lines?.afterTitle?.[type])
 
@@ -214,7 +250,11 @@ function handleMarkdownTitle(type, options, lines) {
   }
 }
 
-function handleConstLines(arr, options, lines) {
+function handleConstLines(
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) {
   if (!isValidArray(arr)) return
 
   handleMarkdownTitle(DOC_TYPES.constant, options, lines)
@@ -234,7 +274,11 @@ function handleConstLines(arr, options, lines) {
  * @param options `OutputFileOptions`
  * @returns `{ outputFileName: string | null, lines: string[], data: CommentInfoItem[] }`
  */
-function handleOutput(arr, outputDir, options = {}) {
+function handleOutput(
+  arr: CommentInfoItem[],
+  outputDir?: string,
+  options: OutputFileOptions = {}
+) {
   console.log('Output file is start ...')
   // method|type|constant|document|component|...
   const originalData = {}
@@ -248,7 +292,7 @@ function handleOutput(arr, outputDir, options = {}) {
     originalData[item.type].push(item)
   })
 
-  const lines = []
+  const lines: string[] = []
 
   // start lines
   const startLines = formatAsArray(options.lines?.start)
@@ -340,12 +384,18 @@ export function writeFileSync(
  * @param options? `OutputFileOptions` [OutputFileOptions](#OutputFileOptions)
  * @returns `OutputFileReturns | OutputFileReturns[]` What's [OutputFileReturns](#outputfilereturns)
  */
-export function outputFile(input, outputDirOrFile, options = {}) {
+export function outputFile(
+  input: OutputFileInput,
+  outputDirOrFile?: string | OutputFileOptions,
+  options?: OutputFileOptions
+) {
   // check other parameters
   if (isObject(outputDirOrFile)) {
     options = outputDirOrFile
     outputDirOrFile = undefined
   }
+
+  options = options || {}
 
   // file or directory's path, or an array of paths
   if (
@@ -385,7 +435,7 @@ export function outputFile(input, outputDirOrFile, options = {}) {
     }
   }
   if (Array.isArray(input)) {
-    return handleOutput(input, outputDirOrFile, options)
+    return handleOutput(input as CommentInfoItem[], outputDirOrFile, options)
   } else {
     // Combine output into one file
     return handleOutput(

@@ -84,7 +84,7 @@ export interface OutputFileReturns {
  * @type OutputFileInput
  * A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-options).
  */
-type OutputFileInput =
+export type OutputFileInput =
   | Record<string, Record<string, CommentInfoItem>>
   | CommentInfoItem[]
   | string
@@ -202,6 +202,8 @@ export interface OutputFileOptions extends GetCommentsDataOptions {
   outputDocTypesAndOrder?: string[]
   // Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
   handlers?: Record<string, OutputFileOptionHandler>
+  // Alignment of table columns, {Required: 'center'}. Default `{[key]: 'left'}`
+  tableAlign?: Record<string, 'left' | 'center' | 'right'>
 }
 
 /**

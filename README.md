@@ -59,7 +59,7 @@ outputFile(path.resolve(__dirname, './src'), path.resolve(__dirname, './docs/REA
 Get the DOM elements that matches selector
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 selector|`string`|yes|-
 doc|`Document`/`HTMLElement`|no|default `document`
 
@@ -70,7 +70,7 @@ doc|`Document`/`HTMLElement`|no|default `document`
 Get the DOM element that matches selector
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 selector|`string`/`HTMLElement`|yes|-
 doc|`Document`/`HTMLElement`|no|default `document`
 
@@ -81,7 +81,7 @@ doc|`Document`/`HTMLElement`|no|default `document`
 base64 to blob data
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 base64|`string`|yes|-
 type|`string`|no|the target blob mimeType, Example `image/jpeg`
 
@@ -96,7 +96,7 @@ classNames({ active: true }, ['text-center'], 'flex')
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 args|`string`/`string[]`/`{ className1: true, className2: false }`|yes|-
 
 - @returns `string`
@@ -118,7 +118,7 @@ Removing all the `sessionStorage` items.
 creates a string containing a URL representing the object given in the parameter.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 blob|`Blob`/`File`|yes|-
 
 - @returns `string`
@@ -128,7 +128,7 @@ blob|`Blob`/`File`|yes|-
 create an element
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 tag|`string`|yes|-
 attrs|`Record<string, any>`|no|HTMLElement's attributes.
 children|`string`/`HTMLElement`/`Node`/`string[]`/`HTMLElement[]`/`Node[]`|no|-
@@ -146,7 +146,7 @@ createUrlForGetRequest('api/user?class=a', { age: 18 })
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 url|`string`|yes|-
 params|`Record<string, unknown>`|yes|-
 
@@ -157,7 +157,7 @@ params|`Record<string, unknown>`|yes|-
 read file to base64 string
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 file|`File`/`Blob`|yes|-
 
 - @returns `Promise<string>`
@@ -167,7 +167,7 @@ file|`File`/`Blob`|yes|-
 Digital Information Sizes Calculator
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 bytes|`number`|yes|bytes
 useDecimal|`boolean`|no|whether to use decimal for calculations. default `false`
 decimalPlaces|`number`|no|How many decimal places to keep. default `2`
@@ -186,7 +186,7 @@ formatDate('20210101', 'yyyy-MM-dd hh:mm:ss') // 2021-01-01 00:00:00
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 date|`any`|yes|any type of object
 format|`string`|yes|like this `yyyy-MM-dd hh:mm:ss W`
 langPackage|`ILangPackage`|no|-
@@ -206,7 +206,7 @@ formatObjKeys({'line-height': 1.5, 'child-obj': {'max-width': 100}}, true)
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 obj|`object`|yes|-
 isCamelCase|`boolean`|no|Whether the key of the object uses camel-case or snake-case, default `false`
 
@@ -217,7 +217,7 @@ isCamelCase|`boolean`|no|Whether the key of the object uses camel-case or snake-
 Reading the `localStorage` item.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 key|`string`|yes|A string containing the name of the `key` you want to retrieve the value of.
 def|`any`|yes|If the `key` does not exist, `def` is returned.
 
@@ -228,7 +228,7 @@ def|`any`|yes|If the `key` does not exist, `def` is returned.
 Get the max zIndex value in the document
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 defaultZIndex|`number`|no|Return value when none of the DOM elements have `zIndex` set, default `100`
 
 - @returns `number`
@@ -238,7 +238,7 @@ defaultZIndex|`number`|no|Return value when none of the DOM elements have `zInde
 Get scrollable parent element
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 el|`HTMLElement`|yes|-
 
 - @returns `HTMLElement[]`
@@ -248,7 +248,7 @@ el|`HTMLElement`|yes|-
 Reading the `sessionStorage` item.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 key|`string`|yes|A string containing the name of the `key` you want to retrieve the value of.
 def|`any`|yes|If the `key` does not exist, `def` is returned.
 
@@ -259,7 +259,7 @@ def|`any`|yes|If the `key` does not exist, `def` is returned.
 Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 el|`Node`|yes|-
 attr|`string`|no|Arbitrary property key for CSSStyleDeclaration
 isNumber|`boolean`|no|whether to cast the returned property value to a numeric type
@@ -271,7 +271,7 @@ isNumber|`boolean`|no|whether to cast the returned property value to a numeric t
 determines whether the passed value is an Array
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`any`|yes|any type of object
 
 - @returns `boolean`
@@ -281,7 +281,7 @@ input|`any`|yes|any type of object
 determines whether the el is an Element
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 el|`Node`|yes|DOM Node
 
 - @returns `boolean`
@@ -291,7 +291,7 @@ el|`Node`|yes|DOM Node
 Determine if `input` is a string number
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`any`|yes|any type of object
 
 - @returns `boolean`
@@ -301,7 +301,7 @@ input|`any`|yes|any type of object
 determines whether the passed value is an object
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`any`|yes|any type of object
 
 - @returns `boolean`
@@ -315,7 +315,7 @@ joinUrl('https://a.com/', '/news', 'detail/100001/?x=9')
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 args|`string[]`|yes|-
 
 - @returns `string`
@@ -325,7 +325,7 @@ args|`string[]`|yes|-
 Generate a random string id.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 prefix|`string`|no|A prefix of the id
 suffix|`string`|no|A suffix of the id
 
@@ -336,7 +336,7 @@ suffix|`string`|no|A suffix of the id
 Generate a random string with a maximum length of 1000.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 length|`number`|no|The length of the random string, which has a maximum value of 1000.
 
 - @returns `string`
@@ -346,7 +346,7 @@ length|`number`|no|The length of the random string, which has a maximum value of
 Removing the `localStorage` item.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 key|`string`|yes|A string containing the name of the key you want to remove.
 
 - @returns `void`
@@ -356,7 +356,7 @@ key|`string`|yes|A string containing the name of the key you want to remove.
 Removing the `sessionStorage` item.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 key|`string`|yes|A string containing the name of the key you want to remove.
 
 - @returns `void`
@@ -366,7 +366,7 @@ key|`string`|yes|A string containing the name of the key you want to remove.
 It's accesses the current domain's `localStorage` object and adds a `value` to it using `localStorage.setItem()`.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 key|`string`|yes|A `string` containing the name of the key you want to create/update.
 value|`any`|yes|Any `object` the value you want to give the `key` you are creating/updating.
 
@@ -377,7 +377,7 @@ value|`any`|yes|Any `object` the value you want to give the `key` you are creati
 It's accesses the current domain's `sessionStorage` object and adds a `value` to it using `sessionStorage.setItem()`.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 key|`string`|yes|A `string` containing the name of the key you want to create/update.
 value|`any`|yes|Any `object` the value you want to give the `key` you are creating/updating.
 
@@ -391,7 +391,7 @@ slice({ length: 2, 0: 100, 1: 100 }) // [100, 100]
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 arrayLike|`pseudo-array`|yes|-
 offset|`number`|no|default `0`
 
@@ -402,7 +402,7 @@ offset|`number`|no|default `0`
 split base64 data
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 base64|`string`|yes|base64(image) data.
 
 - @returns `{ type: string; data: string }`
@@ -423,7 +423,7 @@ splitValue('0000,600円') // [0, ',600円']
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`string`/`number`|yes|-
 
 - @returns `[number, string]`
@@ -439,7 +439,7 @@ toCamelCase('hello-world', true) // HelloWorld
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`string`|yes|-
 isFirstCapitalLetter|`boolean`|no|whether to capitalize the first letter, default `false`
 
@@ -451,7 +451,7 @@ Convert input to Date,
 please click [date-utils-2020](https://github.com/capricorncd/date-utils-2020) for details
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`any`|yes|any type of object
 
 - @returns `Date | null`
@@ -469,7 +469,7 @@ toNumber('1,000,999', true) // 0
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`any`|yes|-
 isStrictMode|`boolean`|no|Whether it is strict mode, default `false`
 
@@ -486,7 +486,7 @@ toSnakeCase('helloWorld', ' ') // hello world
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`string`|yes|any string
 connectSymbol|`string`|no|word connect symbol, default `-`
 
@@ -506,7 +506,7 @@ toStrStyles({ lineHeight: 1.5, width: '50%' }, { 'line-height': '24px' })
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 styles|`object[]`/`CSSStyleDeclaration[]`|yes|-
 
 - @returns `string`
