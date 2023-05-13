@@ -12,3 +12,13 @@
  * ```
  * description 2222
  */
+
+ /**
+  * @property el
+  * Use `el` to get the HTML element of the current class
+  * property 3333
+  * ```ts
+  * x.el
+  * ```
+  * last line text
+ */

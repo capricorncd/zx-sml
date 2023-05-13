@@ -23,6 +23,7 @@ import type {
   OutputFileOptions,
   CommentInfoItem,
   OutputFileInput,
+  CommentInfoItemProp,
 } from './types.d'
 
 /**
@@ -31,7 +32,7 @@ import type {
  * @param lines `string[]`
  */
 function createMethodsDoc(
-  item,
+  item: CommentInfoItem,
   lines: string[],
   options: OutputFileOptions = {}
 ) {
@@ -57,21 +58,19 @@ function createMethodsDoc(
     ...item.returns.map((ret) => `- @returns ${ret.raw}`),
     BLANK_LINE
   )
-  pushCodesIntoLines(item.codes, lines, options)
+  pushCodesIntoLines(item.codes, lines)
 }
 
 /**
- * 将注释中的代码，添加到desc的后面
+ * 将注释中的代码，添加到desc行的后面
+ * 目前document/property/method有效
+ * `isExtractCodeFromComments`为`true`时，`codes`里才有数据
  * @param codes 注释中的代码数组
  * @param lines 已处理的文档行数组
  * @param options
  */
-function pushCodesIntoLines(
-  codes: string[],
-  lines: string[],
-  options: OutputFileOptions = {}
-) {
-  if (options.isExtractCodeFromComments) {
+function pushCodesIntoLines(codes: string[], lines: string[]) {
+  if (isValidArray(codes)) {
     lines.push(...codes, BLANK_LINE)
   }
 }
@@ -90,7 +89,7 @@ function createTypesDoc(
   lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
   // table
   const typeTable = createPropsTable(
-    item.props,
+    item.props as CommentInfoItemProp[],
     DOC_TYPES.type,
     'Prop',
     options
@@ -187,7 +186,7 @@ function handleDocumentLines(
     }
     lines.push(...item.desc, BLANK_LINE)
 
-    pushCodesIntoLines(item.codes, lines, options)
+    pushCodesIntoLines(item.codes, lines)
   })
 
   return outputFileName
@@ -235,6 +234,7 @@ function handleMarkdownTitle(
     method: 'Methods',
     type: 'Types',
     constant: 'Constants',
+    property: 'Property',
   }
 
   lines.push(
@@ -268,6 +268,27 @@ function handleConstLines(
 }
 
 /**
+ * handle property
+ * @param arr
+ * @param options
+ * @param lines
+ */
+export function handlePropertyLines(
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) {
+  if (!isValidArray(arr)) return
+
+  handleMarkdownTitle(DOC_TYPES.property, options, lines)
+
+  arr.forEach((item) => {
+    lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
+    pushCodesIntoLines(item.codes, lines)
+  })
+}
+
+/**
  * handle output
  * @param arr `CommentInfoItem[]`
  * @param outputDir `string` optional parameter.
@@ -281,7 +302,7 @@ function handleOutput(
 ) {
   console.log('Output file is start ...')
   // method|type|constant|document|component|...
-  const originalData = {}
+  const originalData: Record<string, CommentInfoItem[]> = {}
 
   let outputFileName = null
 
@@ -316,6 +337,8 @@ function handleOutput(
       // # document
       if (type === DOC_TYPES.document) {
         outputFileName = handleDocumentLines(originalData[type], options, lines)
+      } else if (type === DOC_TYPES.property) {
+        handlePropertyLines(originalData[type], options, lines)
       } else if (type === DOC_TYPES.method) {
         handleMethodLines(originalData[type], options, lines)
       } else if (type === DOC_TYPES.type) {
@@ -402,22 +425,14 @@ export function outputFile(
     // file or directory's path
     typeof input === 'string' ||
     // or an array of paths
-    (isValidArray(input) && input.every((str) => typeof str === 'string'))
+    (isValidArray(input) &&
+      (input as string[]).every((str) => typeof str === 'string'))
   ) {
-    input = getCommentsData(input, true, options)
+    input = getCommentsData(input as string | string[], true, options)
   }
 
-  // Options Compatibility Handling, which will be removed in a later version.
-  const optionsLines = options.lines || {
-    start: options.startLines,
-    end: options.endLines,
-    afterType: options.linesAfterType,
-    afterTitle: options.linesAfterTitle,
-  }
-
-  const optionsAlias = options.alias || {
-    tableHead: options.tableHeadAlias,
-  }
+  const optionsLines = options.lines || {}
+  const optionsAlias = options.alias || {}
 
   options = {
     ...options,

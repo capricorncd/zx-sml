@@ -19,4 +19,5 @@ export const DOC_TYPES = {
   type: 'type',
   document: 'document',
   constant: 'constant',
+  property: 'property',
 }
