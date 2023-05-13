@@ -238,6 +238,403 @@ outputLines|`string[]`/`NodeJS.ArrayBufferView`/`string`|yes|The output file con
 
 - @returns `void`
 
+## Types
+
+### CommentInfoItem
+
+CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-options) function.
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+type|`string`|yes|method/type/class/document
+name|`string`|yes|@method name(...args)'s `name`
+fullName|`string`|yes|@method name(...args)'s `name(...args)`
+desc|`string[]`|yes|description
+params|`CommentInfoItemParam[]`|yes|method's params
+returns|`CommentInfoItemReturn[]`|yes|method's returns
+codes|`string[]`|yes|for example codes
+private|`boolean`|yes|Whether the member method of the class is private
+path|`string`|yes|file path
+props|`CommentInfoItemProp[]`|no|[CommentInfoItemProp](#CommentInfoItemProp)
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface CommentInfoItem {
+  // method/type/class/document
+  type: string
+  // @method name(...args)'s `name`
+  name: string
+  // @method name(...args)'s `name(...args)`
+  fullName: string
+  // description
+  desc: string[]
+  // method's params
+  params: CommentInfoItemParam[]
+  // method's returns
+  returns: CommentInfoItemReturn[]
+  // for example codes
+  codes: string[]
+  // Whether the member method of the class is private
+  private: boolean
+  // file path
+  path: string
+  // [CommentInfoItemProp](#CommentInfoItemProp)
+  props?: CommentInfoItemProp[]
+}
+```
+
+</details>
+
+### CommentInfoItemParam
+
+[CommentInfoItem](#CommentInfoItem)'s `params`.
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+name|`string`|yes|parameter name or property name
+required|`boolean`|yes|Whether the parameter is required, or the field must exist in the returned data.
+desc|`string[]`|yes|parameter or property's descriptions
+types|`string[]`|yes|parameter or property's types
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface CommentInfoItemParam {
+  // parameter name or property name
+  name: string
+  // Whether the parameter is required, or the field must exist in the returned data.
+  required: boolean
+  // parameter or property's descriptions
+  desc: string[]
+  // parameter or property's types
+  types: string[]
+}
+```
+
+</details>
+
+### CommentInfoItemProp
+
+The properties of [CommentInfoItem](#CommentInfoItem), only exists when the type is `type` or `interface`.
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+name|`string`|yes|parameter name or property name
+required|`boolean`|yes|Whether the parameter is required, or the field must exist in the returned data.
+desc|`string[]`|yes|parameter or property's descriptions
+types|`string[]`|yes|parameter or property's types
+raw|`string`|yes|raw annotation string
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface CommentInfoItemProp extends CommentInfoItemParam {
+  raw: string // raw annotation string
+}
+```
+
+</details>
+
+### CommentInfoItemReturn
+
+[CommentInfoItem](#CommentInfoItem)'s `return`.
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+desc|`string[]`|yes|returned's descriptions.
+types|`string[]`|yes|returned's types
+raw|`string`|yes|raw annotation string
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface CommentInfoItemReturn {
+  // returned's descriptions.
+  desc: string[]
+  // returned's types
+  types: string[]
+  // raw annotation string
+  raw: string
+}
+```
+
+</details>
+
+### DocTypes
+
+```ts
+type DocTypes = 'document' | 'method' | 'type' | 'constant'
+```
+
+### ExpendTypesHandler
+
+expend types handler of [GetCommentsDataOptions](#GetCommentsDataOptions)
+
+```ts
+type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
+```
+
+### GetCommentsDataOptions
+
+Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarray-options)
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
+disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
+types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
+expendTypes|`string[]`|no|expend types of getCommentsData function.
+expendTypesHandlers|`Record<string, ExpendTypesHandler>`|no|handler of the expend types.
+codeTypes|`string[]`|no|Need to get source code of the type, default `['type', 'constant']`.
+isExtractCodeFromComments|`boolean`|no|If true, the code in the comment will be added to the end of the @document or @method.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface GetCommentsDataOptions {
+  // Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
+  fileType?: RegExp
+  // Disables key sorting, defaults to `false`, and sorts alphabetically.
+  disableKeySorting?: boolean
+  // This `types` array is obtained from other files or directories for `extends` related processing.
+  types?: CommentInfoItem[]
+  // expend types of getCommentsData function.
+  expendTypes?: string[]
+  // handler of the expend types.
+  expendTypesHandlers?: Record<string, ExpendTypesHandler>
+  // Need to get source code of the type, default `['type', 'constant']`.
+  codeTypes?: string[]
+  // If true, the code in the comment will be added to the end of the @document or @method.
+  isExtractCodeFromComments?: boolean
+}
+```
+
+</details>
+
+### OutputFileInput
+
+A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-options).
+
+```ts
+type OutputFileInput =
+  | Record<string, Record<string, CommentInfoItem>>
+  | CommentInfoItem[]
+  | string
+  | string[]
+```
+
+### OutputFileOptionAlias
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+tableHead|`Record<TableHeadInnerText, string>`|no|Alias of table head th inner text.
+sourceCodeSummary|`string`|no|Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
+requiredValues|`OutputFileOptionAliasRequiredValues`|no|Required values
+types|`Record<Omit<DocTypes, 'document'>, string>`|no|Alias of the DocTypes name.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface OutputFileOptionAlias {
+  // Alias of table head th inner text.
+  tableHead?: Record<TableHeadInnerText, string>
+  // Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
+  sourceCodeSummary?: string
+  // Required values
+  requiredValues?: OutputFileOptionAliasRequiredValues
+  // Alias of the DocTypes name.
+  types?: Record<Omit<DocTypes, 'document'>, string>
+}
+```
+
+</details>
+
+### OutputFileOptionAliasRequiredValues
+
+Required values of [OutputFileOptionAlias](#OutputFileOptionAlias). For example `{requiredValues: {0: 'no', 1: 'yes'}}` or `{requiredValues: {method: {0: 'no', 1: 'yes'}}}`. And `{requiredValues: ['no', 'yes']}` or `{requiredValues: {method: ['no', 'yes']}}`
+
+```ts
+type OutputFileOptionAliasRequiredValues =
+  | Record<0 | 1, string>
+  | Record<DocTypes, Record<0 | 1, string>>
+```
+
+### OutputFileOptionHandler
+
+Custom type output handler.
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+arr|`CommentInfoItem[],`|yes|-
+options|`OutputFileOptions,`|yes|-
+lines|`string[]`|yes|-
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+type OutputFileOptionHandler = (
+  arr: CommentInfoItem[],
+  options: OutputFileOptions,
+  lines: string[]
+) => void
+```
+
+</details>
+
+### OutputFileOptionLines
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+start|`string`/`string[]`|no|The `start` that need to be added at the start.
+end|`string`/`string[]`|no|The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
+afterType|`Record<DocTypes, string \| string[]>`|no|It's will be appended to the `[type]`, before the `## [other type]`
+afterTitle|`Record<DocTypes, string \| string[]>`|no|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface OutputFileOptionLines {
+  // The `start` that need to be added at the start.
+  start?: string | string[]
+  // The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
+  end?: string | string[]
+  // It's will be appended to the `[type]`, before the `## [other type]`
+  afterType?: Record<DocTypes, string | string[]>
+  // It's will be insert after `type` title line.
+  // For example, `{method: ['some type description content']}`,
+  // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+  afterTitle?: Record<DocTypes, string | string[]>
+}
+```
+
+</details>
+
+### OutputFileOptions
+
+Options of the function [outputFile](#outputfileinput-outputdirorfile-options), extends [GetCommentsDataOptions](#GetCommentsDataOptions)
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
+disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
+types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
+expendTypes|`string[]`|no|expend types of getCommentsData function.
+expendTypesHandlers|`Record<string, ExpendTypesHandler>`|no|handler of the expend types.
+codeTypes|`string[]`|no|Need to get source code of the type, default `['type', 'constant']`.
+isExtractCodeFromComments|`boolean`|no|If true, the code in the comment will be added to the end of the @document or @method.
+methodWithRaw|`boolean`|no|Display `methods` using raw string, not table. default `false`
+typeWithTable|`boolean`|no|Display `types` using only table, not Source Code. default `false`
+typeWithSourceCode|`boolean`|no|Display `types` using only Source Code, not table. default `false`
+typeWithAuto|`boolean`|no|By default, `table` and `<details><summary>Source Code</summary></details>` are displayed, but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
+lines|`OutputFileOptionLines`|no|lines. [OutputFileOptionLines](#OutputFileOptionLines)
+alias|`OutputFileOptionAlias`|no|alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
+outputDocTypesAndOrder|`string[]`|no|Output types and their order, default `['document', 'method', 'type', 'constant']`
+handlers|`Record<string, OutputFileOptionHandler>`|no|Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface OutputFileOptions extends GetCommentsDataOptions {
+  // Display `methods` using raw string, not table. default `false`
+  methodWithRaw?: boolean
+  // Display `types` using only table, not Source Code. default `false`
+  typeWithTable?: boolean
+  // Display `types` using only Source Code, not table. default `false`
+  typeWithSourceCode?: boolean
+  // By default, `table` and `<details><summary>Source Code</summary></details>` are displayed,
+  // but sometimes `table`'s data may not exist, only `Source Code` can be displayed and `<details>` not using.
+  typeWithAuto?: boolean
+  // lines. [OutputFileOptionLines](#OutputFileOptionLines)
+  lines?: OutputFileOptionLines
+  // alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
+  alias?: OutputFileOptionAlias
+  // Output types and their order, default `['document', 'method', 'type', 'constant']`
+  outputDocTypesAndOrder?: string[]
+  // Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
+  handlers?: Record<string, OutputFileOptionHandler>
+}
+```
+
+</details>
+
+### OutputFileReturns
+
+Returned data of function [outputFile](#outputfileinput-outputdirorfile-options).
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+outputFileName|`string`/`null`|yes|outputted filename
+lines|`string[]`|yes|line array in the output file
+data|`CommentInfoItem[]`|yes|comments data read from code
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface OutputFileReturns {
+  // outputted filename
+  outputFileName: string | null
+  // line array in the output file
+  lines: string[]
+  // comments data read from code
+  data: CommentInfoItem[]
+}
+```
+
+</details>
+
+### TableHeadInnerText
+
+Table head th inner text of the output file.
+
+```ts
+type TableHeadInnerText =
+  | 'Name'
+  | 'Param'
+  | 'Prop'
+  | 'Types'
+  | 'Required'
+  | 'Description'
+```
+
+### ToTableLinesParamData
+
+The options type of function [toTableLines](#totablelinesdata).
+
+Prop|Types|Required|Description
+:--|:--|:--|:--
+align|`string`/`Record<string, string>`|no|Alignment of the table content, left, center or right, the default is left.
+thead|`string[]`|no|The table header displays a one-dimensional array of content. `{thead: ['Name', 'Description']}`.
+tbody|`string[][]`|no|The table body displays a two-dimensional array of contents. `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+interface ToTableLinesParamData {
+  // Alignment of the table content, left, center or right, the default is left.
+  align?: string | Record<string, string>
+  // The table header displays a one-dimensional array of content.
+  // `{thead: ['Name', 'Description']}`.
+  thead?: string[]
+  // The table body displays a two-dimensional array of contents.
+  // `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.
+  tbody?: string[][]
+}
+```
+
+</details>
+
 ## Constants
 
 ### BLANK_LINE

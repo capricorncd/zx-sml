@@ -14,11 +14,11 @@
     "./docgen": {
       "import": "./dist/zx-docgen/index.es.js",
       "require": "./dist/zx-docgen/index.umd.js",
-      "types": "./libs/docgen/types.d.ts"
+      "types": "./libs/docgen/src/types.d.ts"
     },
     "./nodejs": {
       "require": "./dist/zx-docgen/index.umd.js",
-      "types": "./libs/docgen/types.d.ts"
+      "types": "./libs/docgen/src/types.d.ts"
     }
   },
   "files": [
@@ -32,7 +32,8 @@
     "method",
     "typescript",
     "vite",
-    "vitest"
+    "vitest",
+    "documentation generator"
   ],
   "scripts": {
     "build": "npm run build:sml && npm run build:docgen && npm run build:header",
