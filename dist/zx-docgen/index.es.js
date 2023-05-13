@@ -2,7 +2,7 @@
  * zx-sml version 0.7.0
  * Author: Xing Zhong<zx198401@gmail.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-05-13 11:15:49 (GMT+0900)
+ * Released on: 2023-05-13 08:41:10 (GMT+0000)
  */
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -31,7 +31,8 @@ const DOC_TYPES = {
   method: "method",
   type: "type",
   document: "document",
-  constant: "constant"
+  constant: "constant",
+  property: "property"
 };
 function isArray(input) {
   return Array.isArray(input);
@@ -141,26 +142,32 @@ function getSpDescription(input) {
 function handleParam(input) {
   input = input.replace("@param", "").trim();
   const data = {
-    raw: input
+    raw: input,
+    name: "",
+    required: false,
+    types: [],
+    desc: []
   };
   if (/(\w+\??)\s+`([^`]+)`(.*)/.test(input)) {
     const name = RegExp.$1;
     data.name = name.replace("?", "");
     data.required = !name.includes("?");
-    data.types = formatAsTypes(RegExp.$2);
+    data.types.push(...formatAsTypes(RegExp.$2));
     const desc = RegExp.$3 || getSpDescription(input);
-    data.desc = [desc.trim()];
+    data.desc.push(desc.trim());
   }
   return data;
 }
 function handleReturn(input) {
   input = input.replace(/@returns?/, "").trim();
   const data = {
-    raw: input
+    raw: input,
+    types: [],
+    desc: []
   };
   if (/`([^`]+)`\s*(.*)/.test(input)) {
-    data.types = formatAsTypes(RegExp.$1);
-    data.desc = [RegExp.$2];
+    data.types.push(...formatAsTypes(RegExp.$1));
+    data.desc.push(RegExp.$2);
   }
   return data;
 }
@@ -178,7 +185,10 @@ function createPropsTable(props, docType, typeName = "Name", options = {}) {
     return [];
   const alias = options.alias || {};
   const tableHeadAlias = alias.tableHead || {};
-  let requiredValues = { 0: "no", 1: "yes" };
+  let requiredValues = {
+    0: "no",
+    1: "yes"
+  };
   if (alias.requiredValues) {
     if (alias.requiredValues[docType]) {
       requiredValues = alias.requiredValues[docType];
@@ -263,6 +273,7 @@ function handleProps(item, types) {
       const types2 = formatAsTypes(RegExp.$2);
       description.push(RegExp.$3.trim());
       const data = {
+        raw: line,
         name: name.replace(/('|")(.+)\1/, "$2").replace(/\?/g, ""),
         required: !name.includes("?"),
         desc: description.filter(Boolean),
@@ -285,19 +296,12 @@ function handleProps(item, types) {
 function toTableLines(data) {
   if (!isObject(data) || !isValidArray(data.tbody))
     return [];
-  let { align } = data;
-  const { thead, tbody } = data;
+  const { align, thead, tbody } = data;
   const lines = [];
   let i = 0;
   if (isValidArray(thead)) {
     lines.push(thead.join("|"));
     if (align) {
-      if (typeof align === "string") {
-        align = thead.reduce((prev, field) => {
-          prev[field] = align;
-          return prev;
-        }, {});
-      }
       lines.push(thead.map((field) => TABLE_ALIGNS[align[field]] || DEF_TABLE_ALIGN).join("|"));
     } else {
       lines.push(thead.map(() => DEF_TABLE_ALIGN).join("|"));
@@ -329,10 +333,10 @@ function handleFile(filePath, data, options = {}) {
   }
   let isTargetComment = false;
   let isCode = false;
-  let type = null;
-  let typeName = null;
-  let dataKey;
-  let tempStr;
+  let type = "";
+  let typeName = "";
+  let dataKey = "";
+  let tempStr = "";
   fs.readFileSync(filePath, "utf8").toString().split(new RegExp(os.EOL)).forEach((line) => {
     var _a;
     const originalLine = line;
@@ -361,7 +365,7 @@ function handleFile(filePath, data, options = {}) {
       return;
     }
     if (line === "/**") {
-      typeName = null;
+      typeName = "";
     }
     if (!isTargetComment || !typeName) {
       if (typeName && codeTypes.includes(type) && line) {
@@ -472,10 +476,10 @@ function createMethodsDoc(item, lines, options = {}) {
     });
   }
   lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE, ...options.methodWithRaw ? item.params.map((param) => `- @param ${param.raw}`) : createPropsTable(item.params, DOC_TYPES.method, "Param", options), BLANK_LINE, ...item.returns.map((ret) => `- @returns ${ret.raw}`), BLANK_LINE);
-  pushCodesIntoLines(item.codes, lines, options);
+  pushCodesIntoLines(item.codes, lines);
 }
-function pushCodesIntoLines(codes, lines, options = {}) {
-  if (options.isExtractCodeFromComments) {
+function pushCodesIntoLines(codes, lines) {
+  if (isValidArray(codes)) {
     lines.push(...codes, BLANK_LINE);
   }
 }
@@ -546,7 +550,7 @@ function handleDocumentLines(arr, options, lines) {
       lines.push(`### ${item.fullName}`, BLANK_LINE);
     }
     lines.push(...item.desc, BLANK_LINE);
-    pushCodesIntoLines(item.codes, lines, options);
+    pushCodesIntoLines(item.codes, lines);
   });
   return outputFileName;
 }
@@ -573,7 +577,8 @@ function handleMarkdownTitle(type, options, lines) {
     document: "Document",
     method: "Methods",
     type: "Types",
-    constant: "Constants"
+    constant: "Constants",
+    property: "Property"
   };
   lines.push(`## ${typesAlias[type] || mdTitles[type] || type}`, BLANK_LINE);
   const linesAfterTitles = formatAsArray((_c = (_b = options.lines) == null ? void 0 : _b.afterTitle) == null ? void 0 : _c[type]);
@@ -590,6 +595,15 @@ function handleConstLines(arr, options, lines) {
     if (isValidArray(item.codes)) {
       lines.push("```ts", ...item.codes, "```", BLANK_LINE);
     }
+  });
+}
+function handlePropertyLines(arr, options, lines) {
+  if (!isValidArray(arr))
+    return;
+  handleMarkdownTitle(DOC_TYPES.property, options, lines);
+  arr.forEach((item) => {
+    lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE);
+    pushCodesIntoLines(item.codes, lines);
   });
 }
 function handleOutput(arr, outputDir, options = {}) {
@@ -618,6 +632,8 @@ function handleOutput(arr, outputDir, options = {}) {
     } else {
       if (type === DOC_TYPES.document) {
         outputFileName = handleDocumentLines(originalData[type], options, lines);
+      } else if (type === DOC_TYPES.property) {
+        handlePropertyLines(originalData[type], options, lines);
       } else if (type === DOC_TYPES.method) {
         handleMethodLines(originalData[type], options, lines);
       } else if (type === DOC_TYPES.type) {
@@ -667,15 +683,8 @@ function outputFile(input, outputDirOrFile, options) {
   if (typeof input === "string" || isValidArray(input) && input.every((str) => typeof str === "string")) {
     input = getCommentsData(input, true, options);
   }
-  const optionsLines = options.lines || {
-    start: options.startLines,
-    end: options.endLines,
-    afterType: options.linesAfterType,
-    afterTitle: options.linesAfterTitle
-  };
-  const optionsAlias = options.alias || {
-    tableHead: options.tableHeadAlias
-  };
+  const optionsLines = options.lines || {};
+  const optionsAlias = options.alias || {};
   options = __spreadProps(__spreadValues({}, options), {
     lines: optionsLines,
     alias: optionsAlias

@@ -256,6 +256,7 @@ codes|`string[]`|yes|for example codes
 private|`boolean`|yes|Whether the member method of the class is private
 path|`string`|yes|file path
 props|`CommentInfoItemProp[]`|no|[CommentInfoItemProp](#CommentInfoItemProp)
+sort|`number`|yes|sort in the output file
 
 <details>
 <summary>Source Code</summary>
@@ -282,6 +283,8 @@ interface CommentInfoItem {
   path: string
   // [CommentInfoItemProp](#CommentInfoItemProp)
   props?: CommentInfoItemProp[]
+  // sort in the output file
+  sort: number
 }
 ```
 
@@ -293,6 +296,7 @@ interface CommentInfoItem {
 
 Prop|Types|Required|Description
 :--|:--|:--:|:--
+raw|`string`|yes|unprocessed raw string
 name|`string`|yes|parameter name or property name
 required|`boolean`|yes|Whether the parameter is required, or the field must exist in the returned data.
 desc|`string[]`|yes|parameter or property's descriptions
@@ -303,6 +307,8 @@ types|`string[]`|yes|parameter or property's types
 
 ```ts
 interface CommentInfoItemParam {
+  // unprocessed raw string
+  raw: string
   // parameter name or property name
   name: string
   // Whether the parameter is required, or the field must exist in the returned data.
@@ -423,20 +429,20 @@ A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-op
 
 ```ts
 type OutputFileInput =
-  | Record<string, Record<string, CommentInfoItem>>
-  | CommentInfoItem[]
   | string
   | string[]
+  | Record<string, Record<string, CommentInfoItem>>
+  | CommentInfoItem[]
 ```
 
 ### OutputFileOptionAlias
 
 Prop|Types|Required|Description
 :--|:--|:--:|:--
-tableHead|`Record<TableHeadInnerText, string>`|no|Alias of table head th inner text.
+tableHead|`Record<string, string>`|no|Alias of table head th inner text.
 sourceCodeSummary|`string`|no|Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
 requiredValues|`OutputFileOptionAliasRequiredValues`|no|Required values
-types|`Record<Omit<DocTypes, 'document'>, string>`|no|Alias of the DocTypes name.
+types|`Record<string, string>`|no|Alias of the DocTypes name.
 
 <details>
 <summary>Source Code</summary>
@@ -444,13 +450,13 @@ types|`Record<Omit<DocTypes, 'document'>, string>`|no|Alias of the DocTypes name
 ```ts
 interface OutputFileOptionAlias {
   // Alias of table head th inner text.
-  tableHead?: Record<TableHeadInnerText, string>
+  tableHead?: Record<string, string>
   // Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
   sourceCodeSummary?: string
   // Required values
   requiredValues?: OutputFileOptionAliasRequiredValues
   // Alias of the DocTypes name.
-  types?: Record<Omit<DocTypes, 'document'>, string>
+  types?: Record<string, string>
 }
 ```
 
@@ -462,8 +468,8 @@ Required values of [OutputFileOptionAlias](#OutputFileOptionAlias). For example 
 
 ```ts
 type OutputFileOptionAliasRequiredValues =
-  | Record<0 | 1, string>
-  | Record<DocTypes, Record<0 | 1, string>>
+  | Record<string, string>
+  | Record<string, Record<string, string>>
 ```
 
 ### OutputFileOptionHandler
@@ -495,8 +501,8 @@ Prop|Types|Required|Description
 :--|:--|:--:|:--
 start|`string`/`string[]`|no|The `start` that need to be added at the start.
 end|`string`/`string[]`|no|The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
-afterType|`Record<DocTypes, string \| string[]>`|no|It's will be appended to the `[type]`, before the `## [other type]`
-afterTitle|`Record<DocTypes, string \| string[]>`|no|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
+afterType|`Record<string, string \| string[]>`|no|It's will be appended to the `[type]`, before the `## [other type]`
+afterTitle|`Record<string, string \| string[]>`|no|It's will be insert after `type` title line. For example, `{method: ['some type description content']}`, It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
 
 <details>
 <summary>Source Code</summary>
@@ -508,11 +514,11 @@ interface OutputFileOptionLines {
   // The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
   end?: string | string[]
   // It's will be appended to the `[type]`, before the `## [other type]`
-  afterType?: Record<DocTypes, string | string[]>
+  afterType?: Record<string, string | string[]>
   // It's will be insert after `type` title line.
   // For example, `{method: ['some type description content']}`,
   // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
-  afterTitle?: Record<DocTypes, string | string[]>
+  afterTitle?: Record<string, string | string[]>
 }
 ```
 
@@ -616,7 +622,7 @@ The options type of function [toTableLines](#totablelinesdata).
 
 Prop|Types|Required|Description
 :--|:--|:--:|:--
-align|`string`/`Record<string, string>`|no|Alignment of the table content, left, center or right, the default is left.
+align|`Record<string, string>`|yes|Alignment of the table content, left, center or right, the default is left.
 thead|`string[]`|no|The table header displays a one-dimensional array of content. `{thead: ['Name', 'Description']}`.
 tbody|`string[][]`|no|The table body displays a two-dimensional array of contents. `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.
 
@@ -626,7 +632,7 @@ tbody|`string[][]`|no|The table body displays a two-dimensional array of content
 ```ts
 interface ToTableLinesParamData {
   // Alignment of the table content, left, center or right, the default is left.
-  align?: string | Record<string, string>
+  align: Record<string, string>
   // The table header displays a one-dimensional array of content.
   // `{thead: ['Name', 'Description']}`.
   thead?: string[]
@@ -658,6 +664,7 @@ const DOC_TYPES = {
   type: 'type',
   document: 'document',
   constant: 'constant',
+  property: 'property',
 }
 ```
 
