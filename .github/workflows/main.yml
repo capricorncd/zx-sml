@@ -1,8 +1,12 @@
-name: Build and Deploy
+name: Build and Generate documentation
 on:
   push:
     branches:
       - main
+    paths:
+      - 'libs/docgen/src/**'
+      - 'libs/sml/src/**'
+
 
 jobs:
   build:
@@ -23,11 +27,14 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Generate documentation
+      run: npm run docs
+
     - name: Commit and push changes
       run: |
         git config --global user.name "capricorncd"
         git config --global user.email "capricorncd@qq.com"
         git checkout -b build
-        git add ./dist
-        git commit -m "Build assets"
+        git add ./dist ./docs ./README.md ./libs
+        git commit -m "build: Build assets and generate documentation"
         git push origin build
