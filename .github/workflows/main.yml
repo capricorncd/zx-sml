@@ -1,24 +1,33 @@
+name: Build and Deploy
 on:
   push:
     branches:
-    - main
+      - main
+
 jobs:
-  docgen:
-    name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        node_version: ['16']
-        os: [ubuntu-latest]
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node_version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node_version }}
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-    - name: npm install, build and generate docs
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+
+    - name: Commit and push changes
       run: |
-        npm install
-        npm run docs
+        git config --global user.name "capricorncd"
+        git config --global user.email "capricorncd@qq.com"
+        git checkout -b build
+        git add ./dist
+        git commit -m "Build assets"
+        git push origin build
