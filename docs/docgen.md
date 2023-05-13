@@ -18,7 +18,7 @@ see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.j
 Output 😡 red color log in console
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 args|`Array<string>`|yes|-
 
 - @returns `void`
@@ -138,7 +138,7 @@ Parameter `needArray` is `true`, or `const { data } = outputFile(path.resolve(__
 ```
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`string`/`string[]`|yes|The target file or directory.
 needArray|`boolean`|no|It's true will be returned an array. default `false`.
 options|`GetCommentsDataOptions`|no|[GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`
@@ -150,7 +150,7 @@ options|`GetCommentsDataOptions`|no|[GetCommentsDataOptions](#GetCommentsDataOpt
 Get types from getCommentsData's returned data.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 data|`Record<filePath, Record<commentTypeName, CommentInfoItem>>`/`CommentInfoItem[]`|yes|The data obtained using the [getCommentsData](#getcommentsdatainput-needarray-options) method
 
 - @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
@@ -160,7 +160,7 @@ data|`Record<filePath, Record<commentTypeName, CommentInfoItem>>`/`CommentInfoIt
 is file like, `*.ext`.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 filePath|`string`|yes|-
 
 - @returns `boolean`
@@ -170,7 +170,7 @@ filePath|`string`|yes|-
 Determine whether `arr` is an array and it has some elements.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 arr|`T[]`|yes|-
 
 - @returns `boolean`
@@ -180,7 +180,7 @@ arr|`T[]`|yes|-
 Output 😎 green color log in console
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 args|`Array<string>`|yes|-
 
 - @returns `void`
@@ -190,7 +190,7 @@ args|`Array<string>`|yes|-
 make a directory synchronously
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 dir|`string`|yes|directory path
 
 - @returns `void`
@@ -200,7 +200,7 @@ dir|`string`|yes|directory path
 Output the obtained annotation content as a document.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 input|`{[filePath]: {[key]: CommentInfoItem}}`/`CommentInfoItem[]`/`string`|yes|Comment obtained from the source. When `string` it's a file path, and the [getCommentsData](#getcommentsdatainput-needarray-options) will be called. What's [CommentInfoItem](#commentinfoitem).
 outputDirOrFile|`string`|no|Optional parameter. The file or directory where the output will be written. When `outputDirOrFile` is `undefined`, no file will be output.
 options|`OutputFileOptions`|no|[OutputFileOptions](#OutputFileOptions)
@@ -212,7 +212,7 @@ options|`OutputFileOptions`|no|[OutputFileOptions](#OutputFileOptions)
 Convert `data` to a table in Markdown format.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 data|`ToTableLinesParamData`|yes|see type [ToTableLinesParamData](#ToTableLinesParamData).
 
 - @returns `string[]`
@@ -222,7 +222,7 @@ data|`ToTableLinesParamData`|yes|see type [ToTableLinesParamData](#ToTableLinesP
 Output 😕 yellow color log in console
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 args|`Array<string>`|yes|-
 
 - @returns `void`
@@ -232,7 +232,7 @@ args|`Array<string>`|yes|-
 Synchronized file write function.
 
 Param|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 outputFileName|`string`|yes|Output filename, absolute path.
 outputLines|`string[]`/`NodeJS.ArrayBufferView`/`string`|yes|The output file content, an array of strings.
 
@@ -245,7 +245,7 @@ outputLines|`string[]`/`NodeJS.ArrayBufferView`/`string`|yes|The output file con
 CommentInfoItem is the comment information read with the [getCommentsData](#getcommentsdatainput-needarray-options) function.
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 type|`string`|yes|method/type/class/document
 name|`string`|yes|@method name(...args)'s `name`
 fullName|`string`|yes|@method name(...args)'s `name(...args)`
@@ -292,7 +292,7 @@ interface CommentInfoItem {
 [CommentInfoItem](#CommentInfoItem)'s `params`.
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 name|`string`|yes|parameter name or property name
 required|`boolean`|yes|Whether the parameter is required, or the field must exist in the returned data.
 desc|`string[]`|yes|parameter or property's descriptions
@@ -321,7 +321,7 @@ interface CommentInfoItemParam {
 The properties of [CommentInfoItem](#CommentInfoItem), only exists when the type is `type` or `interface`.
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 name|`string`|yes|parameter name or property name
 required|`boolean`|yes|Whether the parameter is required, or the field must exist in the returned data.
 desc|`string[]`|yes|parameter or property's descriptions
@@ -344,7 +344,7 @@ interface CommentInfoItemProp extends CommentInfoItemParam {
 [CommentInfoItem](#CommentInfoItem)'s `return`.
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 desc|`string[]`|yes|returned's descriptions.
 types|`string[]`|yes|returned's types
 raw|`string`|yes|raw annotation string
@@ -384,7 +384,7 @@ type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
 Parameter `options` of function [getCommentsData](#getcommentsdatainput-needarray-options)
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
 types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
@@ -432,7 +432,7 @@ type OutputFileInput =
 ### OutputFileOptionAlias
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 tableHead|`Record<TableHeadInnerText, string>`|no|Alias of table head th inner text.
 sourceCodeSummary|`string`|no|Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
 requiredValues|`OutputFileOptionAliasRequiredValues`|no|Required values
@@ -471,7 +471,7 @@ type OutputFileOptionAliasRequiredValues =
 Custom type output handler.
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 arr|`CommentInfoItem[],`|yes|-
 options|`OutputFileOptions,`|yes|-
 lines|`string[]`|yes|-
@@ -492,7 +492,7 @@ type OutputFileOptionHandler = (
 ### OutputFileOptionLines
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 start|`string`/`string[]`|no|The `start` that need to be added at the start.
 end|`string`/`string[]`|no|The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
 afterType|`Record<DocTypes, string \| string[]>`|no|It's will be appended to the `[type]`, before the `## [other type]`
@@ -523,7 +523,7 @@ interface OutputFileOptionLines {
 Options of the function [outputFile](#outputfileinput-outputdirorfile-options), extends [GetCommentsDataOptions](#GetCommentsDataOptions)
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 fileType|`RegExp`|no|Regular expression for the type of file to be read, defaults to `/\.[tj]s$/`.
 disableKeySorting|`boolean`|no|Disables key sorting, defaults to `false`, and sorts alphabetically.
 types|`CommentInfoItem[]`|no|This `types` array is obtained from other files or directories for `extends` related processing.
@@ -539,6 +539,7 @@ lines|`OutputFileOptionLines`|no|lines. [OutputFileOptionLines](#OutputFileOptio
 alias|`OutputFileOptionAlias`|no|alias. [OutputFileOptionAlias](#OutputFileOptionAlias)
 outputDocTypesAndOrder|`string[]`|no|Output types and their order, default `['document', 'method', 'type', 'constant']`
 handlers|`Record<string, OutputFileOptionHandler>`|no|Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
+tableAlign|`Record<string, 'left' \| 'center' \| 'right'>`|no|Alignment of table columns, {Required: 'center'}. Default `{[key]: 'left'}`
 
 <details>
 <summary>Source Code</summary>
@@ -562,6 +563,8 @@ interface OutputFileOptions extends GetCommentsDataOptions {
   outputDocTypesAndOrder?: string[]
   // Custom type output handler. Note that the default handler function will not be executed when this parameter is set. For example `{method: (arr, options, lines) => do something}`.
   handlers?: Record<string, OutputFileOptionHandler>
+  // Alignment of table columns, {Required: 'center'}. Default `{[key]: 'left'}`
+  tableAlign?: Record<string, 'left' | 'center' | 'right'>
 }
 ```
 
@@ -572,7 +575,7 @@ interface OutputFileOptions extends GetCommentsDataOptions {
 Returned data of function [outputFile](#outputfileinput-outputdirorfile-options).
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 outputFileName|`string`/`null`|yes|outputted filename
 lines|`string[]`|yes|line array in the output file
 data|`CommentInfoItem[]`|yes|comments data read from code
@@ -612,7 +615,7 @@ type TableHeadInnerText =
 The options type of function [toTableLines](#totablelinesdata).
 
 Prop|Types|Required|Description
-:--|:--|:--|:--
+:--|:--|:--:|:--
 align|`string`/`Record<string, string>`|no|Alignment of the table content, left, center or right, the default is left.
 thead|`string[]`|no|The table header displays a one-dimensional array of content. `{thead: ['Name', 'Description']}`.
 tbody|`string[][]`|no|The table body displays a two-dimensional array of contents. `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.

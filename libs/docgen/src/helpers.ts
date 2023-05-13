@@ -7,6 +7,20 @@ import fs from 'node:fs'
 import { isObject, toNumber } from '@zx/sml'
 import { BLANK_LINE } from './const'
 import { warn } from './log'
+import type { OutputFileOptions } from './types.d'
+
+const TABLE_ALIGN_LEFT = 'left'
+
+const DEF_TABLE_ALIGN = ':--'
+
+/**
+ * TABLE_ALIGNS
+ */
+const TABLE_ALIGNS = {
+  left: DEF_TABLE_ALIGN,
+  center: ':--:',
+  right: '--:',
+}
 
 /**
  * @method mkdirSync(dir)
@@ -52,7 +66,7 @@ export function isFileLike(filePath) {
  * @param arr `T[]`
  * @returns `boolean`
  */
-export function isValidArray(i) {
+export function isValidArray(i: unknown): i is Array<unknown> {
   return Array.isArray(i) && i.length > 0
 }
 
@@ -96,7 +110,7 @@ export function findCharIndex(str, char, times) {
  * @param input `string | string[]`
  * @returns `string[]`
  */
-export function formatAsArray(input) {
+export function formatAsArray(input?: string | string[]): string[] {
   if (typeof input === 'undefined') return []
   return Array.isArray(input) ? input : [input]
 }
@@ -252,7 +266,7 @@ export function createPropsTable(
   props,
   docType,
   typeName = 'Name',
-  options = {}
+  options: OutputFileOptions = {}
 ) {
   if (!isValidArray(props)) return []
   // alias
@@ -267,7 +281,17 @@ export function createPropsTable(
       requiredValues = alias.requiredValues
     }
   }
+
+  // align
+  const align = options.tableAlign || {}
+
   const tableData = {
+    align: {
+      [typeName]: align[typeName] || TABLE_ALIGN_LEFT,
+      Types: align['Types'] || TABLE_ALIGN_LEFT,
+      Required: align['Required'] || TABLE_ALIGN_LEFT,
+      Description: align['Description'] || TABLE_ALIGN_LEFT,
+    },
     // table head
     thead: [
       tableHeadAlias[typeName] || typeName,
@@ -417,17 +441,6 @@ export function handleProps(item, types) {
     }
   })
   return arr
-}
-
-const DEF_TABLE_ALIGN = ':--'
-
-/**
- * TABLE_ALIGNS
- */
-const TABLE_ALIGNS = {
-  left: DEF_TABLE_ALIGN,
-  center: ':--:',
-  right: '--:',
 }
 
 /**

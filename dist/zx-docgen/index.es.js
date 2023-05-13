@@ -2,7 +2,7 @@
  * zx-sml version 0.7.0
  * Author: Xing Zhong<zx198401@gmail.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-05-12 21:09:17 (GMT+0900)
+ * Released on: 2023-05-13 11:15:49 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -69,6 +69,13 @@ function warn(...args) {
 function error(...args) {
   console.log("\u{1F621}", colors.red, ...args, colors.white);
 }
+const TABLE_ALIGN_LEFT = "left";
+const DEF_TABLE_ALIGN = ":--";
+const TABLE_ALIGNS = {
+  left: DEF_TABLE_ALIGN,
+  center: ":--:",
+  right: "--:"
+};
 function mkdirSync(dir) {
   if (!dir || fs.existsSync(dir)) {
     warn(`The directory already exists, or is null, ${dir}`);
@@ -179,7 +186,14 @@ function createPropsTable(props, docType, typeName = "Name", options = {}) {
       requiredValues = alias.requiredValues;
     }
   }
+  const align = options.tableAlign || {};
   const tableData = {
+    align: {
+      [typeName]: align[typeName] || TABLE_ALIGN_LEFT,
+      Types: align["Types"] || TABLE_ALIGN_LEFT,
+      Required: align["Required"] || TABLE_ALIGN_LEFT,
+      Description: align["Description"] || TABLE_ALIGN_LEFT
+    },
     thead: [
       tableHeadAlias[typeName] || typeName,
       tableHeadAlias["Types"] || "Types",
@@ -268,12 +282,6 @@ function handleProps(item, types) {
   });
   return arr;
 }
-const DEF_TABLE_ALIGN = ":--";
-const TABLE_ALIGNS = {
-  left: DEF_TABLE_ALIGN,
-  center: ":--:",
-  right: "--:"
-};
 function toTableLines(data) {
   if (!isObject(data) || !isValidArray(data.tbody))
     return [];
@@ -650,11 +658,12 @@ function writeFileSync(outputFileName, outputLines) {
   }
   fs.writeFileSync(outputFileName, outputLines, "utf8");
 }
-function outputFile(input, outputDirOrFile, options = {}) {
+function outputFile(input, outputDirOrFile, options) {
   if (isObject(outputDirOrFile)) {
     options = outputDirOrFile;
     outputDirOrFile = void 0;
   }
+  options = options || {};
   if (typeof input === "string" || isValidArray(input) && input.every((str) => typeof str === "string")) {
     input = getCommentsData(input, true, options);
   }
