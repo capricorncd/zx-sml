@@ -89,10 +89,10 @@ export interface OutputFileReturns {
  * A parameter `input` of function [outputFile](#outputfileinput-outputdirorfile-options).
  */
 export type OutputFileInput =
-  | Record<string, Record<string, CommentInfoItem>>
-  | CommentInfoItem[]
   | string
   | string[]
+  | Record<string, Record<string, CommentInfoItem>>
+  | CommentInfoItem[]
 
 /**
  * OutputFileReturnData<T>
@@ -133,11 +133,11 @@ export interface OutputFileOptionLines {
   // The 'end' that need to be added at the end, such as adding some license information. `['## License', 'BLANK_LINE', 'MIT License © 2018-Present [Capricorncd](https://github.com/capricorncd).']`.
   end?: string | string[]
   // It's will be appended to the `[type]`, before the `## [other type]`
-  afterType?: Record<DocTypes, string | string[]>
+  afterType?: Record<string, string | string[]>
   // It's will be insert after `type` title line.
   // For example, `{method: ['some type description content']}`,
   // It's will to insert after `method` line, like this's `['## Methods', 'some type description content', '...']`
-  afterTitle?: Record<DocTypes, string | string[]>
+  afterTitle?: Record<string, string | string[]>
 }
 
 /**
@@ -171,7 +171,7 @@ export interface OutputFileOptionAlias {
   // Required values
   requiredValues?: OutputFileOptionAliasRequiredValues
   // Alias of the DocTypes name.
-  types?: Record<Omit<DocTypes, 'document'>, string>
+  types?: Record<string, string>
 }
 
 /**

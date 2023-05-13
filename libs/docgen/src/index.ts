@@ -18,6 +18,6 @@
  */
 export * from './const'
 export { getCommentsData, getTypes } from './docs-input'
-export { outputFile } from './docs-output'
+export { outputFile, writeFileSync } from './docs-output'
 export * from './helpers'
 export * from './log'

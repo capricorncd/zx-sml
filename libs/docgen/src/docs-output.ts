@@ -23,6 +23,7 @@ import type {
   OutputFileOptions,
   CommentInfoItem,
   OutputFileInput,
+  CommentInfoItemProp,
 } from './types.d'
 
 /**
@@ -31,7 +32,7 @@ import type {
  * @param lines `string[]`
  */
 function createMethodsDoc(
-  item,
+  item: CommentInfoItem,
   lines: string[],
   options: OutputFileOptions = {}
 ) {
@@ -88,7 +89,7 @@ function createTypesDoc(
   lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
   // table
   const typeTable = createPropsTable(
-    item.props,
+    item.props as CommentInfoItemProp[],
     DOC_TYPES.type,
     'Prop',
     options
@@ -424,22 +425,14 @@ export function outputFile(
     // file or directory's path
     typeof input === 'string' ||
     // or an array of paths
-    (isValidArray(input) && input.every((str) => typeof str === 'string'))
+    (isValidArray(input) &&
+      (input as string[]).every((str) => typeof str === 'string'))
   ) {
-    input = getCommentsData(input, true, options)
+    input = getCommentsData(input as string | string[], true, options)
   }
 
-  // Options Compatibility Handling, which will be removed in a later version.
-  const optionsLines = options.lines || {
-    start: options.startLines,
-    end: options.endLines,
-    afterType: options.linesAfterType,
-    afterTitle: options.linesAfterTitle,
-  }
-
-  const optionsAlias = options.alias || {
-    tableHead: options.tableHeadAlias,
-  }
+  const optionsLines = options.lines || {}
+  const optionsAlias = options.alias || {}
 
   options = {
     ...options,
