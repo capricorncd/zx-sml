@@ -374,7 +374,7 @@ function handleOutput(
     if (outputFileName) writeFileSync(outputFileName, outputLines)
   }
 
-  log(outputFileName)
+  log(outputFileName || 'no files were output!')
   console.log('Output file is ended.')
   return {
     outputFileName,
