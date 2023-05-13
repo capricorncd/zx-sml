@@ -29,6 +29,8 @@ export interface CommentInfoItem {
   path: string
   // [CommentInfoItemProp](#CommentInfoItemProp)
   props?: CommentInfoItemProp[]
+  // sort in the output file
+  sort: number
 }
 
 /**
@@ -36,6 +38,8 @@ export interface CommentInfoItem {
  * [CommentInfoItem](#CommentInfoItem)'s `params`.
  */
 export interface CommentInfoItemParam {
+  // unprocessed raw string
+  raw: string
   // parameter name or property name
   name: string
   // Whether the parameter is required, or the field must exist in the returned data.
@@ -153,15 +157,15 @@ export type TableHeadInnerText =
  * Required values of [OutputFileOptionAlias](#OutputFileOptionAlias). For example `{requiredValues: {0: 'no', 1: 'yes'}}` or `{requiredValues: {method: {0: 'no', 1: 'yes'}}}`. And `{requiredValues: ['no', 'yes']}` or `{requiredValues: {method: ['no', 'yes']}}`
  */
 export type OutputFileOptionAliasRequiredValues =
-  | Record<0 | 1, string>
-  | Record<DocTypes, Record<0 | 1, string>>
+  | Record<string, string>
+  | Record<string, Record<string, string>>
 
 /**
  * @type OutputFileOptionAlias
  */
 export interface OutputFileOptionAlias {
   // Alias of table head th inner text.
-  tableHead?: Record<TableHeadInnerText, string>
+  tableHead?: Record<string, string>
   // Summary of details, `<details><summary>Source Code</summary></details>`'s summary, default `Source Code`.
   sourceCodeSummary?: string
   // Required values
@@ -264,7 +268,7 @@ export type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
  */
 export interface ToTableLinesParamData {
   // Alignment of the table content, left, center or right, the default is left.
-  align?: string | Record<string, string>
+  align: Record<string, string>
   // The table header displays a one-dimensional array of content.
   // `{thead: ['Name', 'Description']}`.
   thead?: string[]

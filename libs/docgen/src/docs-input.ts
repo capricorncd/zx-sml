@@ -17,6 +17,7 @@ import {
   mergeIntoArray,
   handleSort,
 } from './helpers'
+import type { GetCommentsDataOptions, CommentInfoItem } from './types.d'
 
 /**
  * handle file
@@ -28,8 +29,8 @@ import {
  */
 export function handleFile(
   filePath: string,
-  data: Record<string, unknown>,
-  options = {}
+  data: Record<string, CommentInfoItem>,
+  options: GetCommentsDataOptions = {}
 ) {
   // target types
   const targetTypes = Object.keys(DOC_TYPES)
@@ -53,12 +54,12 @@ export function handleFile(
 
   let isTargetComment = false
   let isCode = false
-  let type = null
-  let typeName = null
+  let type = ''
+  let typeName = ''
   // dataKey = type_typeName
   // Avoid the problem of type naming the same being overwritten
-  let dataKey
-  let tempStr
+  let dataKey = ''
+  let tempStr = ''
   fs.readFileSync(filePath, 'utf8')
     .toString()
     .split(new RegExp(os.EOL))
@@ -104,7 +105,7 @@ export function handleFile(
         return
       }
       if (line === '/**') {
-        typeName = null
+        typeName = ''
       }
       if (!isTargetComment || !typeName) {
         // type codes
@@ -290,8 +291,12 @@ export function handleFile(
  * @param options? `GetCommentsDataOptions` [GetCommentsDataOptions](#GetCommentsDataOptions), default `{}`
  * @returns `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` It's an array if `needArray` is true. What's [CommentInfoItem](#commentinfoitem).
  */
-export function getCommentsData(input, needArray, options = {}) {
-  const data = {}
+export function getCommentsData(
+  input: string | string[],
+  needArray: boolean | GetCommentsDataOptions,
+  options: GetCommentsDataOptions = {}
+) {
+  const data: Record<string, Record<string, CommentInfoItem>> = {}
   if (isObject(needArray)) {
     options = needArray
     needArray = false
@@ -309,7 +314,11 @@ export function getCommentsData(input, needArray, options = {}) {
  * @param data
  * @param options
  */
-function _getCommentsData(input, data, options) {
+function _getCommentsData(
+  input: string | string[],
+  data: Record<string, Record<string, CommentInfoItem>>,
+  options: GetCommentsDataOptions
+) {
   const { fileType = /\.(ts|js)$/ } = options
 
   if (Array.isArray(input)) {
@@ -335,14 +344,16 @@ function _getCommentsData(input, data, options) {
  * @param data `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]` The data obtained using the [getCommentsData](#getcommentsdatainput-needarray-options) method
  * @returns `CommentInfoItem[]` Returned is only `type` [CommentInfoItem](#CommentInfoItem).
  */
-export function getTypes(data) {
+export function getTypes(
+  data: Record<string, Record<string, CommentInfoItem>> | CommentInfoItem[]
+) {
   // CommentInfoItem[]
   if (Array.isArray(data)) {
     return data.filter((item) => item.type === DOC_TYPES.type)
   }
 
   // Record<filePath, Record<commentTypeName, CommentInfoItem>>
-  const types = []
+  const types: CommentInfoItem[] = []
   // get types from `data`
   let item
   Object.keys(data).forEach((filePath) => {
@@ -359,10 +370,13 @@ export function getTypes(data) {
 
 /**
  * handleTypes
- * @param data ``Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]``
+ * @param data `Record<filePath, Record<commentTypeName, CommentInfoItem>> | CommentInfoItem[]`
  * @param options `GetCommentsDataOptions`
  */
-function handleTypes(data, options) {
+function handleTypes(
+  data: Record<string, Record<string, CommentInfoItem>> | CommentInfoItem[],
+  options: GetCommentsDataOptions
+) {
   const types = getTypes(data)
 
   // `options.types` obtained from other files or directories

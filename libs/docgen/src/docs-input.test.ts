@@ -31,6 +31,25 @@ describe('docs-input', () => {
         private: false,
         path: filePath,
       },
+      property_el: {
+        codes: [],
+        desc: [
+          'Use `el` to get the HTML element of the current class',
+          'property 3333',
+          '```ts',
+          'x.el',
+          '```',
+          'last line text',
+        ],
+        fullName: 'el',
+        name: 'el',
+        params: [],
+        path: filePath,
+        private: false,
+        returns: [],
+        sort: 0,
+        type: 'property',
+      },
     })
 
     expect(
@@ -47,6 +66,22 @@ describe('docs-input', () => {
         codes: ['', 'Usage', '', '```bash', '  const x = new X();', '```'],
         private: false,
         path: filePath,
+      },
+      property_el: {
+        codes: ['```ts', 'x.el', '```'],
+        desc: [
+          'Use `el` to get the HTML element of the current class',
+          'property 3333',
+          'last line text',
+        ],
+        fullName: 'el',
+        name: 'el',
+        params: [],
+        path: filePath,
+        private: false,
+        returns: [],
+        sort: 0,
+        type: 'property',
       },
     })
   })
