@@ -11,10 +11,10 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   base: './',
   build: {
-    outDir: resolve(__dirname, '../../dist/zx-sml'),
+    outDir: resolve(__dirname, '../../dist/utils'),
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'zxSml',
+      name: 'zx-sml',
       fileName: (format) => `index.${format}.js`,
     },
   },

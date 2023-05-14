@@ -11,10 +11,10 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   base: './',
   build: {
-    outDir: resolve(__dirname, '../../dist/zx-docgen'),
+    outDir: resolve(__dirname, '../../dist/docgen'),
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'zxDocgen',
+      name: 'zx-docgen',
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
