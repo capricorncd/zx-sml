@@ -39,7 +39,7 @@
     "build:docgen": "npm run build -w libs/docgen",
     "build:header": "node scripts/build-header.js",
     "test": "npm run test:utils && npm run test:docgen",
-    "test:sml": "npm run test -w libs/utils",
+    "test:utils": "npm run test -w libs/utils",
     "test:docgen": "npm run test -w libs/docgen",
     "coverage": "vitest run --coverage",
     "docs": "node scripts/create-docs.js",
