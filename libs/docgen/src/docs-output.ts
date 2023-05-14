@@ -7,7 +7,7 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { isObject } from '@zx/sml'
+import { isObject } from '@zx/utils'
 import { BLANK_LINE, DOC_TYPES } from './const'
 import { getCommentsData } from './docs-input'
 import {

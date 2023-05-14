@@ -1,5 +1,5 @@
 {
-  "name": "@zx/sml",
+  "name": "@zx/utils",
   "version": "1.0.0",
   "description": "The some static method library",
   "main": "src/index.ts",
