@@ -6,7 +6,7 @@
 const fs = require('fs')
 const { EOL } = require('os')
 const path = require('path')
-const { formatDate } = require('../dist/zx-sml/index.umd')
+const { formatDate } = require('../dist/utils/index.umd')
 const pkg = require('../package.json')
 
 const header = [
@@ -32,5 +32,5 @@ function main(lib) {
   })
 }
 
-main('zx-sml')
-main('zx-docgen')
+main('utils')
+main('docgen')

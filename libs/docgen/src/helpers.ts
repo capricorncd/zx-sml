@@ -4,7 +4,7 @@
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
 import fs from 'node:fs'
-import { isObject, toNumber } from '@zx/sml'
+import { isObject, toNumber } from '@zx/utils'
 import { BLANK_LINE } from './const'
 import { warn } from './log'
 import type {

@@ -6,7 +6,7 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { isObject } from '@zx/sml'
+import { isObject } from '@zx/utils'
 import { DOC_TYPES } from './const'
 import {
   isValidArray,
