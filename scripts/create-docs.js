@@ -126,7 +126,7 @@ function main() {
   // README.md
   writeInReadmeFile(lines)
 
-  // zx-sml/nodejs docs
+  // generate zx-sml/docgen docs
   const input = path.resolve(__dirname, '../libs/docgen/src')
   const { lines: docGenLines } = outputFile(
     input,

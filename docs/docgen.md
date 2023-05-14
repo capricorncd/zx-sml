@@ -52,7 +52,7 @@ nodejs file `./scripts/create-docs.js`.
 
 ```js
 const path = require('path')
-const { getCommentsData } = require('zx-sml/nodejs')
+const { getCommentsData } = require('zx-sml/docgen')
 
 const result = getCommentsData(path.resolve(__dirname, './src'));
 console.log(result);
