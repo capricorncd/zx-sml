@@ -267,8 +267,8 @@ export type ExpendTypesHandler = (data: CommentInfoItem, line: string) => void
  * The options type of function [toTableLines](#totablelinesdata).
  */
 export interface ToTableLinesParamData {
-  // Alignment of the table content, left, center or right, the default is left.
-  align: Record<string, string>
+  // Alignment of the table content, `left`, `center` or `right`, the default is `left`.
+  align: string[]
   // The table header displays a one-dimensional array of content.
   // `{thead: ['Name', 'Description']}`.
   thead?: string[]

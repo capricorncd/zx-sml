@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "some static method library and documentation generator",
   "main": "./dist/utils/index.umd.js",
   "module": "./dist/utils/index.es.js",
@@ -78,6 +78,6 @@
     "npm": ">=8.1.2"
   },
   "repository": "https://github.com/capricorncd/zx-sml",
-  "author": "Xing Zhong<zx198401@gmail.com>",
+  "author": "Capricorncd <capricorncd@qq.com>",
   "license": "MIT"
 }
