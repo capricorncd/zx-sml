@@ -622,7 +622,7 @@ The options type of function [toTableLines](#totablelinesdata).
 
 Prop|Types|Required|Description
 :--|:--|:--:|:--
-align|`Record<string, string>`|yes|Alignment of the table content, left, center or right, the default is left.
+align|`string[]`|yes|Alignment of the table content, `left`, `center` or `right`, the default is `left`.
 thead|`string[]`|no|The table header displays a one-dimensional array of content. `{thead: ['Name', 'Description']}`.
 tbody|`string[][]`|no|The table body displays a two-dimensional array of contents. `{tbody: [['someName1', 'someDescription1'],['someName2', 'someDescription2']]}`.
 
@@ -631,8 +631,8 @@ tbody|`string[][]`|no|The table body displays a two-dimensional array of content
 
 ```ts
 interface ToTableLinesParamData {
-  // Alignment of the table content, left, center or right, the default is left.
-  align: Record<string, string>
+  // Alignment of the table content, `left`, `center` or `right`, the default is `left`.
+  align: string[]
   // The table header displays a one-dimensional array of content.
   // `{thead: ['Name', 'Description']}`.
   thead?: string[]
