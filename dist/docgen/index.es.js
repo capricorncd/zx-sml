@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.7.2
- * Author: Xing Zhong<zx198401@gmail.com>
+ * zx-sml version 0.7.3
+ * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-05-14 10:45:34 (GMT+0900)
+ * Released on: 2023-05-15 11:56:02 (GMT+0000)
  */
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -70,7 +70,6 @@ function warn(...args) {
 function error(...args) {
   console.log("\u{1F621}", colors.red, ...args, colors.white);
 }
-const TABLE_ALIGN_LEFT = "left";
 const DEF_TABLE_ALIGN = ":--";
 const TABLE_ALIGNS = {
   left: DEF_TABLE_ALIGN,
@@ -198,12 +197,12 @@ function createPropsTable(props, docType, typeName = "Name", options = {}) {
   }
   const align = options.tableAlign || {};
   const tableData = {
-    align: {
-      [typeName]: align[typeName] || TABLE_ALIGN_LEFT,
-      Types: align["Types"] || TABLE_ALIGN_LEFT,
-      Required: align["Required"] || TABLE_ALIGN_LEFT,
-      Description: align["Description"] || TABLE_ALIGN_LEFT
-    },
+    align: [
+      align[typeName],
+      align["Types"],
+      align["Required"],
+      align["Description"]
+    ],
     thead: [
       tableHeadAlias[typeName] || typeName,
       tableHeadAlias["Types"] || "Types",
@@ -293,21 +292,19 @@ function handleProps(item, types) {
   });
   return arr;
 }
+function createTableAlignLine(trArr, align = []) {
+  return trArr.map((_, i) => TABLE_ALIGNS[align[i]] || DEF_TABLE_ALIGN).join("|");
+}
 function toTableLines(data) {
   if (!isObject(data) || !isValidArray(data.tbody))
     return [];
-  const { align, thead, tbody } = data;
+  const { align = [], thead, tbody } = data;
   const lines = [];
   let i = 0;
   if (isValidArray(thead)) {
-    lines.push(thead.join("|"));
-    if (align) {
-      lines.push(thead.map((field) => TABLE_ALIGNS[align[field]] || DEF_TABLE_ALIGN).join("|"));
-    } else {
-      lines.push(thead.map(() => DEF_TABLE_ALIGN).join("|"));
-    }
+    lines.push(thead.join("|"), createTableAlignLine(thead, align));
   } else {
-    lines.push(tbody[0].join("|"), tbody[0].map(() => DEF_TABLE_ALIGN).join("|"));
+    lines.push(tbody[0].join("|"), createTableAlignLine(tbody[0], align));
     i = 1;
   }
   for (; i < tbody.length; i++) {
