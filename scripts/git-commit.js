@@ -38,9 +38,8 @@ function main() {
     if (msg.match(mergeReg)) return Promise.resolve()
 
     const branchName = execSync('git branch --show-current').toString()
-    const ticketNo = branchName
-      ? `${branchName.replace(/\r?\n/g, '')}`.split('/')
-      : ['']
+    const currentBranch = branchName.replace(/\r?\n/g, '')
+
     // Ctrl+C中断事件处理
     const promptModule = createPromptModule()
     const ui = new Prompt(promptModule.prompts, {})
@@ -56,7 +55,7 @@ function main() {
         type: 'message',
         name: 'branch',
         message: '请确定分支名称',
-        default: ticketNo[ticketNo.length - 1],
+        default: currentBranch,
       },
       {
         type: 'list',

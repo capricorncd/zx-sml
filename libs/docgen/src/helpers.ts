@@ -17,8 +17,6 @@ import type {
   ToTableLinesParamData,
 } from './types.d'
 
-const TABLE_ALIGN_LEFT = 'left'
-
 const DEF_TABLE_ALIGN = ':--'
 
 /**
@@ -307,12 +305,12 @@ export function createPropsTable(
   const align = options.tableAlign || {}
 
   const tableData = {
-    align: {
-      [typeName]: align[typeName] || TABLE_ALIGN_LEFT,
-      Types: align['Types'] || TABLE_ALIGN_LEFT,
-      Required: align['Required'] || TABLE_ALIGN_LEFT,
-      Description: align['Description'] || TABLE_ALIGN_LEFT,
-    },
+    align: [
+      align[typeName],
+      align['Types'],
+      align['Required'],
+      align['Description'],
+    ],
     // table head
     thead: [
       tableHeadAlias[typeName] || typeName,
@@ -472,6 +470,22 @@ export function handleProps(item: CommentInfoItem, types: CommentInfoItem[]) {
 }
 
 /**
+ * createTableAlignLine
+ * => `:--|:--:|:--`
+ * @param trArr `string`
+ * @param align `string`
+ * @returns `string`
+ */
+function createTableAlignLine(trArr: string[], align: string[] = []): string {
+  return trArr
+    .map(
+      (_, i) =>
+        TABLE_ALIGNS[align[i] as keyof typeof TABLE_ALIGNS] || DEF_TABLE_ALIGN
+    )
+    .join('|')
+}
+
+/**
  * @method toTableLines(data)
  * Convert `data` to a table in Markdown format.
  * @param data `ToTableLinesParamData` see type [ToTableLinesParamData](#ToTableLinesParamData).
@@ -479,31 +493,15 @@ export function handleProps(item: CommentInfoItem, types: CommentInfoItem[]) {
  */
 export function toTableLines(data: ToTableLinesParamData) {
   if (!isObject(data) || !isValidArray(data.tbody)) return []
-  const { align, thead, tbody } = data
+  const { align = [], thead, tbody } = data
   const lines = []
 
   let i = 0
   // thead
   if (isValidArray(thead)) {
-    lines.push(thead.join('|'))
-    if (align) {
-      lines.push(
-        thead
-          .map(
-            (field) =>
-              TABLE_ALIGNS[align[field] as keyof typeof TABLE_ALIGNS] ||
-              DEF_TABLE_ALIGN
-          )
-          .join('|')
-      )
-    } else {
-      lines.push(thead.map(() => DEF_TABLE_ALIGN).join('|'))
-    }
+    lines.push(thead.join('|'), createTableAlignLine(thead, align))
   } else {
-    lines.push(
-      tbody[0].join('|'),
-      tbody[0].map(() => DEF_TABLE_ALIGN).join('|')
-    )
+    lines.push(tbody[0].join('|'), createTableAlignLine(tbody[0], align))
     i = 1
   }
 
