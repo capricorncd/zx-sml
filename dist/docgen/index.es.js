@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.7.3
+ * zx-sml version 0.7.4
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-05-15 11:56:02 (GMT+0000)
+ * Released on: 2023-05-16 20:59:18 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -620,7 +620,13 @@ function handleOutput(arr, outputDir, options = {}) {
     lines.push(...startLines, BLANK_LINE);
   }
   const linesAfterType = ((_b = options.lines) == null ? void 0 : _b.afterType) || {};
-  const outputDocTypesAndOrder = isValidArray(options.outputDocTypesAndOrder) ? options.outputDocTypesAndOrder : ["document", "method", "type", "constant"];
+  const outputDocTypesAndOrder = isValidArray(options.outputDocTypesAndOrder) ? options.outputDocTypesAndOrder : [
+    DOC_TYPES.document,
+    DOC_TYPES.property,
+    DOC_TYPES.method,
+    DOC_TYPES.type,
+    DOC_TYPES.constant
+  ];
   outputDocTypesAndOrder.forEach((type) => {
     var _a2;
     const handler = (_a2 = options.handlers) == null ? void 0 : _a2[type];

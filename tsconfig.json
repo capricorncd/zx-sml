@@ -18,6 +18,5 @@
     "paths": {
       "@zx/*": ["./libs/*"]
     }
-  },
-  "references": [{ "path": "./tsconfig.node.json" }]
+  }
 }

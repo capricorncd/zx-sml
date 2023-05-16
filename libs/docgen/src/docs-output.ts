@@ -327,7 +327,13 @@ function handleOutput(
   // Output types and their order
   const outputDocTypesAndOrder = isValidArray(options.outputDocTypesAndOrder)
     ? options.outputDocTypesAndOrder
-    : ['document', 'method', 'type', 'constant']
+    : [
+        DOC_TYPES.document,
+        DOC_TYPES.property,
+        DOC_TYPES.method,
+        DOC_TYPES.type,
+        DOC_TYPES.constant,
+      ]
 
   outputDocTypesAndOrder.forEach((type) => {
     const handler = options.handlers?.[type]

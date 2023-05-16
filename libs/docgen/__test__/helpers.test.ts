@@ -1,5 +1,5 @@
 import { test, describe, expect } from 'vitest'
-import { handleProps, handleParam } from './helpers'
+import { handleProps, handleParam } from '../src/helpers'
 
 describe('helpers', () => {
   test('handleProps', () => {

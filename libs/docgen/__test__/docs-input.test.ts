@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { describe, test, expect } from 'vitest'
-import { handleFile } from './docs-input'
+import { handleFile } from '../src/docs-input'
 
 describe('docs-input', () => {
   test('handleFile', () => {

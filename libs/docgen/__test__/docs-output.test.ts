@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { handlePropertyLines } from './docs-output'
+import { handlePropertyLines } from '../src/docs-output'
 
 describe('docs-output', () => {
   test('handlePropertyLines', () => {

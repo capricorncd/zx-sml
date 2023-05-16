@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "some static method library and documentation generator",
   "main": "./dist/utils/index.umd.js",
   "module": "./dist/utils/index.es.js",
