@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.7.4
+ * zx-sml version 0.7.5
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-05-16 20:59:18 (GMT+0900)
+ * Released on: 2023-05-17 20:41:58 (GMT+0900)
  */
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -600,6 +600,9 @@ function handlePropertyLines(arr, options, lines) {
   handleMarkdownTitle(DOC_TYPES.property, options, lines);
   arr.forEach((item) => {
     lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE);
+    if (item.returns.length) {
+      lines.push(...item.returns.map((ret) => `- @returns ${ret.raw}`), BLANK_LINE);
+    }
     pushCodesIntoLines(item.codes, lines);
   });
 }

@@ -284,6 +284,12 @@ export function handlePropertyLines(
 
   arr.forEach((item) => {
     lines.push(`### ${item.fullName}`, BLANK_LINE, ...item.desc, BLANK_LINE)
+    if (item.returns.length) {
+      lines.push(
+        ...item.returns.map((ret) => `- @returns ${ret.raw}`),
+        BLANK_LINE
+      )
+    }
     pushCodesIntoLines(item.codes, lines)
   })
 }

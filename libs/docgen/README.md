@@ -3,10 +3,10 @@
 A document generator that read the comments in the code and automatically generate MarkDown documents.
 
 ```js
-const { mkdirSync } = require('zx-sml/docgen')
-// import { mkdirSync } from 'zx-sml/docgen'
+const { outputFile } = require('zx-sml/docgen')
+// import { outputFile } from 'zx-sml/docgen'
 
-mkdirSync('./a/b/c')
+outputFile('./src', './outputDir/README.md', {})
 ```
 
 see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.js)

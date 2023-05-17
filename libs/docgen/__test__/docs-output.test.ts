@@ -19,7 +19,7 @@ describe('docs-output', () => {
         params: [],
         path: 'filePath',
         private: false,
-        returns: [],
+        returns: [{ raw: '`string` rrrrrrr', desc: [], types: [] }],
         sort: 0,
         type: 'property',
       },
@@ -40,6 +40,8 @@ describe('docs-output', () => {
       '```',
       'last line text',
       '',
+      '- @returns `string` rrrrrrr',
+      '',
     ])
 
     const lines2: string[] = []
@@ -58,7 +60,7 @@ describe('docs-output', () => {
           params: [],
           path: 'filePath',
           private: false,
-          returns: [],
+          returns: [{ raw: '`string` rrrrrrr', desc: [], types: [] }],
           sort: 0,
           type: 'property',
         },
@@ -74,6 +76,8 @@ describe('docs-output', () => {
       'Use `el` to get the HTML element of the current class',
       'property 3333',
       'last line text',
+      '',
+      '- @returns `string` rrrrrrr',
       '',
       '```ts',
       'x.el',

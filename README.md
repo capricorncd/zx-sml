@@ -46,7 +46,7 @@ Some tool functions used in the Nodejs environment, [docs](./docs/docgen.md).
 ```js
 const { log, outputFile } = require('zx-sml/docgen');
 
-log('hello nodejs')
+log('hello docgen')
 
 outputFile(path.resolve(__dirname, './src'), path.resolve(__dirname, './docs/README.md'));
 ```
