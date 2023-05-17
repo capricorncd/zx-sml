@@ -19,7 +19,9 @@ describe('docs-output', () => {
         params: [],
         path: 'filePath',
         private: false,
-        returns: [{ raw: '`string` rrrrrrr', desc: [], types: [] }],
+        returns: [
+          { raw: '`string` rrrrrrr', desc: ['rrrrrrr'], types: ['string'] },
+        ],
         sort: 0,
         type: 'property',
       },
@@ -60,7 +62,9 @@ describe('docs-output', () => {
           params: [],
           path: 'filePath',
           private: false,
-          returns: [{ raw: '`string` rrrrrrr', desc: [], types: [] }],
+          returns: [
+            { raw: '`string` rrrrrrr', desc: ['rrrrrrr'], types: ['string'] },
+          ],
           sort: 0,
           type: 'property',
         },
