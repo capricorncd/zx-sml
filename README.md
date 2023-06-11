@@ -41,7 +41,7 @@ formatDate('2020-12-04', 'yyyy/MM/dd W')
 
 ### zx-sml/docgen
 
-Some tool functions used in the Nodejs environment, [docs](./docs/docgen.md).
+A document generator that read the comments in the code and automatically generate MarkDown documents, [docs](./docs/docgen.md).
 
 ```js
 const { log, outputFile } = require('zx-sml/docgen');
