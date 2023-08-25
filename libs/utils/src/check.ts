@@ -46,3 +46,22 @@ export function isNumberLike<T>(input: T): boolean {
   }
   return typeof input === 'number'
 }
+
+/**
+ * @method isNumber(input)
+ * Determine whether it is a valid number.
+ *
+ * ```js
+ * isNumber(10) // true
+ * isNumber(-10.02) // true
+ *
+ * isNumber(NaN) // false
+ * isNumber(null) // false
+ * isNumber(undefined) // false
+ * ```
+ * @param input `any` any type of object.
+ * @returns `boolean`
+ */
+export function isNumber(input: unknown): input is number {
+  return Number.isFinite(input)
+}

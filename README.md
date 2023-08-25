@@ -286,6 +286,25 @@ el|`Node`|yes|DOM Node
 
 - @returns `boolean`
 
+### isNumber(input)
+
+Determine whether it is a valid number.
+
+```js
+isNumber(10) // true
+isNumber(-10.02) // true
+
+isNumber(NaN) // false
+isNumber(null) // false
+isNumber(undefined) // false
+```
+
+Param|Types|Required|Description
+:--|:--|:--:|:--
+input|`any`|yes|any type of object.
+
+- @returns `boolean`
+
 ### isNumberLike(input)
 
 Determine if `input` is a string number

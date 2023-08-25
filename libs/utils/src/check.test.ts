@@ -4,7 +4,7 @@
  * Date: 2022/06/11 11:40:27 (GMT+0900)
  */
 import { describe, it, expect } from 'vitest'
-import { isArray, isObject, isNumberLike } from './check'
+import { isArray, isObject, isNumberLike, isNumber } from './check'
 
 describe('check', () => {
   it('isArray', () => {
@@ -33,5 +33,19 @@ describe('check', () => {
     expect(isNumberLike('-123.000')).toBeTruthy()
     expect(isNumberLike('12.01')).toBeTruthy()
     expect(isNumberLike('12px')).toBeFalsy()
+  })
+
+  it('isNumber', () => {
+    expect(isNumber(12.01)).toBeTruthy()
+    expect(isNumber(0)).toBeTruthy()
+    expect(isNumber(-12.01)).toBeTruthy()
+
+    expect(isNumber('-123.000')).toBeFalsy()
+    expect(isNumber('12px')).toBeFalsy()
+    expect(isNumber(NaN)).toBeFalsy()
+    expect(isNumber(void 0)).toBeFalsy()
+    expect(isNumber(null)).toBeFalsy()
+
+    expect(isNumber(Number.NEGATIVE_INFINITY)).toBeFalsy()
   })
 })
