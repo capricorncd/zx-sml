@@ -5,9 +5,7 @@
  * @returns `string`
  */
 export function randomStr(n?: number): string {
-  const str = Math.random()
-    .toString(16)
-    .replace(/^0\.\d*/, '')
+  const str = Math.random().toString(36).slice(2)
   return typeof n === 'number'
     ? n > str.length
       ? str.padEnd(Math.min(n, 1000), str)
