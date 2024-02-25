@@ -40,11 +40,9 @@ export function isElement<T extends Node>(el: T): boolean {
  * @param input `any` any type of object
  * @returns `boolean`
  */
-export function isNumberLike<T>(input: T): boolean {
-  if (typeof input === 'string') {
-    return /^-?\d+(\.\d+)?$/.test(input)
-  }
-  return typeof input === 'number'
+export function isNumberLike(input: unknown): boolean {
+  if (typeof input === 'string') return /^-?\d+(\.\d+)?$/.test(input)
+  return isNumber(input)
 }
 
 /**
