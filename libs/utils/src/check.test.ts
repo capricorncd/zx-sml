@@ -33,6 +33,7 @@ describe('check', () => {
     expect(isNumberLike('-123.000')).toBeTruthy()
     expect(isNumberLike('12.01')).toBeTruthy()
     expect(isNumberLike('12px')).toBeFalsy()
+    expect(isNumberLike(NaN)).toBeFalsy()
   })
 
   it('isNumber', () => {
