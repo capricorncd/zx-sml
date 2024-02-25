@@ -3,35 +3,32 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 11:40:27 (GMT+0900)
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { fileToBase64, createBlobURL, splitBase64 } from './file'
 
-describe('dom', () => {
+describe('file', () => {
   it('fileToBase64', async () => {
     const file = new File(['foo'], 'foo.txt', {
       type: 'text/plain',
     })
-    expect(await fileToBase64(file)).toMatch(/^data:text\/plain;base64,.+/)
+    expect(await fileToBase64(file)).toBe('data:text/plain;base64,Zm9v')
   })
 
-  it.skip('createBlobURL', () => {
-    // https://github.com/jsdom/jsdom/issues/1721
-    // The "obj" argument must be an instance of Blob. Received an instance of Blob
-    // const obj = { hello: 'world' }
-    // const blob = new Blob([JSON.stringify(obj, null, 2)], {
-    //   type: 'application/json',
-    // })
+  it('createBlobURL', () => {
+    // fix: windowURL.createObjectURL is not a function
+    global.URL.createObjectURL = vi.fn((b: Blob) => `blob:${b.size}`)
+
     const file = new File(['foo'], 'foo.txt', {
       type: 'text/plain',
     })
     expect(createBlobURL(file)).toMatch(/^blob:/)
 
-    // const bytes = new Uint8Array(59)
-    // for (let i = 0; i < 59; i++) {
-    //   bytes[i] = 32 + i
-    // }
-    // const blob2 = new Blob([bytes.buffer], { type: 'text/plain' })
-    // expect(createBlobURL(blob2)).toMatch(/^blob:/)
+    const bytes = new Uint8Array(59)
+    for (let i = 0; i < 59; i++) {
+      bytes[i] = 32 + i
+    }
+    const blob2 = new Blob([bytes.buffer], { type: 'text/plain' })
+    expect(createBlobURL(blob2)).toMatch(/^blob:/)
   })
 
   it('splitBase64', () => {
