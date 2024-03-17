@@ -3,7 +3,7 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 09:58:54 (GMT+0900)
  */
-import { isObject } from './check'
+import { isObject, isNumber } from './check'
 
 /**
  * @method createUrlForGetRequest(url, params)
@@ -78,7 +78,7 @@ function restoreUSLocalString(input: string): string {
 }
 
 /**
- * @method toNumber(input, isStrictMode)
+ * @method toNumber(input, isStrictMode, defaultValue?: number)
  * @description Convert any type to number.
  * ```js
  * toNumber('1.3rem') // 1.3
@@ -89,11 +89,23 @@ function restoreUSLocalString(input: string): string {
  * toNumber('1,000,999', true) // 0
  * ```
  * @param input `any`
- * @param isStrictMode? `boolean` Whether it is strict mode, default `false`
+ * @param isStrictMode? `boolean | number` Whether it is strict mode, default `false`
+ * @param defaultValue? `number` The return value when formatting fails, default is 0
  * @returns `number`
  */
-export function toNumber(input: unknown, isStrictMode = false): number {
-  if (typeof input === 'number') return input
+export function toNumber(
+  input: unknown,
+  isStrictMode: boolean | number = false,
+  defaultValue?: number
+): number {
+  if (typeof isStrictMode === 'number') {
+    defaultValue = isStrictMode
+    isStrictMode = false
+  }
+  if (typeof defaultValue !== 'number') {
+    defaultValue = 0
+  }
+  if (isNumber(input)) return input
   if (typeof input === 'string') {
     if (
       !isStrictMode &&
@@ -102,9 +114,9 @@ export function toNumber(input: unknown, isStrictMode = false): number {
       return toNumber(RegExp.$1, true)
     }
     const n = Number(input)
-    return isNaN(n) ? 0 : n
+    return isNaN(n) ? defaultValue : n
   }
-  return 0
+  return defaultValue
 }
 
 /**

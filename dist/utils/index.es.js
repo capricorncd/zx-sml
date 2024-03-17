@@ -1,39 +1,23 @@
 /*!
- * zx-sml version 0.7.5
+ * zx-sml version 0.8.0
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2023-05-17 20:41:58 (GMT+0900)
+ * Released on: 2024-03-17 16:01:21 (GMT+0900)
  */
-var __defProp = Object.defineProperty;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a2, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a2, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a2, prop, b[prop]);
-    }
-  return a2;
-};
-function isArray(input) {
-  return Array.isArray(input);
+function w(e) {
+  return Array.isArray(e);
 }
-function isObject(input) {
-  return typeof input === "object" && input !== null && !isArray(input);
+function u(e) {
+  return typeof e == "object" && e !== null && !w(e);
 }
-function isElement(el) {
-  return el && el.nodeType === 1;
+function b(e) {
+  return e && e.nodeType === 1;
 }
-function isNumberLike(input) {
-  if (typeof input === "string") {
-    return /^-?\d+(\.\d+)?$/.test(input);
-  }
-  return typeof input === "number";
+function N(e) {
+  return typeof e == "string" ? /^-?\d+(\.\d+)?$/.test(e) : g(e);
+}
+function g(e) {
+  return Number.isFinite(e);
 }
 /*!
  * date-utils-2020 v1.1.0
@@ -41,319 +25,307 @@ function isNumberLike(input) {
  * Repository: https://github.com/capricorncd/date-utils-2020#readme
  * Released on: 2023/01/14 14:10:19 GMT+0900
  */
-function l(n) {
-  return String(n).padStart(2, "0");
+function $(e) {
+  return String(e).padStart(2, "0");
 }
-const a = {
+const h = {
+  // weeks: ['日', '一', '二', '三', '四', '五', '六']
   weeks: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 };
-function u(n, e, t) {
-  const s = c(n);
-  if (!s || !e)
-    return String(n);
-  if (e === "timestamp")
-    return s.getTime().toString();
-  if (/(y+)/i.test(e)) {
-    const r = RegExp.$1;
-    e = e.replace(r, (s.getFullYear() + "").substring(4 - r.length));
+function L(e, t, r) {
+  const n = j(e);
+  if (!n || !t)
+    return String(e);
+  if (t === "timestamp")
+    return n.getTime().toString();
+  if (/(y+)/i.test(t)) {
+    const i = RegExp.$1;
+    t = t.replace(i, (n.getFullYear() + "").substring(4 - i.length));
   }
-  (!t || !Array.isArray(t.weeks)) && (t = a);
+  (!r || !Array.isArray(r.weeks)) && (r = h);
   const o = {
-    "M+": s.getMonth() + 1,
-    "d+": s.getDate(),
-    "h+": s.getHours(),
-    "m+": s.getMinutes(),
-    "s+": s.getSeconds(),
-    "a+": s.getHours() < 12 ? "am" : "pm",
-    "A+": s.getHours() < 12 ? "AM" : "PM"
+    "M+": n.getMonth() + 1,
+    "d+": n.getDate(),
+    "h+": n.getHours(),
+    "m+": n.getMinutes(),
+    "s+": n.getSeconds(),
+    // // week number
+    // 'w+': date.getDay(),
+    // // week text
+    // 'W+': langPackage.weeks[date.getDay()],
+    // am/pm
+    "a+": n.getHours() < 12 ? "am" : "pm",
+    "A+": n.getHours() < 12 ? "AM" : "PM"
   };
-  let g;
-  for (const r in o)
-    if (new RegExp("(" + r + ")").test(e)) {
-      g = RegExp.$1;
-      const i = o[r] + "";
-      e = e.replace(g, g.length === 1 ? i : l(i));
+  let s;
+  for (const i in o)
+    if (new RegExp("(" + i + ")").test(t)) {
+      s = RegExp.$1;
+      const a = o[i] + "";
+      t = t.replace(s, s.length === 1 ? a : $(a));
     }
-  if (/w+/i.test(e)) {
-    const r = s.getDay();
-    e = e.replace(/w+/i, /W+/.test(e) ? t.weeks[r] : String(r));
+  if (/w+/i.test(t)) {
+    const i = n.getDay();
+    t = t.replace(/w+/i, /W+/.test(t) ? r.weeks[i] : String(i));
   }
-  if (/g/i.test(e)) {
-    const r = s.toString().split(/\s+/).slice(5), i = e.includes("g");
-    e = e.replace(/g/i, i ? r[0] : r.join(" "));
+  if (/g/i.test(t)) {
+    const i = n.toString().split(/\s+/).slice(5), a = t.includes("g");
+    t = t.replace(/g/i, a ? i[0] : i.join(" "));
   }
-  return e;
+  return t;
 }
-function c(n) {
-  let e = null;
-  if (n instanceof Date)
-    e = n;
-  else if (typeof n == "number")
-    e = new Date(n);
-  else if (typeof n == "string") {
-    let t = n.trim();
-    if (/^\d+$/.test(t)) {
-      const s = t.length;
-      s === 8 ? e = new Date([t.substring(0, 4), t.substring(4, 6), t.substring(6, 8)].join("/")) : s === 6 ? e = new Date([t.substring(0, 4), t.substring(4, 6), "01"].join("/")) : s === 4 ? e = new Date(t + "/01/01") : e = new Date(parseInt(n));
+function j(e) {
+  let t = null;
+  if (e instanceof Date)
+    t = e;
+  else if (typeof e == "number")
+    t = new Date(e);
+  else if (typeof e == "string") {
+    let r = e.trim();
+    if (/^\d+$/.test(r)) {
+      const n = r.length;
+      n === 8 ? t = new Date([r.substring(0, 4), r.substring(4, 6), r.substring(6, 8)].join("/")) : n === 6 ? t = new Date([r.substring(0, 4), r.substring(4, 6), "01"].join("/")) : n === 4 ? t = /* @__PURE__ */ new Date(r + "/01/01") : t = new Date(parseInt(e));
     } else
-      t = t.replace(/[年月日]/g, (s) => s === "\u65E5" ? "" : "/").replace(/[(（（].*?[)））]/g, " ").replace(/\bam|pm\b/ig, " ").replace(/\s+/g, " "), /^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/.test(t) ? e = new Date([RegExp.$1, RegExp.$2, RegExp.$3].join("/")) : /^(\d{4})[-/](\d{1,2})$/.test(t) ? e = new Date([RegExp.$1, RegExp.$2, "01"].join("/")) : e = new Date(t);
+      r = r.replace(/[年月日]/g, (n) => n === "日" ? "" : "/").replace(/[(（（].*?[)））]/g, " ").replace(/\bam|pm\b/ig, " ").replace(/\s+/g, " "), /^(\d{4})[-/](\d{1,2})[-/](\d{1,2})$/.test(r) ? t = new Date([RegExp.$1, RegExp.$2, RegExp.$3].join("/")) : /^(\d{4})[-/](\d{1,2})$/.test(r) ? t = new Date([RegExp.$1, RegExp.$2, "01"].join("/")) : t = new Date(r);
   }
-  return e && !isNaN(e.getFullYear()) ? e : null;
+  return t && !isNaN(t.getFullYear()) ? t : null;
 }
-function createUrlForGetRequest(url, params = {}) {
-  const [prefixUrl, search] = url.split("?");
-  const queryParams = [];
-  if (search)
-    queryParams.push(search);
-  for (const [key, val] of Object.entries(params)) {
-    queryParams.push(`${key}=${isObject(val) ? JSON.stringify(val) : val}`);
+function D(e, t = {}) {
+  const [r, n] = e.split("?"), o = [];
+  n && o.push(n);
+  for (const [s, i] of Object.entries(t))
+    o.push(`${s}=${u(i) ? JSON.stringify(i) : i}`);
+  return r + (o.length ? `?${o.join("&")}` : "");
+}
+function p(e = "", t = "-") {
+  return e.replace(
+    /[A-Z]/g,
+    (r, n) => `${n > 0 ? t : ""}${r.toLowerCase()}`
+  );
+}
+function m(e = "", t = !1) {
+  const r = e.replace(/[-_\s](\w)/g, (n, o) => o.toUpperCase());
+  return t ? r.replace(/^\w/, (n) => n.toUpperCase()) : r;
+}
+function d(e) {
+  return e.replace(
+    /^-?[1-9]\d{0,2}(,\d{3})+/,
+    (t) => t.replace(/,/g, "")
+  );
+}
+function f(e, t = !1, r) {
+  if (typeof t == "number" && (r = t, t = !1), typeof r != "number" && (r = 0), g(e))
+    return e;
+  if (typeof e == "string") {
+    if (!t && /^(-?\d+(?:\.\d+)?)\D*/.test(d(e)))
+      return f(RegExp.$1, !0);
+    const n = Number(e);
+    return isNaN(n) ? r : n;
   }
-  return prefixUrl + (queryParams.length ? `?${queryParams.join("&")}` : "");
+  return r;
 }
-function toSnakeCase(input = "", connectSymbol = "-") {
-  return input.replace(/[A-Z]/g, (s, offset) => `${offset > 0 ? connectSymbol : ""}${s.toLowerCase()}`);
+function v(e) {
+  if (typeof e == "number")
+    return [e, ""];
+  const t = d(e).match(/^(-?\d+(?:\.\d+)?)(.*)$/);
+  return t ? [f(t[1], !0), t[2]] : [0, ""];
 }
-function toCamelCase(input = "", isFirstCapitalLetter = false) {
-  const result = input.replace(/[-_\s](\w)/g, (_, s) => s.toUpperCase());
-  return isFirstCapitalLetter ? result.replace(/^\w/, (s) => s.toUpperCase()) : result;
+function y(e) {
+  return typeof e == "string" ? e : e === null || typeof e > "u" ? "" : Array.isArray(e) ? e.map(y).join(" ") : typeof e == "object" ? Object.keys(e).filter((t) => e[t]).join(" ") : String(e);
 }
-function restoreUSLocalString(input) {
-  return input.replace(/^-?[1-9]\d{0,2}(,\d{3})+/, (match) => match.replace(/,/g, ""));
+function U(...e) {
+  return e.map(y).filter((t) => !!t).join(" ");
 }
-function toNumber(input, isStrictMode = false) {
-  if (typeof input === "number")
-    return input;
-  if (typeof input === "string") {
-    if (!isStrictMode && /^(-?\d+(?:\.\d+)?)\D*/.test(restoreUSLocalString(input))) {
-      return toNumber(RegExp.$1, true);
-    }
-    const n = Number(input);
-    return isNaN(n) ? 0 : n;
-  }
-  return 0;
+function I(...e) {
+  return e.join("/").replace(/(\w(?!:))(\/+)/g, "$1/").replace(/\/([?#])|\/$/g, "$1");
 }
-function splitValue(input) {
-  if (typeof input === "number") {
-    return [input, ""];
-  }
-  const result = restoreUSLocalString(input).match(/^(-?\d+(?:\.\d+)?)(.*)$/);
-  return result ? [toNumber(result[1], true), result[2]] : [0, ""];
+function E(e, t = 0) {
+  return Array.prototype.slice.call(e, t);
 }
-function toString(input) {
-  if (typeof input === "string")
-    return input;
-  if (input === null || typeof input === "undefined")
-    return "";
-  if (Array.isArray(input))
-    return input.map(toString).join(" ");
-  if (typeof input === "object") {
-    return Object.keys(input).filter((key) => input[key]).join(" ");
-  }
-  return String(input);
+function S(e = {}, t = !1) {
+  const r = t ? m : p, n = {};
+  for (const [o, s] of Object.entries(e))
+    n[r(o)] = u(s) ? S(s, t) : s;
+  return n;
 }
-function classNames(...args) {
-  return args.map(toString).filter((item) => !!item).join(" ");
-}
-function joinUrl(...args) {
-  return args.join("/").replace(/(\w(?!:))(\/+)/g, "$1/").replace(/\/([?#])|\/$/g, "$1");
-}
-function slice(arrayLike, offset = 0) {
-  return Array.prototype.slice.call(arrayLike, offset);
-}
-function formatKeys(obj = {}, isCamelCase = false) {
-  const formatter = isCamelCase ? toCamelCase : toSnakeCase;
-  const result = {};
-  for (const [key, value] of Object.entries(obj)) {
-    result[formatter(key)] = isObject(value) ? formatKeys(value, isCamelCase) : value;
-  }
-  return result;
-}
-function formatBytes(bytes, useDecimal = false, decimalPlaces = 2) {
-  const aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-  const denominator = useDecimal ? 1e3 : 1024;
-  let value = String(bytes);
-  let unit = "Byte";
-  for (let nMultiple = 0, nApprox = bytes / denominator; nApprox > 1; nApprox /= denominator, nMultiple++) {
-    value = nApprox.toFixed(decimalPlaces);
-    unit = aMultiples[nMultiple];
-  }
-  if (useDecimal)
-    unit = unit.replace("i", "");
-  return {
-    text: value.replace(/\.0+$/, "") + unit,
-    value: +value,
-    unit,
-    bytes
+function M(e, t = !1, r = 2) {
+  const n = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], o = t ? 1e3 : 1024;
+  let s = String(e), i = "Byte";
+  for (let a = 0, l = e / o; l > 1; l /= o, a++)
+    s = l.toFixed(r), i = n[a];
+  return t && (i = i.replace("i", "")), {
+    text: s.replace(/\.0+$/, "") + i,
+    value: +s,
+    unit: i,
+    bytes: e
   };
 }
-function $(selector, doc = document) {
-  if (!selector)
+function O(e, t = document) {
+  return e ? e instanceof HTMLElement ? e : t.querySelector(e) : null;
+}
+function T(e, t = document) {
+  return E(t.querySelectorAll(e));
+}
+function x(e, t = {}, r) {
+  const n = document.createElement(e);
+  for (const [o, s] of Object.entries(t))
+    n.setAttribute(
+      p(o),
+      o === "style" && u(s) ? R(s) : String(s)
+    );
+  return r && (Array.isArray(r) || (r = [r]), r.forEach((o) => {
+    if (typeof o == "string") {
+      const s = x("div");
+      s.innerHTML = o, n.append(...s.childNodes);
+    } else
+      n.append(o);
+  })), n;
+}
+function R(...e) {
+  const t = e.reduce((n, o) => ({ ...n, ...S(o) }), {}), r = [];
+  for (const [n, o] of Object.entries(t))
+    o === "" || typeof o > "u" || o === null || r.push(`${n}:${o}`);
+  return r.join(";");
+}
+function k(e = 100) {
+  const t = document.getElementsByTagName("*");
+  let r, n, o;
+  const s = [];
+  for (let i = 0; i < t.length; i++)
+    r = t[i], r.nodeType === 1 && (n = window.getComputedStyle(r, null), n.position !== "static" && (o = +n.zIndex, o > 0 && s.push(o)));
+  return s.length ? Math.max.apply(null, s) : e;
+}
+function A(e, t, r = !1) {
+  if (!b(e))
     return null;
-  if (selector instanceof HTMLElement)
-    return selector;
-  return doc.querySelector(selector);
-}
-function $$(selector, doc = document) {
-  return slice(doc.querySelectorAll(selector));
-}
-function createElement(tag, attrs = {}, children) {
-  const el = document.createElement(tag);
-  for (const [key, val] of Object.entries(attrs)) {
-    el.setAttribute(toSnakeCase(key), key === "style" && isObject(val) ? toStrStyles(val) : String(val));
-  }
-  if (children) {
-    if (!Array.isArray(children)) {
-      children = [children];
-    }
-    children.forEach((child) => {
-      if (typeof child === "string") {
-        const temp = createElement("div");
-        temp.innerHTML = child;
-        el.append(...temp.childNodes);
-      } else {
-        el.append(child);
-      }
-    });
-  }
-  return el;
-}
-function toStrStyles(...args) {
-  const styles = args.reduce((prev, obj) => {
-    return __spreadValues(__spreadValues({}, prev), formatKeys(obj));
-  }, {});
-  const arr = [];
-  for (const [key, value] of Object.entries(styles)) {
-    if (value === "" || typeof value === "undefined" || value === null)
-      continue;
-    arr.push(`${key}:${value}`);
-  }
-  return arr.join(";");
-}
-function getMaxZIndex(defaultZIndex = 100) {
-  const elements = document.getElementsByTagName("*");
-  let el, css, zIndex;
-  const arr = [];
-  for (let i = 0; i < elements.length; i++) {
-    el = elements[i];
-    if (el.nodeType !== 1)
-      continue;
-    css = window.getComputedStyle(el, null);
-    if (css.position !== "static") {
-      zIndex = +css.zIndex;
-      if (zIndex > 0)
-        arr.push(zIndex);
-    }
-  }
-  return arr.length ? Math.max.apply(null, arr) : defaultZIndex;
-}
-function getStyleValue(el, attr, isNumber = false) {
-  if (!isElement(el))
-    return null;
-  const css = window.getComputedStyle(el, null);
-  if (attr) {
+  const n = window.getComputedStyle(
+    e,
+    null
+  );
+  if (t)
     try {
-      const value = css[toCamelCase(attr)];
-      return isNumber ? toNumber(value) : value;
-    } catch (e) {
+      const o = n[m(t)];
+      return r ? f(o) : o;
+    } catch {
       return null;
     }
-  }
-  return css;
+  return n;
 }
-function getScrollParents(el) {
-  const scrollableValues = ["auto", "scroll"];
-  const arr = [];
-  let parent = el.parentElement;
-  let val;
-  while (parent) {
-    val = getStyleValue(parent, "overflow");
-    if (typeof val === "string" && scrollableValues.includes(val)) {
-      arr.push(parent);
-    }
-    parent = parent.parentElement;
-  }
-  return arr;
+function F(e) {
+  const t = ["auto", "scroll"], r = [];
+  let n = e.parentElement, o;
+  for (; n; )
+    o = A(n, "overflow"), typeof o == "string" && t.includes(o) && r.push(n), n = n.parentElement;
+  return r;
 }
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      var _a;
-      const result = (_a = e.target) == null ? void 0 : _a.result;
-      if (result) {
-        resolve(result);
-      } else {
-        reject(new Error(`FileReader's result is null, ${e.target}`));
-      }
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
+function C(e) {
+  return new Promise((t, r) => {
+    const n = new FileReader();
+    n.onload = (o) => {
+      var i;
+      const s = (i = o.target) == null ? void 0 : i.result;
+      s ? t(s) : r(new Error(`FileReader's result is null, ${o.target}`));
+    }, n.onerror = r, n.readAsDataURL(e);
   });
 }
-function createBlobURL(blob) {
-  const windowURL = window.URL || window.webkitURL;
-  return windowURL.createObjectURL(blob);
+function H(e) {
+  return (window.URL || window.webkitURL).createObjectURL(e);
 }
-function splitBase64(base64) {
-  const arr = base64.split(",");
-  let type = "";
-  if (/data:(\w+\/\w+);base64/.test(arr[0])) {
-    type = RegExp.$1;
-  }
-  return {
-    type,
-    data: arr[1]
+function B(e) {
+  const t = e.split(",");
+  let r = "";
+  return /data:(\w+\/\w+);base64/.test(t[0]) && (r = RegExp.$1), {
+    type: r,
+    data: t[1]
   };
 }
-function base64ToBlob(base64, type) {
-  const dataInfo = splitBase64(base64);
-  const data = window.atob(dataInfo.data);
-  type = type || dataInfo.type;
-  const ia = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i++) {
-    ia[i] = data.charCodeAt(i);
-  }
-  return new Blob([ia], { type });
+function J(e, t) {
+  const r = B(e), n = window.atob(r.data);
+  t = t || r.type;
+  const o = new Uint8Array(n.length);
+  for (let s = 0; s < n.length; s++)
+    o[s] = n.charCodeAt(s);
+  return new Blob([o], { type: t });
 }
-function setLocalStorage(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+function P(e, t) {
+  localStorage.setItem(e, JSON.stringify(t));
 }
-function getLocalStorage(key, def) {
+function q(e, t) {
   try {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : def;
-  } catch (err) {
-    return def;
+    const r = localStorage.getItem(e);
+    return r ? JSON.parse(r) : t;
+  } catch {
+    return t;
   }
 }
-function removeLocalStorage(key) {
-  localStorage.removeItem(key);
+function Y(e) {
+  localStorage.removeItem(e);
 }
-function clearLocalStorage() {
+function Z() {
   localStorage.clear();
 }
-function setSessionStorage(key, value) {
-  sessionStorage.setItem(key, JSON.stringify(value));
+function z(e, t) {
+  sessionStorage.setItem(e, JSON.stringify(t));
 }
-function getSessionStorage(key, def) {
+function G(e, t) {
   try {
-    const data = sessionStorage.getItem(key);
-    return data ? JSON.parse(data) : def;
-  } catch (err) {
-    return def;
+    const r = sessionStorage.getItem(e);
+    return r ? JSON.parse(r) : t;
+  } catch {
+    return t;
   }
 }
-function removeSessionStorage(key) {
-  sessionStorage.removeItem(key);
+function K(e) {
+  sessionStorage.removeItem(e);
 }
-function clearSessionStorage() {
+function W() {
   sessionStorage.clear();
 }
-function randomStr(n) {
-  const str = Math.random().toString(16).replace(/^0\.\d*/, "");
-  return typeof n === "number" ? n > str.length ? str.padEnd(Math.min(n, 1e3), str) : str.substring(0, n) : str;
+function c(e) {
+  const t = Math.random().toString(36).slice(2);
+  return typeof e == "number" ? e > t.length ? t.padEnd(Math.min(e, 1e3), t) : t.substring(0, e) : t;
 }
-function randomId(prefix, suffix) {
-  return [prefix, randomStr(5), randomStr(5), randomStr(), suffix].filter(Boolean).join("-");
+function _(e, t) {
+  return [e, c(5), c(5), c(), t].filter(Boolean).join("-");
 }
-export { $, $$, base64ToBlob, classNames, clearLocalStorage, clearSessionStorage, createBlobURL, createElement, createUrlForGetRequest, fileToBase64, formatBytes, u as formatDate, formatKeys, getLocalStorage, getMaxZIndex, getScrollParents, getSessionStorage, getStyleValue, isArray, isElement, isNumberLike, isObject, joinUrl, randomId, randomStr, removeLocalStorage, removeSessionStorage, setLocalStorage, setSessionStorage, slice, splitBase64, splitValue, toCamelCase, c as toDate, toNumber, toSnakeCase, toStrStyles, l as toTwoDigits };
+export {
+  O as $,
+  T as $$,
+  J as base64ToBlob,
+  U as classNames,
+  Z as clearLocalStorage,
+  W as clearSessionStorage,
+  H as createBlobURL,
+  x as createElement,
+  D as createUrlForGetRequest,
+  C as fileToBase64,
+  M as formatBytes,
+  L as formatDate,
+  S as formatKeys,
+  q as getLocalStorage,
+  k as getMaxZIndex,
+  F as getScrollParents,
+  G as getSessionStorage,
+  A as getStyleValue,
+  w as isArray,
+  b as isElement,
+  g as isNumber,
+  N as isNumberLike,
+  u as isObject,
+  I as joinUrl,
+  _ as randomId,
+  c as randomStr,
+  Y as removeLocalStorage,
+  K as removeSessionStorage,
+  P as setLocalStorage,
+  z as setSessionStorage,
+  E as slice,
+  B as splitBase64,
+  v as splitValue,
+  m as toCamelCase,
+  j as toDate,
+  f as toNumber,
+  p as toSnakeCase,
+  R as toStrStyles,
+  $ as toTwoDigits
+};
