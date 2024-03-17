@@ -100,6 +100,14 @@ describe('format', () => {
     expect(toNumber(null)).toBe(0)
     expect(toNumber(undefined)).toBe(0)
     expect(toNumber({})).toBe(0)
+    // defaultValue
+    expect(toNumber('-12px', true, 100)).toBe(100)
+    expect(toNumber('-x12px', 2)).toBe(2)
+    expect(toNumber(NaN, 2)).toBe(2)
+    // NaN
+    expect(toNumber('NaN', NaN)).toBe(NaN)
+    expect(toNumber(NaN, NaN)).toBe(NaN)
+    expect(toNumber(NaN, 5)).toBe(5)
   })
 
   it('formatKeys', () => {
