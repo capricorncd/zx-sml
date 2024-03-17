@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.8.0
+ * zx-sml version 0.8.1
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2024-03-17 16:01:21 (GMT+0900)
+ * Released on: 2024-03-17 16:11:32 (GMT+0900)
  */
 function w(e) {
   return Array.isArray(e);
@@ -13,11 +13,20 @@ function u(e) {
 function b(e) {
   return e && e.nodeType === 1;
 }
-function N(e) {
+function $(e) {
   return typeof e == "string" ? /^-?\d+(\.\d+)?$/.test(e) : g(e);
 }
 function g(e) {
   return Number.isFinite(e);
+}
+function h(e, t = "px") {
+  if ($(e))
+    return `${e}${t}`;
+  if (typeof e == "string") {
+    const r = e.trim();
+    return /\d+\s+/.test(r) ? r.trim().split(/\s+/).map((n) => h(n, t)).join(" ") : r;
+  }
+  return "";
 }
 /*!
  * date-utils-2020 v1.1.0
@@ -25,15 +34,15 @@ function g(e) {
  * Repository: https://github.com/capricorncd/date-utils-2020#readme
  * Released on: 2023/01/14 14:10:19 GMT+0900
  */
-function $(e) {
+function j(e) {
   return String(e).padStart(2, "0");
 }
-const h = {
+const x = {
   // weeks: ['日', '一', '二', '三', '四', '五', '六']
   weeks: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 };
-function L(e, t, r) {
-  const n = j(e);
+function D(e, t, r) {
+  const n = E(e);
   if (!n || !t)
     return String(e);
   if (t === "timestamp")
@@ -42,7 +51,7 @@ function L(e, t, r) {
     const i = RegExp.$1;
     t = t.replace(i, (n.getFullYear() + "").substring(4 - i.length));
   }
-  (!r || !Array.isArray(r.weeks)) && (r = h);
+  (!r || !Array.isArray(r.weeks)) && (r = x);
   const o = {
     "M+": n.getMonth() + 1,
     "d+": n.getDate(),
@@ -62,7 +71,7 @@ function L(e, t, r) {
     if (new RegExp("(" + i + ")").test(t)) {
       s = RegExp.$1;
       const a = o[i] + "";
-      t = t.replace(s, s.length === 1 ? a : $(a));
+      t = t.replace(s, s.length === 1 ? a : j(a));
     }
   if (/w+/i.test(t)) {
     const i = n.getDay();
@@ -74,7 +83,7 @@ function L(e, t, r) {
   }
   return t;
 }
-function j(e) {
+function E(e) {
   let t = null;
   if (e instanceof Date)
     t = e;
@@ -90,7 +99,7 @@ function j(e) {
   }
   return t && !isNaN(t.getFullYear()) ? t : null;
 }
-function D(e, t = {}) {
+function U(e, t = {}) {
   const [r, n] = e.split("?"), o = [];
   n && o.push(n);
   for (const [s, i] of Object.entries(t))
@@ -124,7 +133,7 @@ function f(e, t = !1, r) {
   }
   return r;
 }
-function v(e) {
+function I(e) {
   if (typeof e == "number")
     return [e, ""];
   const t = d(e).match(/^(-?\d+(?:\.\d+)?)(.*)$/);
@@ -133,13 +142,13 @@ function v(e) {
 function y(e) {
   return typeof e == "string" ? e : e === null || typeof e > "u" ? "" : Array.isArray(e) ? e.map(y).join(" ") : typeof e == "object" ? Object.keys(e).filter((t) => e[t]).join(" ") : String(e);
 }
-function U(...e) {
+function M(...e) {
   return e.map(y).filter((t) => !!t).join(" ");
 }
-function I(...e) {
+function O(...e) {
   return e.join("/").replace(/(\w(?!:))(\/+)/g, "$1/").replace(/\/([?#])|\/$/g, "$1");
 }
-function E(e, t = 0) {
+function R(e, t = 0) {
   return Array.prototype.slice.call(e, t);
 }
 function S(e = {}, t = !1) {
@@ -148,7 +157,7 @@ function S(e = {}, t = !1) {
     n[r(o)] = u(s) ? S(s, t) : s;
   return n;
 }
-function M(e, t = !1, r = 2) {
+function T(e, t = !1, r = 2) {
   const n = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], o = t ? 1e3 : 1024;
   let s = String(e), i = "Byte";
   for (let a = 0, l = e / o; l > 1; l /= o, a++)
@@ -160,34 +169,34 @@ function M(e, t = !1, r = 2) {
     bytes: e
   };
 }
-function O(e, t = document) {
+function k(e, t = document) {
   return e ? e instanceof HTMLElement ? e : t.querySelector(e) : null;
 }
-function T(e, t = document) {
-  return E(t.querySelectorAll(e));
+function v(e, t = document) {
+  return R(t.querySelectorAll(e));
 }
-function x(e, t = {}, r) {
+function A(e, t = {}, r) {
   const n = document.createElement(e);
   for (const [o, s] of Object.entries(t))
     n.setAttribute(
       p(o),
-      o === "style" && u(s) ? R(s) : String(s)
+      o === "style" && u(s) ? B(s) : String(s)
     );
   return r && (Array.isArray(r) || (r = [r]), r.forEach((o) => {
     if (typeof o == "string") {
-      const s = x("div");
+      const s = A("div");
       s.innerHTML = o, n.append(...s.childNodes);
     } else
       n.append(o);
   })), n;
 }
-function R(...e) {
+function B(...e) {
   const t = e.reduce((n, o) => ({ ...n, ...S(o) }), {}), r = [];
   for (const [n, o] of Object.entries(t))
     o === "" || typeof o > "u" || o === null || r.push(`${n}:${o}`);
   return r.join(";");
 }
-function k(e = 100) {
+function C(e = 100) {
   const t = document.getElementsByTagName("*");
   let r, n, o;
   const s = [];
@@ -195,7 +204,7 @@ function k(e = 100) {
     r = t[i], r.nodeType === 1 && (n = window.getComputedStyle(r, null), n.position !== "static" && (o = +n.zIndex, o > 0 && s.push(o)));
   return s.length ? Math.max.apply(null, s) : e;
 }
-function A(e, t, r = !1) {
+function N(e, t, r = !1) {
   if (!b(e))
     return null;
   const n = window.getComputedStyle(
@@ -215,10 +224,10 @@ function F(e) {
   const t = ["auto", "scroll"], r = [];
   let n = e.parentElement, o;
   for (; n; )
-    o = A(n, "overflow"), typeof o == "string" && t.includes(o) && r.push(n), n = n.parentElement;
+    o = N(n, "overflow"), typeof o == "string" && t.includes(o) && r.push(n), n = n.parentElement;
   return r;
 }
-function C(e) {
+function H(e) {
   return new Promise((t, r) => {
     const n = new FileReader();
     n.onload = (o) => {
@@ -228,10 +237,10 @@ function C(e) {
     }, n.onerror = r, n.readAsDataURL(e);
   });
 }
-function H(e) {
+function J(e) {
   return (window.URL || window.webkitURL).createObjectURL(e);
 }
-function B(e) {
+function L(e) {
   const t = e.split(",");
   let r = "";
   return /data:(\w+\/\w+);base64/.test(t[0]) && (r = RegExp.$1), {
@@ -239,18 +248,18 @@ function B(e) {
     data: t[1]
   };
 }
-function J(e, t) {
-  const r = B(e), n = window.atob(r.data);
+function P(e, t) {
+  const r = L(e), n = window.atob(r.data);
   t = t || r.type;
   const o = new Uint8Array(n.length);
   for (let s = 0; s < n.length; s++)
     o[s] = n.charCodeAt(s);
   return new Blob([o], { type: t });
 }
-function P(e, t) {
+function q(e, t) {
   localStorage.setItem(e, JSON.stringify(t));
 }
-function q(e, t) {
+function Y(e, t) {
   try {
     const r = localStorage.getItem(e);
     return r ? JSON.parse(r) : t;
@@ -258,16 +267,16 @@ function q(e, t) {
     return t;
   }
 }
-function Y(e) {
+function Z(e) {
   localStorage.removeItem(e);
 }
-function Z() {
+function z() {
   localStorage.clear();
 }
-function z(e, t) {
+function G(e, t) {
   sessionStorage.setItem(e, JSON.stringify(t));
 }
-function G(e, t) {
+function K(e, t) {
   try {
     const r = sessionStorage.getItem(e);
     return r ? JSON.parse(r) : t;
@@ -275,57 +284,58 @@ function G(e, t) {
     return t;
   }
 }
-function K(e) {
+function W(e) {
   sessionStorage.removeItem(e);
 }
-function W() {
+function _() {
   sessionStorage.clear();
 }
 function c(e) {
   const t = Math.random().toString(36).slice(2);
   return typeof e == "number" ? e > t.length ? t.padEnd(Math.min(e, 1e3), t) : t.substring(0, e) : t;
 }
-function _(e, t) {
+function Q(e, t) {
   return [e, c(5), c(5), c(), t].filter(Boolean).join("-");
 }
 export {
-  O as $,
-  T as $$,
-  J as base64ToBlob,
-  U as classNames,
-  Z as clearLocalStorage,
-  W as clearSessionStorage,
-  H as createBlobURL,
-  x as createElement,
-  D as createUrlForGetRequest,
-  C as fileToBase64,
-  M as formatBytes,
-  L as formatDate,
+  k as $,
+  v as $$,
+  P as base64ToBlob,
+  M as classNames,
+  z as clearLocalStorage,
+  _ as clearSessionStorage,
+  J as createBlobURL,
+  A as createElement,
+  U as createUrlForGetRequest,
+  H as fileToBase64,
+  T as formatBytes,
+  D as formatDate,
   S as formatKeys,
-  q as getLocalStorage,
-  k as getMaxZIndex,
+  Y as getLocalStorage,
+  C as getMaxZIndex,
   F as getScrollParents,
-  G as getSessionStorage,
-  A as getStyleValue,
+  K as getSessionStorage,
+  N as getStyleValue,
   w as isArray,
   b as isElement,
   g as isNumber,
-  N as isNumberLike,
+  $ as isNumberLike,
   u as isObject,
-  I as joinUrl,
-  _ as randomId,
+  O as joinUrl,
+  Q as randomId,
   c as randomStr,
-  Y as removeLocalStorage,
-  K as removeSessionStorage,
-  P as setLocalStorage,
-  z as setSessionStorage,
-  E as slice,
-  B as splitBase64,
-  v as splitValue,
+  Z as removeLocalStorage,
+  W as removeSessionStorage,
+  q as setLocalStorage,
+  G as setSessionStorage,
+  R as slice,
+  L as splitBase64,
+  I as splitValue,
   m as toCamelCase,
-  j as toDate,
+  h as toCssValue,
+  E as toDate,
   f as toNumber,
   p as toSnakeCase,
-  R as toStrStyles,
-  $ as toTwoDigits
+  B as toStrStyles,
+  j as toTwoDigits
 };
