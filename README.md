@@ -464,6 +464,15 @@ isFirstCapitalLetter|`boolean`|no|whether to capitalize the first letter, defaul
 
 - @returns `string`
 
+### toCssValue(value, unit)
+
+Param|Types|Required|Description
+:--|:--|:--:|:--
+value|`any`|yes|css properties value
+unit|`string`|yes|px, em...
+
+- @returns `string`
+
 ### toDate(input)
 
 Convert input to Date,
@@ -475,7 +484,7 @@ input|`any`|yes|any type of object
 
 - @returns `Date | null`
 
-### toNumber(input, isStrictMode)
+### toNumber(input, isStrictMode, defaultValue?: number)
 
 Convert any type to number.
 ```js
@@ -490,7 +499,8 @@ toNumber('1,000,999', true) // 0
 Param|Types|Required|Description
 :--|:--|:--:|:--
 input|`any`|yes|-
-isStrictMode|`boolean`|no|Whether it is strict mode, default `false`
+isStrictMode|`boolean`/`number`|no|Whether it is strict mode, default `false`
+defaultValue|`number`|no|The return value when formatting fails, default is 0
 
 - @returns `number`
 
