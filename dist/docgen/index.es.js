@@ -1,8 +1,8 @@
 /*!
- * zx-sml version 0.8.1
+ * zx-sml version 0.8.3
  * Author: Capricorncd <capricorncd@qq.com>
  * Repository: https://github.com/capricorncd/zx-sml
- * Released on: 2024-03-17 16:11:32 (GMT+0900)
+ * Released on: 2024-03-23 22:36:46 (GMT+0900)
  */
 import E from "node:fs";
 import B from "node:os";
