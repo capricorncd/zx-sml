@@ -7,7 +7,9 @@ import { isNumberLike } from './check'
 
 /**
  * @method toCssValue(value, unit)
- *
+ * @example toCssValue('10 20') // 10px 20px
+ * toCssValue('10') // 10px
+ * toCssValue(' 25em 10px 0 8') // 25em 10px 0px 8px
  * @param value `any` css properties value
  * @param unit `string` px, em...
  * @returns `string`
@@ -15,8 +17,9 @@ import { isNumberLike } from './check'
 export function toCssValue(value: unknown, unit = 'px'): string {
   if (isNumberLike(value)) return `${value}${unit}`
   if (typeof value === 'string') {
-    const str = value.trim()
-    return /\d+\s+/.test(str)
+    // Remove extra spaces, ` 8   8  ` => `8 8`
+    const str = value.trim().replace(/\s{2,}/, ' ')
+    return /(\d\s|\d$)/.test(str)
       ? str
           .trim()
           .split(/\s+/)

@@ -63,3 +63,12 @@ export function isNumberLike(input: unknown): boolean {
 export function isNumber(input: unknown): input is number {
   return Number.isFinite(input)
 }
+
+/**
+ * null or undefined
+ * @param input `any` any type of object.
+ * @returns `boolean`
+ */
+export function isNullOrUndefined(input?: unknown): input is null {
+  return typeof input === 'undefined' || input === null
+}

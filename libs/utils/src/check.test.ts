@@ -4,7 +4,13 @@
  * Date: 2022/06/11 11:40:27 (GMT+0900)
  */
 import { describe, it, expect } from 'vitest'
-import { isArray, isObject, isNumberLike, isNumber } from './check'
+import {
+  isArray,
+  isObject,
+  isNumberLike,
+  isNumber,
+  isNullOrUndefined,
+} from './check'
 
 describe('check', () => {
   it('isArray', () => {
@@ -48,5 +54,15 @@ describe('check', () => {
     expect(isNumber(null)).toBeFalsy()
 
     expect(isNumber(Number.NEGATIVE_INFINITY)).toBeFalsy()
+  })
+
+  it('isNullOrUndefined', () => {
+    expect(isNullOrUndefined(void 0)).toBeTruthy()
+    expect(isNullOrUndefined(null)).toBeTruthy()
+
+    expect(isNullOrUndefined(!void 0)).toBeFalsy()
+    expect(isNullOrUndefined(!null)).toBeFalsy()
+    expect(isNullOrUndefined(2)).toBeFalsy()
+    expect(isNullOrUndefined('')).toBeFalsy()
   })
 })
