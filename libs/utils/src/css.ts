@@ -16,13 +16,14 @@ import { isNumberLike } from './check'
  */
 export function toCssValue(value: unknown, unit = 'px'): string {
   if (isNumberLike(value)) return `${value}${unit}`
-  if (typeof value === 'string') {
+  if (value && typeof value === 'string') {
     // Remove extra spaces, ` 8   8  ` => `8 8`
-    const str = value.trim().replace(/\s{2,}/, ' ')
-    return /(\d\s|\d$)/.test(str)
+    const str = value.trim().replace(/\s{2,}/g, ' ')
+    return /^(-?\d+(\.\d+)?([a-z]+|%)?\s*)+$/i.test(str) &&
+      /(\d+\s|\s\d+$)/.test(str)
       ? str
           .trim()
-          .split(/\s+/)
+          .split(' ')
           .map((s) => toCssValue(s, unit))
           .join(' ')
       : str
