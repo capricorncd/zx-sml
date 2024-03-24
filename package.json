@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Some static method library and documentation generator",
   "main": "./dist/utils/index.umd.js",
   "module": "./dist/utils/index.es.js",
@@ -47,6 +47,7 @@
     "test:docgen": "npm run test -w libs/docgen",
     "coverage": "vitest run --coverage",
     "docs": "node scripts/create-docs.js",
+    "publish": "npm run build && npm publish",
     "lint": "prettier --write ."
   },
   "dependencies": {
