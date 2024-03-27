@@ -233,13 +233,14 @@ defaultZIndex|`number`|no|Return value when none of the DOM elements have `zInde
 
 - @returns `number`
 
-### getScrollableParents(el)
+### getScrollableParents(el, scrollDirection)
 
-Get scrollable parent element
+Get scrollable parent elements
 
 Param|Types|Required|Description
 :--|:--|:--:|:--
 el|`HTMLElement`|yes|-
+scrollDirection|`ScrollDirection`|no|optional values `x,y`
 
 - @returns `HTMLElement[]`
 
@@ -254,7 +255,7 @@ def|`any`|yes|If the `key` does not exist, `def` is returned.
 
 - @returns `any` Any object the value of the `key`. If the `key` does not exist, `def` is returned.
 
-### getStyleValue(el, attr, isNumber)
+### getStyleValue(el, attr, needNumber)
 
 Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
 
@@ -262,7 +263,7 @@ Param|Types|Required|Description
 :--|:--|:--:|:--
 el|`Node`|yes|-
 attr|`string`|no|Arbitrary property key for CSSStyleDeclaration
-isNumber|`boolean`|no|whether to cast the returned property value to a numeric type
+needNumber|`boolean`|no|whether to cast the returned property value to a numeric type
 
 - @returns `string | number | CSSStyleDeclaration | CSSRule | ((index: number) => string) | ((property: string, value: string/null, priority?: string) => void) | null`
 
@@ -466,6 +467,10 @@ isFirstCapitalLetter|`boolean`|no|whether to capitalize the first letter, defaul
 
 ### toCssValue(value, unit)
 
+@example toCssValue('10 20') // 10px 20px
+toCssValue('10') // 10px
+toCssValue(' 25em 10px 0 8') // 25em 10px 0px 8px
+
 Param|Types|Required|Description
 :--|:--|:--:|:--
 value|`any`|yes|css properties value
@@ -539,6 +544,38 @@ Param|Types|Required|Description
 styles|`object[]`/`CSSStyleDeclaration[]`|yes|-
 
 - @returns `string`
+
+## Types
+
+### GetStyleValueReturnType<T, N>
+
+type of getStyleValue return
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+type GetStyleValueReturnType<T, N> = T extends undefined
+  ? CSSStyleDeclaration
+  : N extends true
+  ? number
+  : string
+```
+
+</details>
+
+### ScrollDirection
+
+type of scroll direction, x-axis/y-axis
+*/
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+```
+
+</details>
 
 <!--METHOD_END-->
 

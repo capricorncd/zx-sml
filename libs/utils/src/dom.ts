@@ -125,14 +125,27 @@ export function getMaxZIndex(defaultZIndex = 100): number {
 }
 
 /**
- * @method getStyleValue(el, attr, isNumber)
+ * @type GetStyleValueReturnType<T, N>
+ * type of getStyleValue return
+ */
+export type GetStyleValueReturnType<T, N> = T extends undefined
+  ? CSSStyleDeclaration
+  : N extends true
+  ? number
+  : string
+
+/**
+ * @method getStyleValue(el, attr, needNumber)
  * Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
  * @param el `Node`
  * @param attr? `string` Arbitrary property key for CSSStyleDeclaration
- * @param isNumber? `boolean` whether to cast the returned property value to a numeric type
+ * @param needNumber? `boolean` whether to cast the returned property value to a numeric type
  * @returns `string | number | CSSStyleDeclaration | CSSRule | ((index: number) => string) | ((property: string, value: string/null, priority?: string) => void) | null`
  */
-export function getStyleValue(el: Node, attr?: string, isNumber = false) {
+export function getStyleValue<
+  T extends string | undefined,
+  N extends boolean | undefined
+>(el: Node, attr?: T, needNumber?: N): GetStyleValueReturnType<T, N> | null {
   if (!isElement(el)) return null
   const css: CSSStyleDeclaration = window.getComputedStyle(
     el as HTMLElement,
@@ -140,31 +153,58 @@ export function getStyleValue(el: Node, attr?: string, isNumber = false) {
   )
   if (attr) {
     try {
-      const value = css[toCamelCase(attr) as keyof CSSStyleDeclaration]
-      return isNumber ? toNumber(value) : value
+      const value = css[
+        toCamelCase(attr) as keyof CSSStyleDeclaration
+      ] as string
+      return (needNumber ? toNumber(value) : value) as GetStyleValueReturnType<
+        T,
+        N
+      >
     } catch (e) {
       return null
     }
   }
-  return css
+  return css as GetStyleValueReturnType<T, N>
 }
 
+const CSS_OVERFLOW_ATTRS = ['overflow', 'overflowX', 'overflowY']
+const CSS_SCROLLABLE_VALUES = ['auto', 'scroll']
+
 /**
- * @method getScrollableParents(el)
- * Get scrollable parent element
+ * @type ScrollDirection
+ * type of scroll direction, x-axis/y-axis
+ * */
+export type ScrollDirection = 'x' | 'y'
+
+/**
+ * @method getScrollableParents(el, scrollDirection)
+ * Get scrollable parent elements
  * @param el `HTMLElement`
+ * @param scrollDirection? `ScrollDirection` optional values `x,y`
  * @returns `HTMLElement[]`
  */
-export function getScrollParents(el: HTMLElement): HTMLElement[] {
-  const scrollableValues = ['auto', 'scroll']
+export function getScrollParents(
+  el: HTMLElement,
+  scrollDirection?: ScrollDirection
+): HTMLElement[] {
+  const overflowAttrs = !scrollDirection
+    ? CSS_OVERFLOW_ATTRS
+    : CSS_OVERFLOW_ATTRS.filter((key) =>
+        new RegExp(`(${scrollDirection}|w)$`, 'i').test(key)
+      )
+
   const arr: HTMLElement[] = []
   let parent: HTMLElement | null = el.parentElement
-  let val
+  let css: CSSStyleDeclaration
   while (parent) {
-    val = getStyleValue(parent, 'overflow')
-    if (typeof val === 'string' && scrollableValues.includes(val)) {
-      arr.push(parent)
-    }
+    css =
+      getStyleValue<undefined, undefined>(parent) || ({} as CSSStyleDeclaration)
+    overflowAttrs.forEach((key) => {
+      const value = css[key as keyof CSSStyleDeclaration]
+      if (typeof value === 'string' && CSS_SCROLLABLE_VALUES.includes(value)) {
+        arr.push(parent as HTMLElement)
+      }
+    })
     parent = parent.parentElement
   }
   return arr
