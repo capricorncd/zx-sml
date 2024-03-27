@@ -8,4 +8,4 @@ DIR=`pwd`
 exec < /dev/tty
 
 # 执行提交前的处理脚本
-GIT_PARAMS="$DIR/$1" node scripts/git-commit.js
+GIT_PARAMS="$DIR/$1" node scripts/git-commit.mjs

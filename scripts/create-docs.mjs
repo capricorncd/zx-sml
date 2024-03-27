@@ -3,13 +3,18 @@
  * https://github.com/capricorncd
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
-const fs = require('fs')
-const { EOL } = require('os')
-const path = require('path')
-const { outputFile, writeFileSync } = require('../dist/docgen/index.umd')
+import fs from 'node:fs'
+import { EOL } from 'node:os'
+import path from 'node:path'
+import process from 'node:process'
+import { outputFile, writeFileSync } from 'zx-sml/docgen'
 
 const METHOD_START = '<!--METHOD_START-->'
 const METHOD_END = '<!--METHOD_END-->'
+
+function resolve(filePath) {
+  return path.resolve(process.cwd(), filePath)
+}
 
 /**
  * <!--METHOD_START-->
@@ -17,7 +22,7 @@ const METHOD_END = '<!--METHOD_END-->'
  * @param inputLines
  */
 function writeInReadmeFile(inputLines) {
-  const readmeFile = path.resolve(__dirname, '../README.md')
+  const readmeFile = resolve('README.md')
   const lines = []
   let isMethodStart = false
   fs.readFileSync(readmeFile, 'utf8')
@@ -121,23 +126,20 @@ const outputFileOptions = {
 
 function main() {
   // zx-sml default docs
-  const srcDir = path.resolve(__dirname, '../libs/utils/src')
+  const srcDir = resolve('libs/utils/src')
   const { lines } = outputFile(srcDir, getCommentsDataOptions)
   // README.md
   writeInReadmeFile(lines)
 
   // generate zx-sml/docgen docs
-  const input = path.resolve(__dirname, '../libs/docgen/src')
+  const input = resolve('libs/docgen/src')
   const { lines: docGenLines } = outputFile(
     input,
-    path.resolve(__dirname, '../docs/docgen.md'),
+    resolve('docs/docgen.md'),
     outputFileOptions
   )
 
-  writeFileSync(
-    path.resolve(__dirname, '../libs/docgen/README.md'),
-    docGenLines
-  )
+  writeFileSync(resolve('libs/docgen/README.md'), docGenLines)
 }
 
 main()

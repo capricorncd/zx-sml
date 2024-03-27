@@ -3,11 +3,11 @@
  * https://github.com/capricorncd
  * Date: 2022/06/12 13:14:13 (GMT+0900)
  */
-const fs = require('fs')
-const { EOL } = require('os')
-const path = require('path')
-const { formatDate } = require('../dist/utils/index.umd')
-const pkg = require('../package.json')
+import fs from 'node:fs'
+import { EOL } from 'node:os'
+import path from 'node:path'
+import { formatDate } from 'zx-sml'
+import pkg from '../package.json' assert { type: 'json' }
 
 const header = [
   '/*!',
@@ -18,13 +18,17 @@ const header = [
   ` */`,
 ]
 
+function resolve(filePath) {
+  return path.resolve(process.cwd(), filePath)
+}
+
 function addHeader(file) {
   const liens = fs.readFileSync(file, 'utf8').toString().split(EOL)
   fs.writeFileSync(file, [...header, ...liens].join(EOL))
 }
 
 function main(lib) {
-  const distDir = path.resolve(__dirname, `../dist/${lib}`)
+  const distDir = resolve(`dist/${lib}`)
   fs.readdirSync(distDir).forEach((file) => {
     if (/\.js$/.test(file)) {
       addHeader(path.join(distDir, file))

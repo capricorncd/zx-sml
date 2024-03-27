@@ -1,7 +1,8 @@
 {
   "name": "zx-sml",
-  "version": "0.8.4",
+  "version": "0.9.0",
   "description": "Some static method library and documentation generator",
+  "type": "module",
   "main": "./dist/utils/index.umd.js",
   "module": "./dist/utils/index.es.js",
   "types": "./libs/utils/src/types.d.ts",
@@ -41,17 +42,18 @@
     "build": "npm run build:utils && npm run build:docgen && npm run build:header",
     "build:utils": "npm run build -w libs/utils",
     "build:docgen": "npm run build -w libs/docgen",
-    "build:header": "node scripts/build-header.js",
+    "build:header": "node scripts/build-header.mjs",
     "test": "npm run test:utils && npm run test:docgen",
     "test:utils": "npm run test -w libs/utils",
     "test:docgen": "npm run test -w libs/docgen",
     "coverage": "vitest run --coverage",
-    "docs": "node scripts/create-docs.js",
+    "docs": "node scripts/create-docs.mjs",
     "publish": "npm run build && npm publish",
     "lint": "prettier --write ."
   },
   "dependencies": {
-    "date-utils-2020": "^1.1.0"
+    "date-utils-2020": "^1.1.0",
+    "zx-sml": "*"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.6",
@@ -63,7 +65,7 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "inquirer": "^8.2.4",
+    "inquirer": "^9.2.15",
     "jsdom": "^19.0.0",
     "prettier": "^2.6.2",
     "typescript": "^4.7.3",
