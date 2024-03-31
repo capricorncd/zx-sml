@@ -150,33 +150,35 @@ export function splitValue(input: string | number): [number, string] {
  * @returns `string`
  */
 function toString(input: unknown): string {
-  if (typeof input === 'string') return input
-  if (input === null || typeof input === 'undefined') return ''
-  if (Array.isArray(input)) return input.map(toString).join(' ')
-  // { className1: true, className2: false } => 'className1'
-  if (typeof input === 'object') {
+  if (isNumber(input)) return input.toString()
+  if (typeof input === 'string') return input.trim().replace(/\s{2,}/g, ' ')
+  if (Array.isArray(input)) return input.map(toString).filter(Boolean).join(' ')
+  if (input && typeof input === 'object') {
+    // { bool1: true, bool2: false, spaceString: ' ', zero: 0, number: 10 } => 'bool1 number'
     return Object.keys(input)
-      .filter((key) => input[key as keyof typeof input])
+      .filter((key) => {
+        const val = input[key as keyof typeof input]
+        // @ts-ignore
+        return typeof val === 'string' ? !!val.trim() : !!val
+      })
       .join(' ')
   }
-  return String(input)
+  return ''
 }
 
 /**
  * @method classNames(...args)
- * handle className
- * @param args `string | string[] | { className1: true, className2: false }`
+ * Merge css class names.
+ * NOTE: Duplicate names will not be removed.
+ * @param args `string | any[] | { bool: true, number: 1, str: 'x', obj: {}, arr: [], other: ? }`
  * @returns `string`
  * ```js
- * classNames({ active: true }, ['text-center'], 'flex')
- * // 'active text-center flex'
+ * classNames({ active: true, zero: 0 }, ['text-center'], 'flex', 0)
+ * // 'active text-center flex 0'
  * ```
  */
 export function classNames(...args: unknown[]): string {
-  return args
-    .map(toString)
-    .filter((item) => !!item)
-    .join(' ')
+  return args.map(toString).filter(Boolean).join(' ')
 }
 
 /**

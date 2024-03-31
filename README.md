@@ -89,15 +89,16 @@ type|`string`|no|the target blob mimeType, Example `image/jpeg`
 
 ### classNames(...args)
 
-handle className
+Merge css class names.
+NOTE: Duplicate names will not be removed.
 ```js
-classNames({ active: true }, ['text-center'], 'flex')
-// 'active text-center flex'
+classNames({ active: true, zero: 0 }, ['text-center'], 'flex', 0)
+// 'active text-center flex 0'
 ```
 
 Param|Types|Required|Description
 :--|:--|:--:|:--
-args|`string`/`string[]`/`{ className1: true, className2: false }`|yes|-
+args|`string`/`any[]`/`{ bool: true, number: 1, str: 'x', obj: {}, arr: [], other: ? }`|yes|-
 
 - @returns `string`
 

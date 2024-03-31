@@ -72,8 +72,11 @@ describe('format', () => {
   })
 
   it('classNames', () => {
-    expect(classNames('active', 'text-center', 'flex')).toBe(
-      'active text-center flex'
+    expect(
+      classNames('active', 'text-center', 'flex', ' other    space ')
+    ).toBe('active text-center flex other space')
+    expect(classNames('active', 'active', { active: true })).toBe(
+      'active active active'
     )
     expect(classNames({ active: true }, ['text-center'], 'flex')).toBe(
       'active text-center flex'
@@ -82,6 +85,18 @@ describe('format', () => {
       'active flex'
     )
     expect(classNames([1, 2], 1)).toBe('1 2 1')
+    expect(
+      classNames(
+        [1, undefined, null, { active: true }, [{ 'text-center': true }]],
+        0,
+        1,
+        // object
+        { disabled: null, spaceString: ' ', world: [], zero: 0, number: 5 },
+        // function
+        () => 1
+      )
+    ).toBe('1 active text-center 0 1 world number')
+    expect(classNames(Symbol('test'))).toBe('')
   })
 
   it('toNumber', () => {
