@@ -4,7 +4,7 @@
  * Date: 2022/06/11 13:13:33 (GMT+0900)
  */
 import fs from 'node:fs'
-import os from 'node:os'
+import { EOL } from 'node:os'
 import path from 'node:path'
 import { isObject } from '@zx/utils'
 import { DOC_TYPES } from './const'
@@ -62,20 +62,21 @@ export function handleFile(
   let tempStr = ''
   fs.readFileSync(filePath, 'utf8')
     .toString()
-    .split(new RegExp(os.EOL))
+    .split(EOL)
     .forEach((line) => {
       const originalLine = line
       line = line.trim()
       // Start with method|type|document annotations
-      if (typesRegExp.test(line)) {
+      const found = line.match(typesRegExp)
+      if (found) {
         isTargetComment = true
 
-        type = RegExp.$1
+        type = found[1]
 
         // setContents(box, newContents)
         // InterfaceName<Type1, Type2>
         // classInstance.someMethod(param)
-        const fullName = RegExp.$2.trim()
+        const fullName = found[2].trim()
 
         // setContents
         // InterfaceName

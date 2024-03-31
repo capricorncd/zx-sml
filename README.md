@@ -552,7 +552,7 @@ styles|`object[]`/`CSSStyleDeclaration[]`|yes|-
 
 ### FormatDateLangPackage
 
-The function formatDate(date, format, langPackage) args langPackage's interface.
+The function `formatDate(date, format, langPackage)` args langPackage's interface. [ILangPackage](#ILangPackage)
 
 <details>
 <summary>Source Code</summary>
@@ -583,12 +583,12 @@ type GetStyleValueReturnType<T, N> = T extends undefined
 ### ScrollDirection
 
 type of scroll direction, x-axis/y-axis
-*/
 
 <details>
 <summary>Source Code</summary>
 
 ```ts
+type ScrollDirection = 'x' | 'y'
 ```
 
 </details>
@@ -597,6 +597,11 @@ type of scroll direction, x-axis/y-axis
 
 ### ILangPackage
 
+The function `formatDate(date, format, langPackage)` args langPackage's interface.
+
+<details>
+<summary>Source Code</summary>
+
 ```ts
 interface ILangPackage {
   // Starting on sunday. For example ['周日', '周一', ..., '周六']
@@ -604,6 +609,8 @@ interface ILangPackage {
   [key: string]: any
 }
 ```
+
+</details>
 
 ## License
 

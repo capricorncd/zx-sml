@@ -8,7 +8,7 @@ import type { ILangPackage } from 'date-utils-2020'
 /**
  * @type FormatDateLangPackage
  *
- * The function formatDate(date, format, langPackage) args langPackage's interface.
+ * The function `formatDate(date, format, langPackage)` args langPackage's interface. [ILangPackage](#ILangPackage)
  */
 export type FormatDateLangPackage = ILangPackage
 
@@ -25,5 +25,5 @@ export type GetStyleValueReturnType<T, N> = T extends undefined
 /**
  * @type ScrollDirection
  * type of scroll direction, x-axis/y-axis
- * */
+ */
 export type ScrollDirection = 'x' | 'y'
