@@ -468,9 +468,11 @@ isFirstCapitalLetter|`boolean`|no|whether to capitalize the first letter, defaul
 
 ### toCssValue(value, unit)
 
-@example toCssValue('10 20') // 10px 20px
+```js
+toCssValue('10 20') // 10px 20px
 toCssValue('10') // 10px
 toCssValue(' 25em 10px 0 8') // 25em 10px 0px 8px
+```
 
 Param|Types|Required|Description
 :--|:--|:--:|:--
