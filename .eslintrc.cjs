@@ -46,6 +46,8 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     // node.js require('some-lib')
     '@typescript-eslint/no-var-requires': 'off',
+    // 可以使用@ts-ignore
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
   settings: {
     'import/resolver': {
