@@ -1,16 +1,16 @@
 {
   "name": "zx-sml",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Some static method library and documentation generator",
   "type": "module",
   "main": "./dist/utils/index.umd.js",
   "module": "./dist/utils/index.es.js",
-  "types": "./libs/utils/src/types.d.ts",
+  "types": "./libs/utils/src/index.ts",
   "exports": {
     ".": {
       "import": "./dist/utils/index.es.js",
       "require": "./dist/utils/index.umd.js",
-      "types": "./libs/utils/src/types.d.ts"
+      "types": "./libs/utils/src/index.ts"
     },
     "./docgen": {
       "import": "./dist/docgen/index.es.js",

@@ -5,6 +5,7 @@
  */
 import { isObject, isElement } from './check'
 import { slice, formatKeys, toNumber, toCamelCase, toSnakeCase } from './format'
+import type { GetStyleValueReturnType, ScrollDirection } from './types.d'
 
 /**
  * @method $(selector, doc)
@@ -125,16 +126,6 @@ export function getMaxZIndex(defaultZIndex = 100): number {
 }
 
 /**
- * @type GetStyleValueReturnType<T, N>
- * type of getStyleValue return
- */
-export type GetStyleValueReturnType<T, N> = T extends undefined
-  ? CSSStyleDeclaration
-  : N extends true
-  ? number
-  : string
-
-/**
  * @method getStyleValue(el, attr, needNumber)
  * Get the value of `CSSStyleDeclaration` or `CSSStyleDeclaration[attr]`
  * @param el `Node`
@@ -169,12 +160,6 @@ export function getStyleValue<
 
 const CSS_OVERFLOW_ATTRS = ['overflow', 'overflowX', 'overflowY']
 const CSS_SCROLLABLE_VALUES = ['auto', 'scroll']
-
-/**
- * @type ScrollDirection
- * type of scroll direction, x-axis/y-axis
- * */
-export type ScrollDirection = 'x' | 'y'
 
 /**
  * @method getScrollableParents(el, scrollDirection)

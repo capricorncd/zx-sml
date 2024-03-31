@@ -548,6 +548,19 @@ styles|`object[]`/`CSSStyleDeclaration[]`|yes|-
 
 ## Types
 
+### FormatDateLangPackage
+
+The function formatDate(date, format, langPackage) args langPackage's interface.
+
+<details>
+<summary>Source Code</summary>
+
+```ts
+type FormatDateLangPackage = ILangPackage
+```
+
+</details>
+
 ### GetStyleValueReturnType<T, N>
 
 type of getStyleValue return
@@ -579,8 +592,6 @@ type of scroll direction, x-axis/y-axis
 </details>
 
 <!--METHOD_END-->
-
-## Types
 
 ### ILangPackage
 
