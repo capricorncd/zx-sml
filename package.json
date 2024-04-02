@@ -1,6 +1,6 @@
 {
   "name": "zx-sml",
-  "version": "0.9.2",
+  "version": "0.9.1",
   "description": "Some static method library and documentation generator",
   "type": "module",
   "main": "./dist/utils/index.umd.js",
@@ -52,7 +52,7 @@
     "lint": "prettier --write ."
   },
   "dependencies": {
-    "date-utils-2020": "^1.1.0",
+    "date-utils-2020": "^1.1.1",
     "zx-sml": "*"
   },
   "devDependencies": {
