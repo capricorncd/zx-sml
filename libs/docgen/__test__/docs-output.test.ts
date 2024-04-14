@@ -1,31 +1,30 @@
 import { describe, test, expect } from 'vitest'
-import { handlePropertyLines } from '../src/docs-output'
+import { handlePropertyLines, handleMethodLines } from '../src/docs-output'
+
+const DEF_LINE = {
+  codes: [],
+  desc: [
+    'Use `el` to get the HTML element of the current class',
+    'property 3333',
+    '```ts',
+    'x.el',
+    '```',
+    'last line text',
+  ],
+  fullName: 'el',
+  name: 'el',
+  params: [],
+  path: 'filePath',
+  private: false,
+  returns: [{ raw: '`string` rrrrrrr', desc: ['rrrrrrr'], types: ['string'] }],
+  sort: 0,
+  type: 'property',
+  generics: [],
+}
 
 describe('docs-output', () => {
   test('handlePropertyLines', () => {
-    const inputItems = [
-      {
-        codes: [],
-        desc: [
-          'Use `el` to get the HTML element of the current class',
-          'property 3333',
-          '```ts',
-          'x.el',
-          '```',
-          'last line text',
-        ],
-        fullName: 'el',
-        name: 'el',
-        params: [],
-        path: 'filePath',
-        private: false,
-        returns: [
-          { raw: '`string` rrrrrrr', desc: ['rrrrrrr'], types: ['string'] },
-        ],
-        sort: 0,
-        type: 'property',
-      },
-    ]
+    const inputItems = [DEF_LINE]
 
     const lines: string[] = []
 
@@ -67,6 +66,7 @@ describe('docs-output', () => {
           ],
           sort: 0,
           type: 'property',
+          generics: [],
         },
       ],
       {},
@@ -86,6 +86,54 @@ describe('docs-output', () => {
       '```ts',
       'x.el',
       '```',
+      '',
+    ])
+  })
+
+  test('handleMethodLines', () => {
+    const lines: string[] = []
+    handleMethodLines(
+      [
+        {
+          codes: [],
+          desc: ['generic method2'],
+          fullName: 'fun2(props)',
+          generics: ['T extends Object'],
+          name: 'fun2',
+          params: [
+            {
+              desc: ['properties'],
+              name: 'props',
+              raw: 'props `T` properties',
+              required: true,
+              types: ['T'],
+            },
+          ],
+          returns: [],
+          sort: 0,
+          private: false,
+          path: 'filePath',
+          type: 'method',
+        },
+      ],
+      {},
+      lines
+    )
+    expect(lines).toStrictEqual([
+      '## Methods',
+      '',
+      '### fun2(props)',
+      '',
+      'generic method2',
+      '',
+      'Param|Types|Required|Description',
+      ':--|:--|:--|:--',
+      'props|`T`|yes|properties',
+      '',
+      '',
+      '- @generic `T extends Object`',
+      '',
+      '- @returns `void`',
       '',
     ])
   })

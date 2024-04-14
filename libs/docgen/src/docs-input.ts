@@ -16,6 +16,8 @@ import {
   handleParam,
   mergeIntoArray,
   handleSort,
+  splitFullNameRaw,
+  getGenericsFromLine,
 } from './helpers'
 import type { GetCommentsDataOptions, CommentInfoItem } from './types.d'
 
@@ -76,8 +78,7 @@ export function handleFile(
         // setContents(box, newContents)
         // InterfaceName<Type1, Type2>
         // classInstance.someMethod(param)
-        const fullName = found[2].trim()
-
+        const { fullName, generics } = splitFullNameRaw(found[2].trim())
         // setContents
         // InterfaceName
         // classInstance.someMethod
@@ -98,6 +99,7 @@ export function handleFile(
           codes: [],
           private: false,
           path: filePath,
+          generics,
         }
         return
       } else if (line === '*/' && isTargetComment) {
@@ -139,6 +141,8 @@ export function handleFile(
             data[dataKey].private = true
           } else if (temp.startsWith('@sort')) {
             data[dataKey].sort = handleSort(temp)
+          } else if (temp.startsWith('@generic')) {
+            data[dataKey].generics.push(getGenericsFromLine(temp))
           } else if (isCode) {
             if (temp.startsWith('@code')) {
               // push a blank line.

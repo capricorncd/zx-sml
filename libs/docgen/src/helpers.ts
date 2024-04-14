@@ -382,6 +382,16 @@ export function toArray(
   return arr
 }
 
+const REG_INTERFACE_EXTENDS = /interface\s+\w+\s+extends\s(.+)\s+\{/
+
+// export interface T extends A, B<P extends O>
+export function getExtendsTypes(input: string): string[] | null {
+  const result = input.match(REG_INTERFACE_EXTENDS)
+  return result
+    ? result[1].split(/,\s*/).map((str) => str.replace(/^(\w+).*/, '$1'))
+    : null
+}
+
 /**
  * handleProps
  * @param item `CommentInfoItem`
@@ -397,11 +407,8 @@ export function handleProps(item: CommentInfoItem, types: CommentInfoItem[]) {
   const firstCodeLine = item.codes[0] || ''
   // handle extends, get extends interface or class's props
   // interface ColorfulCircle<T> extends Colorful<T>, Circle {}
-  if (/\sextends\s+(.+)\s*\{/.test(firstCodeLine)) {
-    const extendTypes = RegExp.$1
-      .split(/\s*,\s*/)
-      // Colorful<T> -> Colorful
-      .map((name) => getTypeName(name.trim()))
+  const extendTypes = getExtendsTypes(firstCodeLine)
+  if (extendTypes) {
     extendTypes.forEach((extendName) => {
       // find extendName from types
       const typeItem = types.find((item) => item.name === extendName)
@@ -510,4 +517,19 @@ export function toTableLines(data: ToTableLinesParamData) {
   }
 
   return lines
+}
+
+// fun<T extends Object>(props) => { fullName: string, generics: string[] }
+export function splitFullNameRaw(input: string) {
+  const result = input.match(/^(\w+)<(\w.+\w)>([^<>]+)/)
+  console.log(result)
+  if (result) {
+    // TODO: 多泛型处理
+    return { fullName: result[1] + result[3], generics: [result[2]] }
+  }
+  return { fullName: input, generics: [] }
+}
+
+export function getGenericsFromLine(line: string) {
+  return line.replace(/^@generic\s+`?<?(\w.+\w)>?`?/, '$1')
 }

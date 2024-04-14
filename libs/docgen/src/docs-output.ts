@@ -54,10 +54,14 @@ function createMethodsDoc(
     ...(options.methodWithRaw
       ? item.params.map((param) => `- @param ${param.raw}`)
       : createPropsTable(item.params, DOC_TYPES.method, 'Param', options)),
-    BLANK_LINE,
-    ...item.returns.map((ret) => `- @returns ${ret.raw}`),
     BLANK_LINE
   )
+
+  if (item.generics.length) {
+    lines.push('- @generic `' + item.generics.join(', ') + '`', BLANK_LINE)
+  }
+
+  lines.push(...item.returns.map((ret) => `- @returns ${ret.raw}`), BLANK_LINE)
   pushCodesIntoLines(item.codes, lines)
 }
 
@@ -193,7 +197,7 @@ function handleDocumentLines(
 }
 
 // ## Methods
-function handleMethodLines(
+export function handleMethodLines(
   arr: CommentInfoItem[],
   options: OutputFileOptions,
   lines: string[]

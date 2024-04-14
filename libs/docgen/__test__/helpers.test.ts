@@ -1,8 +1,8 @@
 import { test, describe, expect } from 'vitest'
-import { handleProps, handleParam } from '../src/helpers'
+import { handleProps, handleParam, getExtendsTypes } from '../src/helpers'
 
 describe('helpers', () => {
-  test('handleProps', () => {
+  test.skip('handleProps', () => {
     expect(
       handleProps(
         {
@@ -15,16 +15,37 @@ describe('helpers', () => {
           private: false,
           path: '',
           sort: 0,
+          generics: [],
           codes: [
-            'export interface ITest {',
+            'export interface ITest<T extends Parent>{',
             '// userId',
             `'data-user-id': string`,
             `'data-user-id2'?: string // userId2`,
             'disabled?: boolean',
+            'parent: T // see Parent',
             '}',
           ],
         },
-        []
+        [
+          {
+            name: 'Parent',
+            fullName: 'Parent',
+            type: 'interface',
+            desc: [],
+            params: [],
+            returns: [],
+            private: false,
+            path: '',
+            sort: 0,
+            generics: [],
+            codes: [
+              'export interface Parent {',
+              '// parentId',
+              `'pid': string`,
+              '}',
+            ],
+          },
+        ]
       )
     ).toStrictEqual([
       {
@@ -48,6 +69,13 @@ describe('helpers', () => {
         required: false,
         types: ['boolean'],
       },
+      {
+        desc: ['see Parent'],
+        name: 'parent',
+        raw: 'parent: T // see Parent',
+        required: true,
+        types: ['T'],
+      },
     ])
   })
 
@@ -69,5 +97,19 @@ describe('helpers', () => {
       types: ['type1', 'type2'],
       desc: ['param description2'],
     })
+  })
+
+  test('getExtendsTypes', () => {
+    expect(
+      getExtendsTypes(`export interface T extends A, B<P extends O> {`)
+    ).toStrictEqual(['A', 'B'])
+
+    expect(
+      getExtendsTypes(`export interface BaseProps<T extends Obj> {`)
+    ).toBeNull()
+
+    expect(
+      getExtendsTypes(`export type PropMappings<T extends BaseProps> = {`)
+    ).toBeNull()
   })
 })

@@ -31,6 +31,8 @@ export interface CommentInfoItem {
   props?: CommentInfoItemProp[]
   // sort in the output file
   sort: number
+  // generic
+  generics: string[]
 }
 
 /**

@@ -7,7 +7,7 @@
   "devDependencies": {},
   "scripts": {
     "build": "vite build --emptyOutDir",
-    "test": "vitest"
+    "test": "vitest -w"
   },
   "repository": {
     "type": "git",

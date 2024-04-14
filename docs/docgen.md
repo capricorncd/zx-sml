@@ -257,6 +257,7 @@ private|`boolean`|yes|Whether the member method of the class is private
 path|`string`|yes|file path
 props|`CommentInfoItemProp[]`|no|[CommentInfoItemProp](#CommentInfoItemProp)
 sort|`number`|yes|sort in the output file
+generics|`string[]`|yes|generic
 
 <details>
 <summary>Source Code</summary>
@@ -285,6 +286,8 @@ interface CommentInfoItem {
   props?: CommentInfoItemProp[]
   // sort in the output file
   sort: number
+  // generic
+  generics: string[]
 }
 ```
 
