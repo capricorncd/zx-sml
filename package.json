@@ -60,6 +60,7 @@
     "@types/node": "^20.11.20",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
+    "@zx-libs/header": "^0.0.2",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.1",
@@ -82,6 +83,7 @@
     "node": ">=16.13.1",
     "npm": ">=8.1.2"
   },
+  "homepage": "https://github.com/capricorncd/zx-libs/tree/main/libs/utils",
   "repository": {
     "url": "git+https://github.com/capricorncd/zx-sml.git"
   },

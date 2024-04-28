@@ -6,45 +6,50 @@
   <a href="https://www.npmjs.com/package/zx-sml"><img src="https://img.shields.io/npm/l/zx-sml.svg?sanitize=true" alt="License"></a>
 </p>
 
-zx-sml is some static method library, which contains [toSnakeCase](#tosnakecaseinput-connectsymbol), [splitValue](#splitvalueinput), [getLocalStorage](#getlocalstoragekey-def), [formatDate](#formatdatedate-format-langpackage), [createElement](#createelementtag-attrs-children), [classNames](#classnamesargs) and [other methods](#methods).
+[@zx-libs/utils](https://github.com/capricorncd/zx-libs/tree/main/libs/utils) is some static method library, which contains [toSnakeCase](#tosnakecaseinput-connectsymbol), [splitValue](#splitvalueinput), [getLocalStorage](#getlocalstoragekey-def), [formatDate](#formatdatedate-format-langpackage), [createElement](#createelementtag-attrs-children), [classNames](#classnamesargs) and [other methods](https://github.com/capricorncd/zx-libs/tree/main/libs/utils#methods).
 
-[zx-sml/docgen](./docs/docgen.md) is some tool functions used in the Nodejs environment, which contains [getCommentsData](./docs/docgen.md#getcommentsdatainput-needarray-options), [outputFile](./docs/docgen.md#outputfileinput-outputdirorfile-options), [mkdirSync](./docs/docgen.md#mkdirsyncdir) and other methods. It is mainly used to obtain the comment information in the code, and then output it as a Markdown file.
+[@zx-libs/docgen](https://github.com/capricorncd/zx-libs/tree/main/node/docgen) is some tool functions used in the Nodejs environment, which contains [getCommentsData](./docs/docgen.md#getcommentsdatainput-needarray-options), [outputFile](./docs/docgen.md#outputfileinput-outputdirorfile-options), [mkdirSync](./docs/docgen.md#mkdirsyncdir) and other methods. It is mainly used to obtain the comment information in the code, and then output it as a Markdown file.
+
+## deprecated
+
+This library is deprecated, please use [@zx-libs/*](https://github.com/capricorncd/zx-libs) instead. https://github.com/capricorncd/zx-libs/tree/main/libs/utils
+
 
 ## Install
 
 ### NPM Install
 
 ```shell
-npm install zx-sml
+npm i @zx-libs/utils
 ```
 
 ### Yarn add
 
 ```shell
-yarn add zx-sml
+yarn add @zx-libs/utils
 ```
 
 ### pnpm install
 
 ```shell
-pnpm i zx-sml
+pnpm i @zx-libs/utils
 ```
 
 ## Usage
 
 ```typescript
-import { formatDate } from 'zx-sml'
+import { formatDate } from '@zx-libs/utils'
 
 formatDate('2020-12-04', 'yyyy/MM/dd W')
 // 2020/12/04 Fri
 ```
 
-### zx-sml/docgen
+### @zx-libs/docgen
 
-A document generator that read the comments in the code and automatically generate MarkDown documents, [docs](./docs/docgen.md).
+A document generator that read the comments in the code and automatically generate MarkDown documents, [docs](https://github.com/capricorncd/zx-libs/tree/main/node/docgen).
 
 ```js
-const { log, outputFile } = require('zx-sml/docgen');
+const { log, outputFile } = require('@zx-libs/docgen');
 
 log('hello docgen')
 
