@@ -1,10 +1,12 @@
 # zx-sml
 
+<!--
 <p>
   <a href="https://npmcharts.com/compare/zx-sml?minimal=true"><img src="https://img.shields.io/npm/dm/zx-sml.svg?sanitize=true" alt="Downloads"></a>
   <a href="https://www.npmjs.com/package/zx-sml"><img src="https://img.shields.io/npm/v/zx-sml.svg?sanitize=true" alt="Version"></a>
   <a href="https://www.npmjs.com/package/zx-sml"><img src="https://img.shields.io/npm/l/zx-sml.svg?sanitize=true" alt="License"></a>
 </p>
+-->
 
 [@zx-libs/utils](https://github.com/capricorncd/zx-libs/tree/main/libs/utils) is some static method library, which contains [toSnakeCase](#tosnakecaseinput-connectsymbol), [splitValue](#splitvalueinput), [getLocalStorage](#getlocalstoragekey-def), [formatDate](#formatdatedate-format-langpackage), [createElement](#createelementtag-attrs-children), [classNames](#classnamesargs) and [other methods](https://github.com/capricorncd/zx-libs/tree/main/libs/utils#methods).
 
@@ -12,7 +14,7 @@
 
 ## deprecated
 
-This library is deprecated, please use [@zx-libs/*](https://github.com/capricorncd/zx-libs) instead. https://github.com/capricorncd/zx-libs/tree/main/libs/utils
+This library is deprecated, please use [@zx-libs/*](https://github.com/capricorncd/zx-libs) instead. https://github.com/capricorncd/zx-libs
 
 
 ## Install

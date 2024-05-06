@@ -1,10 +1,10 @@
-# zx-sml/docgen
+# @zx-libs/docgen
 
 A document generator that read the comments in the code and automatically generate MarkDown documents.
 
 ```js
-const { outputFile } = require('zx-sml/docgen')
-// import { outputFile } from 'zx-sml/docgen'
+const { outputFile } = require('@zx-libs/docgen')
+// import { outputFile } from '@zx-libs/docgen'
 
 outputFile('./src', './outputDir/README.md', {})
 ```
@@ -52,7 +52,7 @@ nodejs file `./scripts/create-docs.js`.
 
 ```js
 const path = require('path')
-const { getCommentsData } = require('zx-sml/docgen')
+const { getCommentsData } = require('@zx-libs/docgen')
 
 const result = getCommentsData(path.resolve(__dirname, './src'));
 console.log(result);
