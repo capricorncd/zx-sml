@@ -9,7 +9,7 @@ const { outputFile } = require('zx-sml/docgen')
 outputFile('./src', './outputDir/README.md', {})
 ```
 
-see [DEMO](https://github.com/capricorncd/zx-sml/blob/main/scripts/create-docs.js)
+see [DEMO](https://github.com/capricorncd/zx-libs/blob/main/node/docgen/scripts/docs.mjs)
 
 ## Methods
 
